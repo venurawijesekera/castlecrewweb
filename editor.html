@@ -42,14 +42,22 @@
         
         <!-- Header -->
         <div class="h-16 border-b border-gray-800 flex items-center justify-between px-6 bg-brand-black">
-            <a href="dashboard.html" class="text-sm text-gray-400 hover:text-white flex items-center gap-2">
-                <span>←</span> Back
-            </a>
-            <div class="font-bold text-sm">Editing: Castle Signature</div>
-            <button class="bg-brand-red text-white text-xs font-bold px-4 py-2 rounded hover:bg-red-700 transition">
-                PUBLISH
-            </button>
-        </div>
+    <a href="dashboard.html" class="text-sm text-gray-400 hover:text-white flex items-center gap-2">
+        <span>←</span> Back
+    </a>
+    <div class="font-bold text-sm hidden md:block">Editing: Castle Signature</div>
+    
+    <div class="flex gap-3">
+        <!-- New View Live Button -->
+        <a href="card.html" target="_blank" class="border border-gray-700 text-gray-300 text-xs font-bold px-4 py-2 rounded hover:bg-white hover:text-black transition flex items-center gap-2">
+            <span>👁</span> View Live
+        </a>
+        
+        <button class="bg-brand-red text-white text-xs font-bold px-4 py-2 rounded hover:bg-red-700 transition">
+            PUBLISH
+        </button>
+    </div>
+</div>
 
         <!-- Form Inputs (Scrollable) -->
         <div class="flex-1 overflow-y-auto p-6 space-y-8">

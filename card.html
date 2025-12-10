@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Venura Wijesekera - Castle Crew</title>
+    <!-- Theme Color for Browser Header -->
+    <meta name="theme-color" content="#0a0a0a">
+    
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            red: '#f00000',
+                            black: '#0a0a0a',
+                            dark: '#121212'
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050505; color: white; -webkit-tap-highlight-color: transparent; }
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="min-h-screen flex justify-center bg-[#111]">
+
+    <!-- MAIN CONTAINER (Restricted width for desktop view) -->
+    <div class="w-full max-w-md bg-[#050505] min-h-screen shadow-2xl relative flex flex-col">
+        
+        <!-- HEADER IMAGE / BANNER -->
+        <div class="h-48 bg-gradient-to-br from-brand-red/30 to-black relative overflow-hidden">
+            <!-- Decorative Elements -->
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-red blur-[80px] opacity-50"></div>
+            
+            <div class="absolute top-6 right-6 text-brand-red font-bold tracking-tighter text-xs flex items-center gap-1 opacity-80">
+                <div class="w-2 h-2 bg-brand-red rotate-45"></div>
+                CASTLE
+            </div>
+        </div>
+
+        <!-- PROFILE CONTENT -->
+        <div class="px-8 -mt-20 relative z-10 flex-1 pb-12">
+            
+            <!-- Avatar -->
+            <div class="w-36 h-36 rounded-full border-4 border-[#050505] bg-gray-800 overflow-hidden mb-6 shadow-2xl relative z-20 animate-fade-in-up" style="animation-delay: 0.1s;">
+                <img src="assets/img/logo.png" alt="Profile" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Text Info -->
+            <div class="animate-fade-in-up" style="animation-delay: 0.2s;">
+                <h1 class="text-4xl font-black uppercase leading-[0.9] mb-2 tracking-tight">
+                    Venura <br> Wijesekera
+                </h1>
+                <p class="text-brand-red font-bold text-base mb-6 tracking-wide">FOUNDER & CEO</p>
+                
+                <p class="text-gray-400 text-sm leading-relaxed mb-8 border-l-2 border-gray-800 pl-4">
+                    Helping brands build their digital legacy through custom NFC solutions and branding.
+                </p>
+            </div>
+
+            <!-- ACTION BUTTONS (Save & Exchange) -->
+            <div class="grid grid-cols-2 gap-4 mb-10 animate-fade-in-up" style="animation-delay: 0.3s;">
+                <!-- Save Contact Button -->
+                <button onclick="downloadVCF()" class="bg-white text-black py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition shadow-lg active:scale-95 transform duration-200">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    Save Contact
+                </button>
+                
+                <!-- Exchange / Connect Button -->
+                <button onclick="alert('Lead generation form would open here.')" class="bg-brand-red text-white py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition shadow-[0_4px_20px_rgba(240,0,0,0.4)] active:scale-95 transform duration-200">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Exchange
+                </button>
+            </div>
+
+            <!-- LINKS LIST -->
+            <div class="space-y-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+                
+                <!-- Email -->
+                <a href="mailto:hello@castlecrew.com" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
+                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-brand-red transition">✉</div>
+                    <div>
+                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">Email</div>
+                        <div class="text-base font-medium">hello@castlecrew.com</div>
+                    </div>
+                </a>
+
+                <!-- Phone -->
+                <a href="tel:+94771234567" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
+                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-brand-red transition">📞</div>
+                    <div>
+                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">Phone</div>
+                        <div class="text-base font-medium">+94 77 123 4567</div>
+                    </div>
+                </a>
+
+                <!-- Website -->
+                <a href="https://www.castlecrew.com" target="_blank" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
+                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-brand-red transition">🌐</div>
+                    <div>
+                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">Website</div>
+                        <div class="text-base font-medium">www.castlecrew.com</div>
+                    </div>
+                </a>
+
+                 <!-- WhatsApp -->
+                 <a href="#" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
+                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-green-500 transition">💬</div>
+                    <div>
+                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">WhatsApp</div>
+                        <div class="text-base font-medium">Chat with me</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="mt-16 text-center animate-fade-in-up" style="animation-delay: 0.5s;">
+                <a href="index.html" class="inline-flex items-center gap-3 px-5 py-2 bg-black rounded-full border border-gray-800/50 hover:border-brand-red/50 transition">
+                    <div class="w-2 h-2 bg-brand-red rotate-45"></div>
+                    <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-500">Create your own card</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- VCF DOWNLOAD SCRIPT -->
+    <script>
+        function downloadVCF() {
+            // Data for the contact
+            const contact = {
+                name: "Venura Wijesekera",
+                org: "Castle Crew",
+                title: "Founder & CEO",
+                tel: "+94771234567",
+                email: "hello@castlecrew.com",
+                url: "https://www.castlecrew.com"
+            };
+
+            // Build VCF String
+            const vcard = [
+                "BEGIN:VCARD",
+                "VERSION:3.0",
+                `FN:${contact.name}`,
+                `ORG:${contact.org}`,
+                `TITLE:${contact.title}`,
+                `TEL;TYPE=CELL:${contact.tel}`,
+                `EMAIL;TYPE=WORK:${contact.email}`,
+                `URL:${contact.url}`,
+                "END:VCARD"
+            ].join("\n");
+
+            // Create Blob and Trigger Download
+            const blob = new Blob([vcard], { type: "text/vcard" });
+            const url = URL.createObjectURL(blob);
+            
+            const newLink = document.createElement('a');
+            newLink.download = "contact.vcf";
+            newLink.textContent = contact.name;
+            newLink.href = url;
+            
+            newLink.click();
+        }
+    </script>
+
+</body>
+</html>
