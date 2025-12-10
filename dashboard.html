@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Castle Cards</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            red: '#f00000',
+                            black: '#0a0a0a',
+                            dark: '#121212',
+                            gray: '#1E1E1E',
+                            sidebar: '#0f0f0f'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050505; color: white; }
+        /* Hide scrollbar for sidebar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR (Desktop) -->
+    <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6">
+        <div>
+            <!-- Logo -->
+            <div class="flex items-center gap-2 mb-10 text-xl font-bold tracking-tight">
+                <div class="w-3 h-3 bg-brand-red rotate-45"></div>
+                CASTLE CREW
+            </div>
+
+            <!-- Nav Links -->
+            <nav class="space-y-2">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-brand-red/10 text-brand-red rounded-lg text-sm font-bold">
+                    <span>▦</span> Templates
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <span>✎</span> My Cards
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <span>📊</span> Analytics
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <span>⚙</span> Settings
+                </a>
+            </nav>
+        </div>
+
+        <!-- User Profile (Bottom) -->
+        <div class="flex items-center gap-3 pt-6 border-t border-gray-800">
+            <div class="w-10 h-10 rounded-full bg-gray-700"></div>
+            <div>
+                <p class="text-sm font-bold">Venura W.</p>
+                <p class="text-xs text-gray-500">Pro Member</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto relative">
+        <!-- Mobile Header -->
+        <div class="md:hidden p-4 flex justify-between items-center border-b border-gray-800 bg-brand-black sticky top-0 z-20">
+            <div class="font-bold">CASTLE CREW</div>
+            <button class="text-gray-400">☰</button>
+        </div>
+
+        <div class="p-6 md:p-12 max-w-7xl mx-auto">
+            
+            <!-- Header -->
+            <div class="mb-10">
+                <h1 class="text-3xl md:text-4xl font-black uppercase mb-2">Choose Your <span class="text-brand-red">Look</span></h1>
+                <p class="text-gray-400">Select a template to start editing your digital business card.</p>
+            </div>
+
+            <!-- TEMPLATE GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Template 1: The Executive -->
+                <div class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
+                    <!-- Preview Image Area -->
+                    <div class="h-64 bg-gray-900 relative p-6 flex flex-col items-center justify-center gap-4">
+                        <div class="absolute inset-0 bg-gradient-to-b from-gray-800 to-black opacity-50"></div>
+                        <!-- Abstract Card UI -->
+                        <div class="relative w-32 h-32 rounded-full bg-gray-700 border-4 border-gray-600 z-10"></div>
+                        <div class="relative z-10 w-3/4 h-4 bg-gray-700 rounded"></div>
+                        <div class="relative z-10 w-1/2 h-3 bg-gray-800 rounded"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">The Executive</h3>
+                        <p class="text-xs text-gray-500 mb-4">Clean, professional, and trust-building. Perfect for CEOs and Founders.</p>
+                        <button class="w-full py-3 border border-gray-700 rounded-lg text-sm font-bold hover:bg-white hover:text-black transition">Preview Template</button>
+                    </div>
+                </div>
+
+                <!-- Template 2: Castle Signature (Red) -->
+                <div class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
+                    <div class="absolute top-4 right-4 bg-brand-red text-white text-[10px] font-bold px-2 py-1 rounded z-20">POPULAR</div>
+                    <div class="h-64 bg-gray-900 relative p-6 flex flex-col items-center justify-center gap-4 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-brand-red/20 to-black"></div>
+                        <!-- Abstract Card UI -->
+                        <div class="relative w-full h-full bg-black border border-brand-red/30 rounded-xl p-4 flex flex-col justify-end transform rotate-3 group-hover:rotate-0 transition">
+                            <div class="w-12 h-12 bg-brand-red mb-4 rounded-full"></div>
+                            <div class="w-full h-2 bg-gray-800 rounded mb-2"></div>
+                            <div class="w-2/3 h-2 bg-gray-800 rounded"></div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1 text-brand-red">Castle Signature</h3>
+                        <p class="text-xs text-gray-500 mb-4">High contrast dark mode with vibrant red accents. Makes a statement.</p>
+                        <button class="w-full py-3 bg-brand-red text-white rounded-lg text-sm font-bold hover:bg-red-700 transition">Select Template</button>
+                    </div>
+                </div>
+
+                <!-- Template 3: The Creative -->
+                <div class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
+                    <div class="h-64 bg-gray-900 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-500">
+                        <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black to-transparent">
+                            <div class="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-md border border-white/30"></div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">The Creative</h3>
+                        <p class="text-xs text-gray-500 mb-4">Full-screen background images. Ideal for photographers and artists.</p>
+                        <button class="w-full py-3 border border-gray-700 rounded-lg text-sm font-bold hover:bg-white hover:text-black transition">Preview Template</button>
+                    </div>
+                </div>
+
+                <!-- Template 4: Minimalist -->
+                <div class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
+                    <div class="h-64 bg-white relative p-6 flex flex-col items-center justify-center text-black">
+                        <div class="text-center">
+                            <div class="text-2xl font-serif font-bold tracking-widest mb-2">VENURA</div>
+                            <div class="text-[10px] uppercase tracking-[0.2em] text-gray-500">Architecture</div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">The Minimalist</h3>
+                        <p class="text-xs text-gray-500 mb-4">Stark black on white text. Elegant, simple, and sophisticated.</p>
+                        <button class="w-full py-3 border border-gray-700 rounded-lg text-sm font-bold hover:bg-white hover:text-black transition">Preview Template</button>
+                    </div>
+                </div>
+
+                <!-- Template 5: The Social -->
+                <div class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
+                    <div class="h-64 bg-gray-900 relative p-8 flex flex-col justify-center gap-3">
+                        <div class="w-full h-10 bg-gray-800 rounded-full border border-gray-700 flex items-center px-4">
+                            <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                        </div>
+                        <div class="w-full h-10 bg-gray-800 rounded-full border border-gray-700 flex items-center px-4">
+                            <div class="w-4 h-4 bg-purple-500 rounded-full"></div>
+                        </div>
+                        <div class="w-full h-10 bg-gray-800 rounded-full border border-gray-700 flex items-center px-4">
+                            <div class="w-4 h-4 bg-pink-500 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">The Social</h3>
+                        <p class="text-xs text-gray-500 mb-4">Link-tree style. Best for influencers with many platforms.</p>
+                        <button class="w-full py-3 border border-gray-700 rounded-lg text-sm font-bold hover:bg-white hover:text-black transition">Preview Template</button>
+                    </div>
+                </div>
+
+                 <!-- Template 6: Glassmorphism -->
+                 <div class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
+                    <div class="h-64 bg-gradient-to-br from-gray-800 to-black relative p-6 flex items-center justify-center">
+                        <div class="w-48 h-32 bg-white/10 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl rotate-[-5deg]"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">Glass Modern</h3>
+                        <p class="text-xs text-gray-500 mb-4">Trendy frosted glass effects. Tech-forward and futuristic.</p>
+                        <button class="w-full py-3 border border-gray-700 rounded-lg text-sm font-bold hover:bg-white hover:text-black transition">Preview Template</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
