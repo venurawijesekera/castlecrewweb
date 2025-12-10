@@ -44,14 +44,12 @@
 </head>
 <body class="min-h-screen flex justify-center bg-[#111]">
 
-    <!-- MAIN CONTAINER (Restricted width for desktop view) -->
+    <!-- MAIN CONTAINER -->
     <div class="w-full max-w-md bg-[#050505] min-h-screen shadow-2xl relative flex flex-col">
         
-        <!-- HEADER IMAGE / BANNER -->
+        <!-- HEADER IMAGE -->
         <div class="h-48 bg-gradient-to-br from-brand-red/30 to-black relative overflow-hidden">
-            <!-- Decorative Elements -->
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-red blur-[80px] opacity-50"></div>
-            
             <div class="absolute top-6 right-6 text-brand-red font-bold tracking-tighter text-xs flex items-center gap-1 opacity-80">
                 <div class="w-2 h-2 bg-brand-red rotate-45"></div>
                 CASTLE
@@ -68,26 +66,21 @@
 
             <!-- Text Info -->
             <div class="animate-fade-in-up" style="animation-delay: 0.2s;">
-                <h1 class="text-4xl font-black uppercase leading-[0.9] mb-2 tracking-tight">
-                    Venura <br> Wijesekera
-                </h1>
+                <h1 class="text-4xl font-black uppercase leading-[0.9] mb-2 tracking-tight">Venura <br> Wijesekera</h1>
                 <p class="text-brand-red font-bold text-base mb-6 tracking-wide">FOUNDER & CEO</p>
-                
                 <p class="text-gray-400 text-sm leading-relaxed mb-8 border-l-2 border-gray-800 pl-4">
                     Helping brands build their digital legacy through custom NFC solutions and branding.
                 </p>
             </div>
 
-            <!-- ACTION BUTTONS (Save & Exchange) -->
+            <!-- ACTION BUTTONS -->
             <div class="grid grid-cols-2 gap-4 mb-10 animate-fade-in-up" style="animation-delay: 0.3s;">
-                <!-- Save Contact Button -->
                 <button onclick="downloadVCF()" class="bg-white text-black py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition shadow-lg active:scale-95 transform duration-200">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                     Save Contact
                 </button>
-                
-                <!-- Exchange / Connect Button -->
-                <button onclick="alert('Lead generation form would open here.')" class="bg-brand-red text-white py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition shadow-[0_4px_20px_rgba(240,0,0,0.4)] active:scale-95 transform duration-200">
+                <!-- Opens Modal Now -->
+                <button onclick="toggleModal(true)" class="bg-brand-red text-white py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition shadow-[0_4px_20px_rgba(240,0,0,0.4)] active:scale-95 transform duration-200">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     Exchange
                 </button>
@@ -95,8 +88,6 @@
 
             <!-- LINKS LIST -->
             <div class="space-y-4 animate-fade-in-up" style="animation-delay: 0.4s;">
-                
-                <!-- Email -->
                 <a href="mailto:hello@castlecrew.com" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
                     <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-brand-red transition">✉</div>
                     <div>
@@ -104,8 +95,6 @@
                         <div class="text-base font-medium">hello@castlecrew.com</div>
                     </div>
                 </a>
-
-                <!-- Phone -->
                 <a href="tel:+94771234567" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
                     <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-brand-red transition">📞</div>
                     <div>
@@ -113,22 +102,11 @@
                         <div class="text-base font-medium">+94 77 123 4567</div>
                     </div>
                 </a>
-
-                <!-- Website -->
                 <a href="https://www.castlecrew.com" target="_blank" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
                     <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-brand-red transition">🌐</div>
                     <div>
                         <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">Website</div>
                         <div class="text-base font-medium">www.castlecrew.com</div>
-                    </div>
-                </a>
-
-                 <!-- WhatsApp -->
-                 <a href="#" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
-                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-green-500 transition">💬</div>
-                    <div>
-                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">WhatsApp</div>
-                        <div class="text-base font-medium">Chat with me</div>
                     </div>
                 </a>
             </div>
@@ -140,14 +118,48 @@
                     <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-500">Create your own card</span>
                 </a>
             </div>
-
         </div>
     </div>
 
-    <!-- VCF DOWNLOAD SCRIPT -->
+    <!-- LEAD GENERATION MODAL -->
+    <div id="exchange-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
+        <!-- Backdrop Blur -->
+        <div onclick="toggleModal(false)" class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"></div>
+        
+        <!-- Modal Content -->
+        <div class="bg-[#111] w-full max-w-sm rounded-2xl border border-gray-800 p-6 relative z-10 transform transition-all scale-100 shadow-2xl">
+            <button onclick="toggleModal(false)" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+            
+            <h2 class="text-2xl font-black uppercase mb-1">Share Info</h2>
+            <p class="text-gray-400 text-xs mb-6">Share your details with Venura.</p>
+
+            <form onsubmit="event.preventDefault(); alert('Lead Sent!'); toggleModal(false);" class="space-y-4">
+                <input type="text" placeholder="Your Name" class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition">
+                <input type="email" placeholder="Email Address" class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition">
+                <input type="tel" placeholder="Phone Number" class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition">
+                <textarea rows="3" placeholder="Quick note..." class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition"></textarea>
+                
+                <button type="submit" class="w-full bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-200 transition">SEND DETAILS</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
     <script>
+        // Modal Logic
+        function toggleModal(show) {
+            const modal = document.getElementById('exchange-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+                // Small animation trick
+                modal.querySelector('div.relative').classList.add('animate-fade-in-up');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // VCF Logic
         function downloadVCF() {
-            // Data for the contact
             const contact = {
                 name: "Venura Wijesekera",
                 org: "Castle Crew",
@@ -156,32 +168,19 @@
                 email: "hello@castlecrew.com",
                 url: "https://www.castlecrew.com"
             };
-
-            // Build VCF String
             const vcard = [
-                "BEGIN:VCARD",
-                "VERSION:3.0",
-                `FN:${contact.name}`,
-                `ORG:${contact.org}`,
-                `TITLE:${contact.title}`,
-                `TEL;TYPE=CELL:${contact.tel}`,
-                `EMAIL;TYPE=WORK:${contact.email}`,
-                `URL:${contact.url}`,
-                "END:VCARD"
+                "BEGIN:VCARD", "VERSION:3.0", `FN:${contact.name}`, `ORG:${contact.org}`,
+                `TITLE:${contact.title}`, `TEL;TYPE=CELL:${contact.tel}`,
+                `EMAIL;TYPE=WORK:${contact.email}`, `URL:${contact.url}`, "END:VCARD"
             ].join("\n");
-
-            // Create Blob and Trigger Download
             const blob = new Blob([vcard], { type: "text/vcard" });
             const url = URL.createObjectURL(blob);
-            
             const newLink = document.createElement('a');
             newLink.download = "contact.vcf";
             newLink.textContent = contact.name;
             newLink.href = url;
-            
             newLink.click();
         }
     </script>
-
 </body>
 </html>
