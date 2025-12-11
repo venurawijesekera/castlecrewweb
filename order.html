@@ -26,7 +26,6 @@
     </script>
     <style>
         body { background-color: #050505; color: white; }
-        /* Custom file upload styling */
         .file-drop-zone {
             background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23333' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
             transition: all 0.3s ease;
@@ -39,7 +38,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- NAV (Simplified for Checkout) -->
+    <!-- NAV -->
     <nav class="w-full py-6 px-6 md:px-12 flex justify-between items-center border-b border-gray-900 bg-[#0a0a0a]">
         <div class="text-xl font-bold tracking-tighter flex items-center gap-2">
             <div class="w-3 h-3 bg-brand-red rotate-45"></div>
@@ -75,7 +74,7 @@
                     <div class="mt-4 flex items-start gap-3">
                         <input type="checkbox" id="design-help" class="mt-1 bg-black border-gray-700 rounded text-brand-red focus:ring-brand-red">
                         <label for="design-help" class="text-sm text-gray-400">
-                            I don't have a vector logo. <span class="text-white font-bold">Please help me redesign it (+$25)</span>
+                            I don't have a vector logo. <span class="text-white font-bold">Please help me redesign it (+ LKR 2,500)</span>
                         </label>
                     </div>
                 </div>
@@ -107,11 +106,10 @@
                     <div class="md:col-span-2">
                         <label class="text-xs text-gray-500 font-bold uppercase mb-1 block">Country</label>
                         <select class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-gray-400">
-                            <option>Select Country...</option>
-                            <option>United States</option>
+                            <option>Sri Lanka</option>
                             <option>United Kingdom</option>
-                            <option>Canada</option>
                             <option>Australia</option>
+                            <option>USA</option>
                         </select>
                     </div>
                 </div>
@@ -121,12 +119,19 @@
             <section>
                 <h2 class="text-xl font-bold mb-4 flex items-center gap-3">
                     <span class="w-6 h-6 rounded-full bg-brand-red text-white flex items-center justify-center text-xs">3</span>
-                    Payment
+                    Payment Method
                 </h2>
-                <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800 opacity-60">
-                    <p class="text-sm text-gray-400 flex items-center gap-2">
-                        <span class="text-xl">🔒</span> Payment processor will load after clicking "Complete Order".
-                    </p>
+                <div class="bg-brand-dark p-6 rounded-2xl border border-gray-800">
+                   <div class="flex gap-4">
+                       <label class="flex items-center gap-3 border border-gray-700 p-4 rounded-xl cursor-pointer w-full hover:border-brand-red">
+                           <input type="radio" name="payment" checked class="text-brand-red focus:ring-brand-red bg-black">
+                           <span class="font-bold">Credit/Debit Card</span>
+                       </label>
+                       <label class="flex items-center gap-3 border border-gray-700 p-4 rounded-xl cursor-pointer w-full hover:border-brand-red">
+                           <input type="radio" name="payment" class="text-brand-red focus:ring-brand-red bg-black">
+                           <span class="font-bold">Bank Transfer</span>
+                       </label>
+                   </div>
                 </div>
             </section>
 
@@ -137,51 +142,73 @@
             <div class="bg-white text-black p-6 rounded-2xl sticky top-6 shadow-2xl">
                 <h3 class="text-xl font-black uppercase mb-6 border-b border-gray-200 pb-4">Order Summary</h3>
 
-                <!-- Selected Item -->
+                <!-- Selected Item (Dynamic) -->
                 <div class="flex items-start gap-4 mb-6">
                     <div class="w-16 h-10 bg-black rounded md:w-20 md:h-12 flex items-center justify-center text-white text-xs font-bold">
                         IMG
                     </div>
                     <div>
-                        <h4 class="font-bold text-sm">Professional Card</h4>
-                        <p class="text-xs text-gray-500">Matte Black PVC (1x)</p>
+                        <h4 id="item-name" class="font-bold text-sm">Professional Card</h4>
+                        <p class="text-xs text-gray-500">PVC / Matte Black</p>
                     </div>
-                    <div class="ml-auto font-bold text-sm">$49.00</div>
+                    <div id="item-price" class="ml-auto font-bold text-sm">LKR 2,500</div>
                 </div>
 
                 <!-- Totals -->
                 <div class="space-y-3 text-sm border-t border-gray-200 pt-4 mb-6">
                     <div class="flex justify-between text-gray-600">
                         <span>Subtotal</span>
-                        <span>$49.00</span>
+                        <span id="summary-subtotal">LKR 2,500</span>
                     </div>
                     <div class="flex justify-between text-gray-600">
-                        <span>Shipping</span>
-                        <span>$5.00</span>
-                    </div>
-                    <div class="flex justify-between text-gray-600">
-                        <span>Tax (Est.)</span>
-                        <span>$0.00</span>
+                        <span>Island-wide Delivery</span>
+                        <span>LKR 450</span>
                     </div>
                 </div>
 
                 <div class="flex justify-between items-center border-t border-black pt-4 mb-8">
                     <span class="font-bold uppercase text-sm">Total</span>
-                    <span class="font-black text-2xl text-brand-red">$54.00</span>
+                    <span id="summary-total" class="font-black text-2xl text-brand-red">LKR 2,950</span>
                 </div>
 
                 <button onclick="alert('Order submitted! Redirecting to Payment Gateway...')" class="w-full bg-brand-red text-white py-4 rounded-xl font-bold hover:bg-red-700 transition shadow-lg text-sm uppercase tracking-wide">
-                    Complete Order
+                    Pay Now
                 </button>
                 
                 <p class="text-[10px] text-center text-gray-400 mt-4">
-                    By ordering you agree to our Terms. <br> 
+                    Secure 256-bit SSL Encrypted payment. <br> 
                     Login details will be emailed instantly.
                 </p>
             </div>
         </div>
 
     </div>
+
+    <!-- JAVASCRIPT TO HANDLE PRICING -->
+    <script>
+        // Default Pricing (Professional Base)
+        let price = 2500;
+        let shipping = 450;
+        let itemName = "Professional Card";
+
+        // Check URL Parameters
+        const params = new URLSearchParams(window.location.search);
+        const plan = params.get('plan');
+
+        if (plan === 'executive') {
+            price = 5500; // Base Metal Price
+            itemName = "Metal Hybrid Card";
+        }
+
+        // Format to Currency
+        const formatMoney = (amount) => 'LKR ' + amount.toLocaleString();
+
+        // Update DOM
+        document.getElementById('item-name').innerText = itemName;
+        document.getElementById('item-price').innerText = formatMoney(price);
+        document.getElementById('summary-subtotal').innerText = formatMoney(price);
+        document.getElementById('summary-total').innerText = formatMoney(price + shipping);
+    </script>
 
 </body>
 </html>
