@@ -215,31 +215,122 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT FOR LIVE EDITING -->
+    <!-- JAVASCRIPT FOR LIVE EDITING & DATABASE -->
     <script>
         // Select Inputs
-        const nameInput = document.getElementById('input-name');
-        const jobInput = document.getElementById('input-job');
-        const bioInput = document.getElementById('input-bio');
-        const emailInput = document.getElementById('input-email');
-        const phoneInput = document.getElementById('input-phone');
-        const webInput = document.getElementById('input-website');
+        const inputs = {
+            name: document.getElementById('input-name'),
+            job: document.getElementById('input-job'),
+            company: document.getElementById('input-company'),
+            bio: document.getElementById('input-bio'),
+            email: document.getElementById('input-email'),
+            phone: document.getElementById('input-phone'),
+            website: document.getElementById('input-website')
+        };
 
         // Select Preview Elements
-        const prevName = document.getElementById('preview-name');
-        const prevJob = document.getElementById('preview-job');
-        const prevBio = document.getElementById('preview-bio');
-        const prevEmail = document.getElementById('preview-email');
-        const prevPhone = document.getElementById('preview-phone');
-        const prevWeb = document.getElementById('preview-website');
+        const previews = {
+            name: document.getElementById('preview-name'),
+            job: document.getElementById('preview-job'),
+            bio: document.getElementById('preview-bio'),
+            email: document.getElementById('preview-email'),
+            phone: document.getElementById('preview-phone'),
+            website: document.getElementById('preview-website')
+        };
 
-        // Event Listeners
-        nameInput.addEventListener('input', (e) => prevName.innerHTML = e.target.value.replace(' ', '<br>'));
-        jobInput.addEventListener('input', (e) => prevJob.textContent = e.target.value);
-        bioInput.addEventListener('input', (e) => prevBio.textContent = e.target.value);
-        emailInput.addEventListener('input', (e) => prevEmail.textContent = e.target.value);
-        phoneInput.addEventListener('input', (e) => prevPhone.textContent = e.target.value);
-        webInput.addEventListener('input', (e) => prevWeb.textContent = e.target.value);
+        // 1. LIVE PREVIEW LOGIC
+        function updatePreview() {
+            previews.name.innerHTML = inputs.name.value.replace(' ', '<br>');
+            previews.job.textContent = inputs.job.value;
+            previews.bio.textContent = inputs.bio.value;
+            previews.email.textContent = inputs.email.value;
+            previews.phone.textContent = inputs.phone.value;
+            previews.website.textContent = inputs.website.value;
+        }
+
+        // Attach listeners to all inputs
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        // 2. LOAD DATA FROM DATABASE
+        async function loadData() {
+            const token = localStorage.getItem('castle_token');
+            if (!token) {
+                window.location.href = 'login.html'; // Redirect if not logged in
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/card', {
+                    headers: { 'Authorization': token }
+                });
+                const data = await res.json();
+
+                if (data.id) {
+                    // Populate Inputs
+                    inputs.name.value = data.full_name || "";
+                    inputs.job.value = data.job_title || "";
+                    inputs.company.value = data.company || "";
+                    inputs.bio.value = data.bio || "";
+                    inputs.email.value = data.email || "";
+                    inputs.phone.value = data.phone || "";
+                    inputs.website.value = data.website || "";
+
+                    // Trigger visual update
+                    updatePreview();
+                }
+            } catch (err) {
+                console.error("Failed to load card data", err);
+            }
+        }
+
+        // 3. SAVE DATA (PUBLISH)
+        async function saveData() {
+            const btn = document.querySelector('button.bg-brand-red'); // The Publish Button
+            const originalText = btn.innerText;
+            btn.innerText = "SAVING...";
+
+            const token = localStorage.getItem('castle_token');
+            
+            const payload = {
+                full_name: inputs.name.value,
+                job_title: inputs.job.value,
+                company: inputs.company.value,
+                bio: inputs.bio.value,
+                email: inputs.email.value,
+                phone: inputs.phone.value,
+                website: inputs.website.value
+            };
+
+            try {
+                const res = await fetch('/api/card', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': token 
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    alert("Card Updated Successfully!");
+                } else {
+                    alert("Failed to save changes.");
+                }
+            } catch (err) {
+                alert("Error saving data.");
+            } finally {
+                btn.innerText = originalText;
+            }
+        }
+
+        // Find the publish button and attach click event
+        document.querySelector('button.bg-brand-red').addEventListener('click', saveData);
+
+        // Load data on page start
+        loadData();
+
     </script>
 </body>
 </html>

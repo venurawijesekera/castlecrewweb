@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Venura Wijesekera - Castle Crew</title>
-    <!-- Theme Color for Browser Header -->
+    <title>Castle Crew Profile</title>
     <meta name="theme-color" content="#0a0a0a">
-    
     <link rel="icon" type="image/png" href="assets/img/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
@@ -16,38 +14,20 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            red: '#f00000',
-                            black: '#0a0a0a',
-                            dark: '#121212'
-                        }
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
-                    }
+                    colors: { brand: { red: '#f00000', black: '#0a0a0a' } },
+                    animation: { 'fade-in-up': 'fadeInUp 0.8s ease-out forwards' },
+                    keyframes: { fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
                 }
             }
         }
     </script>
-    <style>
-        body { background-color: #050505; color: white; -webkit-tap-highlight-color: transparent; }
-        /* Smooth scrolling */
-        html { scroll-behavior: smooth; }
-    </style>
+    <style>body { background-color: #050505; color: white; -webkit-tap-highlight-color: transparent; }</style>
 </head>
 <body class="min-h-screen flex justify-center bg-[#111]">
 
-    <!-- MAIN CONTAINER -->
     <div class="w-full max-w-md bg-[#050505] min-h-screen shadow-2xl relative flex flex-col">
         
-        <!-- HEADER IMAGE -->
+        <!-- HEADER -->
         <div class="h-48 bg-gradient-to-br from-brand-red/30 to-black relative overflow-hidden">
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-red blur-[80px] opacity-50"></div>
             <div class="absolute top-6 right-6 text-brand-red font-bold tracking-tighter text-xs flex items-center gap-1 opacity-80">
@@ -60,126 +40,123 @@
         <div class="px-8 -mt-20 relative z-10 flex-1 pb-12">
             
             <!-- Avatar -->
-            <div class="w-36 h-36 rounded-full border-4 border-[#050505] bg-gray-800 overflow-hidden mb-6 shadow-2xl relative z-20 animate-fade-in-up" style="animation-delay: 0.1s;">
-                <img src="assets/img/logo.png" alt="Profile" class="w-full h-full object-cover">
+            <div class="w-36 h-36 rounded-full border-4 border-[#050505] bg-gray-800 overflow-hidden mb-6 shadow-2xl relative z-20 animate-fade-in-up">
+                <img id="p-avatar" src="assets/img/logo.png" class="w-full h-full object-cover">
             </div>
 
-            <!-- Text Info -->
-            <div class="animate-fade-in-up" style="animation-delay: 0.2s;">
-                <h1 class="text-4xl font-black uppercase leading-[0.9] mb-2 tracking-tight">Venura <br> Wijesekera</h1>
-                <p class="text-brand-red font-bold text-base mb-6 tracking-wide">FOUNDER & CEO</p>
-                <p class="text-gray-400 text-sm leading-relaxed mb-8 border-l-2 border-gray-800 pl-4">
-                    Helping brands build their digital legacy through custom NFC solutions and branding.
-                </p>
+            <!-- Text Info (Dynamic IDs Added) -->
+            <div class="animate-fade-in-up" style="animation-delay: 0.1s;">
+                <h1 id="p-name" class="text-4xl font-black uppercase leading-[0.9] mb-2 tracking-tight">Loading...</h1>
+                <p id="p-job" class="text-brand-red font-bold text-base mb-6 tracking-wide">...</p>
+                <p id="p-bio" class="text-gray-400 text-sm leading-relaxed mb-8 border-l-2 border-gray-800 pl-4">...</p>
             </div>
 
-            <!-- ACTION BUTTONS -->
-            <div class="grid grid-cols-2 gap-4 mb-10 animate-fade-in-up" style="animation-delay: 0.3s;">
-                <button onclick="downloadVCF()" class="bg-white text-black py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition shadow-lg active:scale-95 transform duration-200">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            <!-- BUTTONS -->
+            <div class="grid grid-cols-2 gap-4 mb-10 animate-fade-in-up" style="animation-delay: 0.2s;">
+                <button onclick="downloadVCF()" class="bg-white text-black py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition shadow-lg active:scale-95">
                     Save Contact
                 </button>
-                <!-- Opens Modal Now -->
-                <button onclick="toggleModal(true)" class="bg-brand-red text-white py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition shadow-[0_4px_20px_rgba(240,0,0,0.4)] active:scale-95 transform duration-200">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <button onclick="toggleModal(true)" class="bg-brand-red text-white py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition shadow-lg active:scale-95">
                     Exchange
                 </button>
             </div>
 
-            <!-- LINKS LIST -->
-            <div class="space-y-4 animate-fade-in-up" style="animation-delay: 0.4s;">
-                <a href="mailto:hello@castlecrew.com" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
-                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-brand-red transition">✉</div>
-                    <div>
-                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">Email</div>
-                        <div class="text-base font-medium">hello@castlecrew.com</div>
-                    </div>
+            <!-- LINKS (Dynamic IDs Added) -->
+            <div class="space-y-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+                <a id="link-email" href="#" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl border border-gray-900/50">
+                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl">✉</div>
+                    <div><div class="text-[10px] text-gray-500 uppercase font-bold">Email</div><div id="p-email" class="text-base font-medium">...</div></div>
                 </a>
-                <a href="tel:+94771234567" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
-                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-brand-red transition">📞</div>
-                    <div>
-                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">Phone</div>
-                        <div class="text-base font-medium">+94 77 123 4567</div>
-                    </div>
+                <a id="link-phone" href="#" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl border border-gray-900/50">
+                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl">📞</div>
+                    <div><div class="text-[10px] text-gray-500 uppercase font-bold">Phone</div><div id="p-phone" class="text-base font-medium">...</div></div>
                 </a>
-                <a href="https://www.castlecrew.com" target="_blank" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl hover:bg-[#1a1a1a] transition border border-gray-900/50 hover:border-gray-800">
-                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl group-hover:text-brand-red transition">🌐</div>
-                    <div>
-                        <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-0.5">Website</div>
-                        <div class="text-base font-medium">www.castlecrew.com</div>
-                    </div>
+                <a id="link-web" href="#" target="_blank" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl border border-gray-900/50">
+                    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl">🌐</div>
+                    <div><div class="text-[10px] text-gray-500 uppercase font-bold">Website</div><div id="p-web" class="text-base font-medium">...</div></div>
                 </a>
             </div>
 
-            <!-- FOOTER -->
-            <div class="mt-16 text-center animate-fade-in-up" style="animation-delay: 0.5s;">
-                <a href="index.html" class="inline-flex items-center gap-3 px-5 py-2 bg-black rounded-full border border-gray-800/50 hover:border-brand-red/50 transition">
-                    <div class="w-2 h-2 bg-brand-red rotate-45"></div>
-                    <span class="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-500">Create your own card</span>
-                </a>
-            </div>
         </div>
     </div>
-
-    <!-- LEAD GENERATION MODAL -->
+    
+    <!-- Exchange Modal (Hidden) -->
     <div id="exchange-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
-        <!-- Backdrop Blur -->
-        <div onclick="toggleModal(false)" class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"></div>
-        
-        <!-- Modal Content -->
-        <div class="bg-[#111] w-full max-w-sm rounded-2xl border border-gray-800 p-6 relative z-10 transform transition-all scale-100 shadow-2xl">
-            <button onclick="toggleModal(false)" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
-            
+        <div onclick="toggleModal(false)" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div class="bg-[#111] w-full max-w-sm rounded-2xl border border-gray-800 p-6 relative z-10 shadow-2xl">
+            <button onclick="toggleModal(false)" class="absolute top-4 right-4 text-gray-500">✕</button>
             <h2 class="text-2xl font-black uppercase mb-1">Share Info</h2>
-            <p class="text-gray-400 text-xs mb-6">Share your details with Venura.</p>
-
+            <p class="text-gray-400 text-xs mb-6">Connect with <span id="modal-name">us</span>.</p>
             <form onsubmit="event.preventDefault(); alert('Lead Sent!'); toggleModal(false);" class="space-y-4">
-                <input type="text" placeholder="Your Name" class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition">
-                <input type="email" placeholder="Email Address" class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition">
-                <input type="tel" placeholder="Phone Number" class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition">
-                <textarea rows="3" placeholder="Quick note..." class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition"></textarea>
-                
-                <button type="submit" class="w-full bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-200 transition">SEND DETAILS</button>
+                <input type="text" placeholder="Your Name" class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none">
+                <input type="email" placeholder="Email" class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none">
+                <button class="w-full bg-white text-black font-bold py-3 rounded-lg">SEND</button>
             </form>
         </div>
     </div>
 
-    <!-- SCRIPTS -->
+    <!-- LOGIC -->
     <script>
-        // Modal Logic
-        function toggleModal(show) {
-            const modal = document.getElementById('exchange-modal');
-            if (show) {
-                modal.classList.remove('hidden');
-                // Small animation trick
-                modal.querySelector('div.relative').classList.add('animate-fade-in-up');
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
+        // Global object to store fetched data for VCF
+        let cardData = {};
 
-        // VCF Logic
+        // 1. Fetch Data on Load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('/api/get-public-card');
+                const data = await response.json();
+
+                if (data && !data.error) {
+                    cardData = data; // Store for VCF
+
+                    // Update UI
+                    document.title = data.full_name + " - Castle Cards";
+                    document.getElementById('p-name').innerHTML = data.full_name.replace(' ', '<br>');
+                    document.getElementById('p-job').textContent = (data.job_title || "") + " • " + (data.company || "");
+                    document.getElementById('p-bio').textContent = data.bio || "";
+                    document.getElementById('modal-name').textContent = data.full_name;
+
+                    // Update Links
+                    document.getElementById('p-email').textContent = data.email;
+                    document.getElementById('link-email').href = "mailto:" + data.email;
+
+                    document.getElementById('p-phone').textContent = data.phone;
+                    document.getElementById('link-phone').href = "tel:" + data.phone;
+
+                    document.getElementById('p-web').textContent = data.website;
+                    document.getElementById('link-web').href = data.website.startsWith('http') ? data.website : 'https://' + data.website;
+                }
+            } catch (err) {
+                console.error("Error loading profile", err);
+            }
+        });
+
+        // 2. VCF Logic
         function downloadVCF() {
-            const contact = {
-                name: "Venura Wijesekera",
-                org: "Castle Crew",
-                title: "Founder & CEO",
-                tel: "+94771234567",
-                email: "hello@castlecrew.com",
-                url: "https://www.castlecrew.com"
-            };
+            if (!cardData.full_name) return; // Wait for data
+
             const vcard = [
-                "BEGIN:VCARD", "VERSION:3.0", `FN:${contact.name}`, `ORG:${contact.org}`,
-                `TITLE:${contact.title}`, `TEL;TYPE=CELL:${contact.tel}`,
-                `EMAIL;TYPE=WORK:${contact.email}`, `URL:${contact.url}`, "END:VCARD"
+                "BEGIN:VCARD", "VERSION:3.0", 
+                `FN:${cardData.full_name}`, 
+                `ORG:${cardData.company}`,
+                `TITLE:${cardData.job_title}`, 
+                `TEL;TYPE=CELL:${cardData.phone}`,
+                `EMAIL;TYPE=WORK:${cardData.email}`, 
+                `URL:${cardData.website}`, 
+                "END:VCARD"
             ].join("\n");
+
             const blob = new Blob([vcard], { type: "text/vcard" });
             const url = URL.createObjectURL(blob);
             const newLink = document.createElement('a');
-            newLink.download = "contact.vcf";
-            newLink.textContent = contact.name;
+            newLink.download = cardData.full_name.replace(' ', '_') + ".vcf";
             newLink.href = url;
             newLink.click();
+        }
+
+        function toggleModal(show) {
+            const modal = document.getElementById('exchange-modal');
+            modal.classList.toggle('hidden', !show);
         }
     </script>
 </body>

@@ -1,0 +1,8 @@
+name = "castlecrewweb"
+pages_build_output_dir = "."
+compatibility_date = "2024-04-05"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "castle-db"
+database_id = "14c3aebd-86c7-4529-aba0-bb6ddf0b9e7f"
