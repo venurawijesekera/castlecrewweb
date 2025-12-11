@@ -27,11 +27,8 @@
     </script>
     <style>
         body { background-color: #050505; color: white; }
-        /* Hide scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-        
-        /* Mobile Preview Scrollbar */
         .phone-screen::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -42,89 +39,92 @@
         
         <!-- Header -->
         <div class="h-16 border-b border-gray-800 flex items-center justify-between px-6 bg-brand-black">
-    <a href="dashboard.html" class="text-sm text-gray-400 hover:text-white flex items-center gap-2">
-        <span>←</span> Back
-    </a>
-    <div class="font-bold text-sm hidden md:block">Editing: Castle Signature</div>
-    
-    <div class="flex gap-3">
-        <!-- New View Live Button -->
-        <a href="card.html" target="_blank" class="border border-gray-700 text-gray-300 text-xs font-bold px-4 py-2 rounded hover:bg-white hover:text-black transition flex items-center gap-2">
-            <span>👁</span> View Live
-        </a>
-        
-        <button class="bg-brand-red text-white text-xs font-bold px-4 py-2 rounded hover:bg-red-700 transition">
-            PUBLISH
-        </button>
-    </div>
-</div>
+            <a href="dashboard.html" class="text-sm text-gray-400 hover:text-white flex items-center gap-2">
+                <span>←</span> Back
+            </a>
+            <div class="font-bold text-sm hidden md:block">Card Editor</div>
+            <div class="flex gap-3">
+                <a id="live-link" href="#" target="_blank" class="border border-gray-700 text-gray-300 text-xs font-bold px-4 py-2 rounded hover:bg-white hover:text-black transition flex items-center gap-2">
+                    <span>👁</span> Live
+                </a>
+                <button onclick="saveData()" class="bg-brand-red text-white text-xs font-bold px-4 py-2 rounded hover:bg-red-700 transition">
+                    PUBLISH CHANGES
+                </button>
+            </div>
+        </div>
 
         <!-- Form Inputs (Scrollable) -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-8">
-            
-            <!-- Profile Section -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+            <!-- 1. URL & TEMPLATE SETTINGS -->
             <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
-                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider">Profile Information</h3>
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider">Card Settings</h3>
                 
-                <!-- Photo Upload Mock -->
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center border-2 border-brand-red overflow-hidden">
-                        <img id="input-avatar-preview" src="assets/img/logo.png" class="w-full h-full object-cover">
+                <!-- URL INPUT -->
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-1">Your Castle Link (Username)</label>
+                    <div class="relative group">
+                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm select-none">castlecrew.cc/</div>
+                        <!-- Added padding-left to accommodate prefix -->
+                        <input type="text" id="input-slug" class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-28 text-sm focus:border-brand-red focus:outline-none transition text-brand-red font-bold">
+                        
+                        <!-- Availability Indicator -->
+                        <div id="slug-status" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs font-bold"></div>
                     </div>
-                    <div>
-                        <button class="text-xs bg-white text-black font-bold px-3 py-1.5 rounded mb-1 hover:bg-gray-200">Upload Photo</button>
-                        <p class="text-[10px] text-gray-500">Max 5MB. PNG or JPG.</p>
-                    </div>
+                    <p class="text-[10px] text-gray-500 mt-1">This is your unique URL.</p>
                 </div>
 
+                <!-- TEMPLATE SELECTOR -->
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Active Template</label>
+                    <select id="input-template" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none text-white appearance-none cursor-pointer">
+                        <option value="signature">Castle Signature (Dark)</option>
+                        <option value="realestate">Eco Real Estate (Light)</option>
+                        <option value="creative">The Creative (Vibrant)</option>
+                        <option value="minimal">The Minimalist</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- 2. PROFILE INFO -->
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider">Profile Information</h3>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs text-gray-400 mb-1">Full Name</label>
-                        <input type="text" id="input-name" value="Venura Wijesekera" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
+                        <input type="text" id="input-name" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
                     </div>
                     <div>
                         <label class="block text-xs text-gray-400 mb-1">Job Title</label>
-                        <input type="text" id="input-job" value="Founder & CEO" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
+                        <input type="text" id="input-job" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
                     </div>
                     <div>
                         <label class="block text-xs text-gray-400 mb-1">Company</label>
-                        <input type="text" id="input-company" value="Castle Crew" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
+                        <input type="text" id="input-company" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
                     </div>
                     <div>
                         <label class="block text-xs text-gray-400 mb-1">Bio / Tagline</label>
-                        <textarea id="input-bio" rows="3" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">Helping brands build their digital legacy.</textarea>
+                        <textarea id="input-bio" rows="3" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition"></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- Contact Section -->
+            <!-- 3. CONTACT DETAILS -->
             <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
                 <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider">Contact Details</h3>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs text-gray-400 mb-1">Email</label>
-                        <input type="email" id="input-email" value="hello@castlecrew.com" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
+                        <input type="email" id="input-email" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
                     </div>
                     <div>
                         <label class="block text-xs text-gray-400 mb-1">Phone</label>
-                        <input type="tel" id="input-phone" value="+94 77 123 4567" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
+                        <input type="tel" id="input-phone" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
                     </div>
                     <div>
                         <label class="block text-xs text-gray-400 mb-1">Website</label>
-                        <input type="url" id="input-website" value="www.castlecrew.com" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
+                        <input type="url" id="input-website" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none transition">
                     </div>
-                </div>
-            </div>
-
-             <!-- Color Theme -->
-             <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
-                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider">Accent Color</h3>
-                <div class="flex gap-3">
-                    <button class="w-8 h-8 rounded-full bg-[#f00000] ring-2 ring-white"></button>
-                    <button class="w-8 h-8 rounded-full bg-blue-600 hover:ring-2 hover:ring-white transition"></button>
-                    <button class="w-8 h-8 rounded-full bg-purple-600 hover:ring-2 hover:ring-white transition"></button>
-                    <button class="w-8 h-8 rounded-full bg-yellow-500 hover:ring-2 hover:ring-white transition"></button>
-                    <button class="w-8 h-8 rounded-full bg-white hover:ring-2 hover:ring-white transition"></button>
                 </div>
             </div>
 
@@ -133,92 +133,54 @@
 
     <!-- RIGHT: PREVIEW PANEL -->
     <div class="hidden md:flex flex-1 bg-[#050505] items-center justify-center relative overflow-hidden">
-        <!-- Background Grid -->
         <div class="absolute inset-0 bg-[linear-gradient(rgba(30,30,30,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(30,30,30,0.5)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
 
         <!-- Phone Mockup -->
         <div class="relative w-[375px] h-[750px] bg-black rounded-[50px] border-[12px] border-gray-900 shadow-2xl flex flex-col overflow-hidden">
-            <!-- Dynamic Island / Notch -->
             <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-7 bg-black rounded-b-2xl z-20"></div>
 
-            <!-- THE ACTUAL CARD TEMPLATE (Castle Signature) -->
+            <!-- PREVIEW CONTENT -->
             <div id="preview-screen" class="phone-screen w-full h-full bg-[#111] overflow-y-auto text-white relative">
-                
-                <!-- Template Header -->
+                <!-- Standard Header -->
                 <div class="h-40 bg-gradient-to-br from-brand-red/20 to-black relative">
                     <div class="absolute top-4 right-4 text-brand-red font-bold tracking-tighter text-sm">CASTLE</div>
                 </div>
 
-                <!-- Content Container -->
                 <div class="px-6 -mt-16 relative z-10 pb-10">
-                    <!-- Profile Image -->
                     <div class="w-32 h-32 rounded-full border-4 border-[#111] bg-gray-800 overflow-hidden mb-4 shadow-lg">
-                        <img id="preview-avatar" src="assets/img/logo.png" class="w-full h-full object-cover">
+                        <img src="assets/img/logo.png" class="w-full h-full object-cover">
                     </div>
 
-                    <!-- Name & Job -->
-                    <h1 id="preview-name" class="text-3xl font-black uppercase leading-tight mb-1">Venura <br> Wijesekera</h1>
-                    <p id="preview-job" class="text-brand-red font-bold text-sm mb-4">Founder & CEO</p>
+                    <h1 id="preview-name" class="text-3xl font-black uppercase leading-tight mb-1">Loading...</h1>
+                    <p id="preview-job" class="text-brand-red font-bold text-sm mb-4">...</p>
                     
-                    <!-- Bio -->
-                    <p id="preview-bio" class="text-gray-400 text-sm leading-relaxed mb-8 border-l-2 border-gray-700 pl-3">
-                        Helping brands build their digital legacy.
-                    </p>
+                    <p id="preview-bio" class="text-gray-400 text-sm leading-relaxed mb-8 border-l-2 border-gray-700 pl-3">...</p>
 
-                    <!-- Action Buttons -->
                     <div class="grid grid-cols-2 gap-3 mb-8">
-                        <a href="#" class="bg-white text-black py-3 rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition">
-                            Save Contact
-                        </a>
-                        <a href="#" class="bg-brand-red text-white py-3 rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition">
-                            Exchange
-                        </a>
+                        <button class="bg-white text-black py-3 rounded-lg text-sm font-bold">Save Contact</button>
+                        <button class="bg-brand-red text-white py-3 rounded-lg text-sm font-bold">Exchange</button>
                     </div>
 
-                    <!-- Links List -->
                     <div class="space-y-3">
-                        <a id="preview-email-link" href="#" class="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl hover:bg-gray-800 transition border border-gray-800">
+                        <div class="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl border border-gray-800">
                             <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-lg">✉</div>
-                            <div>
-                                <div class="text-[10px] text-gray-500 uppercase font-bold">Email</div>
-                                <div id="preview-email" class="text-sm font-medium">hello@castlecrew.com</div>
-                            </div>
-                        </a>
-
-                        <a id="preview-phone-link" href="#" class="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl hover:bg-gray-800 transition border border-gray-800">
-                            <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-lg">📞</div>
-                            <div>
-                                <div class="text-[10px] text-gray-500 uppercase font-bold">Phone</div>
-                                <div id="preview-phone" class="text-sm font-medium">+94 77 123 4567</div>
-                            </div>
-                        </a>
-
-                        <a id="preview-website-link" href="#" class="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl hover:bg-gray-800 transition border border-gray-800">
+                            <div class="text-sm font-medium" id="preview-email">...</div>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl border border-gray-800">
                             <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-lg">🌐</div>
-                            <div>
-                                <div class="text-[10px] text-gray-500 uppercase font-bold">Website</div>
-                                <div id="preview-website" class="text-sm font-medium">www.castlecrew.com</div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="mt-12 text-center">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-black rounded-full border border-gray-800 opacity-60">
-                            <div class="w-2 h-2 bg-brand-red rotate-45"></div>
-                            <span class="text-[10px] uppercase font-bold tracking-widest text-gray-400">Castle Cards</span>
+                            <div class="text-sm font-medium" id="preview-website">...</div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT FOR LIVE EDITING & DATABASE -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Select Inputs
         const inputs = {
+            slug: document.getElementById('input-slug'),
+            template: document.getElementById('input-template'),
             name: document.getElementById('input-name'),
             job: document.getElementById('input-job'),
             company: document.getElementById('input-company'),
@@ -228,47 +190,43 @@
             website: document.getElementById('input-website')
         };
 
-        // Select Preview Elements
         const previews = {
             name: document.getElementById('preview-name'),
             job: document.getElementById('preview-job'),
             bio: document.getElementById('preview-bio'),
             email: document.getElementById('preview-email'),
-            phone: document.getElementById('preview-phone'),
             website: document.getElementById('preview-website')
         };
 
-        // 1. LIVE PREVIEW LOGIC
+        const slugStatus = document.getElementById('slug-status');
+        let originalSlug = "";
+        let debounceTimer;
+
+        // 1. Live Preview Text Logic
         function updatePreview() {
-            previews.name.innerHTML = inputs.name.value.replace(' ', '<br>');
-            previews.job.textContent = inputs.job.value;
-            previews.bio.textContent = inputs.bio.value;
-            previews.email.textContent = inputs.email.value;
-            previews.phone.textContent = inputs.phone.value;
-            previews.website.textContent = inputs.website.value;
+            previews.name.innerHTML = inputs.name.value.replace(' ', '<br>') || "Your Name";
+            previews.job.textContent = (inputs.job.value || "Job Title") + " @ " + (inputs.company.value || "Company");
+            previews.bio.textContent = inputs.bio.value || "Your bio will appear here.";
+            previews.email.textContent = inputs.email.value || "email@example.com";
+            previews.website.textContent = inputs.website.value || "website.com";
         }
+        
+        Object.values(inputs).forEach(input => input.addEventListener('input', updatePreview));
 
-        // Attach listeners to all inputs
-        Object.values(inputs).forEach(input => {
-            input.addEventListener('input', updatePreview);
-        });
-
-        // 2. LOAD DATA FROM DATABASE
+        // 2. Load Data from Backend
         async function loadData() {
             const token = localStorage.getItem('castle_token');
-            if (!token) {
-                window.location.href = 'login.html'; // Redirect if not logged in
-                return;
-            }
+            if (!token) return window.location.href = 'login.html';
 
             try {
-                const res = await fetch('/api/card', {
-                    headers: { 'Authorization': token }
-                });
+                const res = await fetch('/api/card', { headers: { 'Authorization': token } });
                 const data = await res.json();
 
                 if (data.id) {
-                    // Populate Inputs
+                    inputs.slug.value = data.slug || "";
+                    originalSlug = data.slug || "";
+                    inputs.template.value = data.template_id || "signature";
+
                     inputs.name.value = data.full_name || "";
                     inputs.job.value = data.job_title || "";
                     inputs.company.value = data.company || "";
@@ -276,24 +234,60 @@
                     inputs.email.value = data.email || "";
                     inputs.phone.value = data.phone || "";
                     inputs.website.value = data.website || "";
+                    
+                    // Set Live Link
+                    const liveUrl = "card.html?id=" + data.slug;
+                    document.getElementById('live-link').href = liveUrl;
 
-                    // Trigger visual update
                     updatePreview();
                 }
             } catch (err) {
-                console.error("Failed to load card data", err);
+                console.error("Failed to load data", err);
             }
         }
 
-        // 3. SAVE DATA (PUBLISH)
+        // 3. Real-time Slug Check (Debounced)
+        inputs.slug.addEventListener('keyup', () => {
+            clearTimeout(debounceTimer);
+            const val = inputs.slug.value.trim();
+            
+            if(!val || val === originalSlug) {
+                slugStatus.innerText = "";
+                return;
+            }
+
+            slugStatus.innerText = "Checking...";
+            slugStatus.className = "absolute right-3 top-1/2 transform -translate-y-1/2 text-xs font-bold text-gray-500";
+            
+            debounceTimer = setTimeout(async () => {
+                try {
+                    const res = await fetch(`/api/check-slug?slug=${val}`);
+                    const data = await res.json();
+                    
+                    if (data.available) {
+                        slugStatus.innerText = "✓ Available";
+                        slugStatus.className = "absolute right-3 top-1/2 transform -translate-y-1/2 text-xs font-bold text-green-500";
+                    } else {
+                        slugStatus.innerText = "✕ Taken";
+                        slugStatus.className = "absolute right-3 top-1/2 transform -translate-y-1/2 text-xs font-bold text-brand-red";
+                    }
+                } catch(e) { slugStatus.innerText = "? Error"; }
+            }, 500);
+        });
+
+        // 4. Save / Publish
         async function saveData() {
-            const btn = document.querySelector('button.bg-brand-red'); // The Publish Button
+            const btn = document.querySelector('button.bg-brand-red');
             const originalText = btn.innerText;
-            btn.innerText = "SAVING...";
+            btn.innerText = "PUBLISHING...";
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
 
             const token = localStorage.getItem('castle_token');
             
             const payload = {
+                slug: inputs.slug.value.trim(),
+                template_id: inputs.template.value,
                 full_name: inputs.name.value,
                 job_title: inputs.job.value,
                 company: inputs.company.value,
@@ -312,25 +306,30 @@
                     },
                     body: JSON.stringify(payload)
                 });
+                
+                const result = await res.json();
 
                 if (res.ok) {
-                    alert("Card Updated Successfully!");
+                    alert("Card Published Successfully!");
+                    originalSlug = payload.slug; // Update original so we don't re-check availability
+                    
+                    // Update View Live Button
+                    const liveUrl = "card.html?id=" + payload.slug;
+                    document.getElementById('live-link').href = liveUrl;
+
                 } else {
-                    alert("Failed to save changes.");
+                    alert("Failed: " + (result.error || "Unknown Error"));
                 }
             } catch (err) {
-                alert("Error saving data.");
+                alert("Connection Error");
             } finally {
                 btn.innerText = originalText;
+                btn.disabled = false;
+                btn.classList.remove('opacity-50');
             }
         }
 
-        // Find the publish button and attach click event
-        document.querySelector('button.bg-brand-red').addEventListener('click', saveData);
-
-        // Load data on page start
         loadData();
-
     </script>
 </body>
 </html>

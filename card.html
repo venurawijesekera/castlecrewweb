@@ -100,10 +100,27 @@
         // Global object to store fetched data for VCF
         let cardData = {};
 
-        // 1. Fetch Data on Load
         window.addEventListener('load', async () => {
+            
+            // 1. DETERMINE SLUG FROM URL
+            // If URL is castlecrew.cc/venura -> slug is "venura"
+            // We remove the leading slash.
+            let slug = window.location.pathname.replace(/^\//, '');
+
+            // Edge Case: If accessing card.html directly or index.html, check for ?id=venura
+            if (!slug || slug === 'index.html' || slug === 'card.html') {
+                const urlParams = new URLSearchParams(window.location.search);
+                slug = urlParams.get('id');
+            }
+
+            if (!slug) {
+                console.warn("No user slug found.");
+                return;
+            }
+
             try {
-                const response = await fetch('/api/get-public-card');
+                // 2. FETCH DATA USING SLUG
+                const response = await fetch(`/api/public/${slug}`);
                 const data = await response.json();
 
                 if (data && !data.error) {
@@ -125,13 +142,15 @@
 
                     document.getElementById('p-web').textContent = data.website;
                     document.getElementById('link-web').href = data.website.startsWith('http') ? data.website : 'https://' + data.website;
+                } else {
+                    document.body.innerHTML = "<div class='text-white flex items-center justify-center h-screen'>User not found</div>";
                 }
             } catch (err) {
                 console.error("Error loading profile", err);
             }
         });
 
-        // 2. VCF Logic
+        // 3. VCF Logic
         function downloadVCF() {
             if (!cardData.full_name) return; // Wait for data
 
