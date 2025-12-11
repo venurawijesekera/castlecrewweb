@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,64 +23,107 @@
 
     <div class="flex justify-between items-center mb-10">
         <h1 class="text-3xl font-black uppercase">Admin <span class="text-brand-red">Dashboard</span></h1>
-        <a href="dashboard.html" class="text-sm text-gray-500 hover:text-white">Back to App</a>
+        <div class="flex gap-4">
+            <button onclick="loadAdminData()" class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">Refresh</button>
+            <a href="dashboard.html" class="text-sm bg-brand-red px-4 py-2 rounded font-bold">Back to App</a>
+        </div>
     </div>
 
     <!-- STATS -->
-    <div class="grid grid-cols-3 gap-6 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
             <h3 class="text-gray-500 text-xs font-bold uppercase">Total Users</h3>
             <p id="total-users" class="text-4xl font-black mt-2">...</p>
         </div>
         <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
-            <h3 class="text-gray-500 text-xs font-bold uppercase">Pro Members</h3>
-            <p class="text-4xl font-black mt-2 text-brand-red">0</p>
+            <h3 class="text-gray-500 text-xs font-bold uppercase">Pro/Exec Members</h3>
+            <p id="paid-users" class="text-4xl font-black mt-2 text-brand-red">...</p>
         </div>
         <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
-            <h3 class="text-gray-500 text-xs font-bold uppercase">Revenue</h3>
-            <p class="text-4xl font-black mt-2">LKR 0</p>
+            <h3 class="text-gray-500 text-xs font-bold uppercase">System Status</h3>
+            <p class="text-4xl font-black mt-2 text-green-500">Active</p>
         </div>
     </div>
 
     <!-- USERS TABLE -->
     <div class="bg-brand-dark rounded-xl border border-gray-800 overflow-hidden">
-        <table class="w-full text-left text-sm text-gray-400">
-            <thead class="bg-black text-white uppercase text-xs font-bold">
-                <tr>
-                    <th class="p-4">ID</th>
-                    <th class="p-4">Email</th>
-                    <th class="p-4">Joined</th>
-                    <th class="p-4">Plan</th>
-                    <th class="p-4 text-right">Actions</th>
-                </tr>
-            </thead>
-            <tbody id="user-list">
-                <!-- Data injected via JS -->
-                <tr><td class="p-4" colspan="5">Loading users...</td></tr>
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-gray-400">
+                <thead class="bg-black text-white uppercase text-xs font-bold">
+                    <tr>
+                        <th class="p-4">ID</th>
+                        <th class="p-4">Email</th>
+                        <th class="p-4">Joined</th>
+                        <th class="p-4">Current Plan</th>
+                        <th class="p-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="user-list">
+                    <tr><td class="p-4" colspan="5">Loading users...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- EDIT USER MODAL -->
+    <div id="edit-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50">
+        <div class="bg-[#111] w-full max-w-sm p-6 rounded-2xl border border-gray-800 shadow-2xl relative">
+            <h2 class="text-xl font-bold mb-1">Manage User</h2>
+            <p id="modal-email" class="text-xs text-gray-500 mb-6">user@email.com</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-2">Change Plan</label>
+                    <select id="plan-select" class="w-full bg-black border border-gray-700 rounded p-2 text-sm focus:border-brand-red focus:outline-none">
+                        <option value="starter">Starter (Free)</option>
+                        <option value="professional">Professional</option>
+                        <option value="executive">Executive</option>
+                    </select>
+                </div>
+
+                <button onclick="saveUserChanges()" class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">SAVE CHANGES</button>
+                
+                <div class="border-t border-gray-800 pt-4 mt-4">
+                    <button onclick="deleteUser()" class="w-full text-red-500 text-xs font-bold hover:text-red-400">DELETE USER PERMANENTLY</button>
+                </div>
+            </div>
+
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+        </div>
     </div>
 
     <script>
-        // 1. Fetch All Users (We need a backend API for this, see Step 4)
+        let currentUserId = null;
+
+        // 1. Fetch Users & Populate Table
         async function loadAdminData() {
             try {
-                // We will create this API next
+                // Ensure we call the correct API endpoint. 
+                // We need to update api/admin/users.js to return the 'plan' column too.
                 const res = await fetch('/api/admin/users');
                 const users = await res.json();
 
-                if (!users.length) return;
+                if (!users.length) {
+                     document.getElementById('user-list').innerHTML = '<tr><td class="p-4">No users found.</td></tr>';
+                     return;
+                }
 
+                // Update Stats
                 document.getElementById('total-users').innerText = users.length;
+                const paidCount = users.filter(u => u.plan === 'professional' || u.plan === 'executive').length;
+                document.getElementById('paid-users').innerText = paidCount;
                 
+                // Render Table
                 const html = users.map(user => `
                     <tr class="border-b border-gray-800 hover:bg-white/5 transition">
                         <td class="p-4 font-mono text-xs">#${user.id}</td>
                         <td class="p-4 text-white font-bold">${user.email}</td>
                         <td class="p-4">${new Date(user.created_at).toLocaleDateString()}</td>
-                        <td class="p-4"><span class="bg-gray-800 text-white px-2 py-1 rounded text-xs">Starter</span></td>
+                        <td class="p-4">
+                            <span class="${getPlanBadge(user.plan)}">${user.plan || 'starter'}</span>
+                        </td>
                         <td class="p-4 text-right">
-                            <button onclick="alert('Manage ' + ${user.id})" class="text-brand-red font-bold hover:underline">Manage</button>
+                            <button onclick="openModal(${user.id}, '${user.email}', '${user.plan || 'starter'}')" class="text-brand-red font-bold hover:underline text-xs bg-brand-red/10 px-3 py-1.5 rounded">MANAGE</button>
                         </td>
                     </tr>
                 `).join('');
@@ -93,6 +136,73 @@
             }
         }
 
+        // Helper for Badge Styles
+        function getPlanBadge(plan) {
+            if(plan === 'executive') return 'bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded text-xs uppercase font-bold';
+            if(plan === 'professional') return 'bg-brand-red/20 text-brand-red px-2 py-1 rounded text-xs uppercase font-bold';
+            return 'bg-gray-800 text-gray-400 px-2 py-1 rounded text-xs uppercase font-bold';
+        }
+
+        // 2. Modal Logic
+        function openModal(id, email, plan) {
+            currentUserId = id;
+            document.getElementById('modal-email').innerText = email;
+            document.getElementById('plan-select').value = plan;
+            document.getElementById('edit-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').classList.add('hidden');
+            currentUserId = null;
+        }
+
+        // 3. Save Changes (API Call)
+        async function saveUserChanges() {
+            if(!currentUserId) return;
+            const newPlan = document.getElementById('plan-select').value;
+            const btn = document.querySelector('#edit-modal button.bg-brand-red');
+            btn.innerText = "SAVING...";
+
+            try {
+                const res = await fetch('/api/admin/update-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: currentUserId, plan: newPlan })
+                });
+
+                if(res.ok) {
+                    alert("Plan Updated Successfully!");
+                    closeModal();
+                    loadAdminData(); // Refresh table
+                } else {
+                    alert("Failed to update.");
+                }
+            } catch(e) { alert("Error"); }
+            btn.innerText = "SAVE CHANGES";
+        }
+
+        // 4. Delete User (API Call)
+        async function deleteUser() {
+            if(!confirm("Are you sure? This will delete the user and their card forever.")) return;
+            
+            try {
+                const res = await fetch('/api/admin/update-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: currentUserId, action: 'delete' })
+                });
+
+                if(res.ok) {
+                    alert("User Deleted.");
+                    closeModal();
+                    loadAdminData();
+                } else {
+                    alert("Failed to delete.");
+                }
+            } catch(e) { alert("Error"); }
+        }
+
+        // Load on start
         loadAdminData();
     </script>
 
