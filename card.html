@@ -44,7 +44,7 @@
                 <img id="p-avatar" src="assets/img/logo.png" class="w-full h-full object-cover">
             </div>
 
-            <!-- Text Info (Dynamic IDs Added) -->
+            <!-- Text Info -->
             <div class="animate-fade-in-up" style="animation-delay: 0.1s;">
                 <h1 id="p-name" class="text-4xl font-black uppercase leading-[0.9] mb-2 tracking-tight">Loading...</h1>
                 <p id="p-job" class="text-brand-red font-bold text-base mb-6 tracking-wide">...</p>
@@ -61,17 +61,17 @@
                 </button>
             </div>
 
-            <!-- LINKS (Dynamic IDs Added) -->
+            <!-- LINKS -->
             <div class="space-y-4 animate-fade-in-up" style="animation-delay: 0.3s;">
-                <a id="link-email" href="#" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl border border-gray-900/50">
+                <a id="link-email" href="#" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl border border-gray-900/50 hidden">
                     <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl">✉</div>
                     <div><div class="text-[10px] text-gray-500 uppercase font-bold">Email</div><div id="p-email" class="text-base font-medium">...</div></div>
                 </a>
-                <a id="link-phone" href="#" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl border border-gray-900/50">
+                <a id="link-phone" href="#" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl border border-gray-900/50 hidden">
                     <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl">📞</div>
                     <div><div class="text-[10px] text-gray-500 uppercase font-bold">Phone</div><div id="p-phone" class="text-base font-medium">...</div></div>
                 </a>
-                <a id="link-web" href="#" target="_blank" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl border border-gray-900/50">
+                <a id="link-web" href="#" target="_blank" class="group flex items-center gap-5 p-5 bg-[#111] rounded-2xl border border-gray-900/50 hidden">
                     <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center text-xl">🌐</div>
                     <div><div class="text-[10px] text-gray-500 uppercase font-bold">Website</div><div id="p-web" class="text-base font-medium">...</div></div>
                 </a>
@@ -100,75 +100,96 @@
         // Global object to store fetched data for VCF
         let cardData = {};
 
+        // 1. Fetch Data on Load
         window.addEventListener('load', async () => {
             
-            // 1. DETERMINE SLUG FROM URL
-            // If URL is castlecrew.cc/venura -> slug is "venura"
-            // We remove the leading slash.
-            let slug = window.location.pathname.replace(/^\//, '');
+            // --- NEW URL DETECTION LOGIC ---
+            // 1. Try to get slug from path (e.g. /venura)
+            let slug = window.location.pathname.replace(/^\/+|\/+$/g, ''); 
 
-            // Edge Case: If accessing card.html directly or index.html, check for ?id=venura
-            if (!slug || slug === 'index.html' || slug === 'card.html') {
+            // 2. If path is a system file (like card.html) or empty, check for ?id= query param
+            if (!slug || slug.includes('.html') || slug === 'index') {
                 const urlParams = new URLSearchParams(window.location.search);
                 slug = urlParams.get('id');
             }
 
+            // 3. If no slug found, show error
             if (!slug) {
-                console.warn("No user slug found.");
+                document.getElementById('p-name').innerHTML = "User Not Found";
+                document.getElementById('p-bio').innerHTML = "Please check the URL.";
                 return;
             }
 
             try {
-                // 2. FETCH DATA USING SLUG
+                // Call the API with the dynamic slug
                 const response = await fetch(`/api/public/${slug}`);
                 const data = await response.json();
 
-                if (data && !data.error) {
-                    cardData = data; // Store for VCF
+                if (data.error) {
+                    throw new Error(data.error);
+                }
 
-                    // Update UI
-                    document.title = data.full_name + " - Castle Cards";
-                    document.getElementById('p-name').innerHTML = data.full_name.replace(' ', '<br>');
-                    document.getElementById('p-job').textContent = (data.job_title || "") + " • " + (data.company || "");
-                    document.getElementById('p-bio').textContent = data.bio || "";
-                    document.getElementById('modal-name').textContent = data.full_name;
+                cardData = data; // Store for VCF
 
-                    // Update Links
+                // Update UI
+                document.title = (data.full_name || "Profile") + " - Castle Cards";
+                document.getElementById('p-name').innerHTML = (data.full_name || "").replace(' ', '<br>');
+                
+                const jobInfo = [data.job_title, data.company].filter(Boolean).join(" • ");
+                document.getElementById('p-job').textContent = jobInfo;
+                
+                document.getElementById('p-bio').textContent = data.bio || "";
+                document.getElementById('modal-name').textContent = data.full_name || "us";
+
+                // Update Links (Only show if data exists)
+                if (data.email) {
                     document.getElementById('p-email').textContent = data.email;
                     document.getElementById('link-email').href = "mailto:" + data.email;
+                    document.getElementById('link-email').classList.remove('hidden');
+                    document.getElementById('link-email').classList.add('flex');
+                }
 
+                if (data.phone) {
                     document.getElementById('p-phone').textContent = data.phone;
                     document.getElementById('link-phone').href = "tel:" + data.phone;
-
-                    document.getElementById('p-web').textContent = data.website;
-                    document.getElementById('link-web').href = data.website.startsWith('http') ? data.website : 'https://' + data.website;
-                } else {
-                    document.body.innerHTML = "<div class='text-white flex items-center justify-center h-screen'>User not found</div>";
+                    document.getElementById('link-phone').classList.remove('hidden');
+                    document.getElementById('link-phone').classList.add('flex');
                 }
+
+                if (data.website) {
+                    document.getElementById('p-web').textContent = data.website.replace(/^https?:\/\//, '');
+                    document.getElementById('link-web').href = data.website.startsWith('http') ? data.website : 'https://' + data.website;
+                    document.getElementById('link-web').classList.remove('hidden');
+                    document.getElementById('link-web').classList.add('flex');
+                }
+
             } catch (err) {
                 console.error("Error loading profile", err);
+                document.getElementById('p-name').innerHTML = "Not Found";
+                document.getElementById('p-job').innerHTML = "This profile does not exist.";
+                document.getElementById('p-bio').innerHTML = "";
             }
         });
 
-        // 3. VCF Logic
+        // 2. VCF Logic
         function downloadVCF() {
             if (!cardData.full_name) return; // Wait for data
 
             const vcard = [
                 "BEGIN:VCARD", "VERSION:3.0", 
-                `FN:${cardData.full_name}`, 
-                `ORG:${cardData.company}`,
-                `TITLE:${cardData.job_title}`, 
-                `TEL;TYPE=CELL:${cardData.phone}`,
-                `EMAIL;TYPE=WORK:${cardData.email}`, 
-                `URL:${cardData.website}`, 
+                `FN:${cardData.full_name || ""}`, 
+                `ORG:${cardData.company || ""}`,
+                `TITLE:${cardData.job_title || ""}`, 
+                `TEL;TYPE=CELL:${cardData.phone || ""}`,
+                `EMAIL;TYPE=WORK:${cardData.email || ""}`, 
+                `URL:${cardData.website || ""}`, 
                 "END:VCARD"
             ].join("\n");
 
             const blob = new Blob([vcard], { type: "text/vcard" });
             const url = URL.createObjectURL(blob);
             const newLink = document.createElement('a');
-            newLink.download = cardData.full_name.replace(' ', '_') + ".vcf";
+            newLink.download = (cardData.full_name || "contact").replace(' ', '_') + ".vcf";
             newLink.href = url;
             newLink.click();
         }
