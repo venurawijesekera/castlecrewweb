@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Castle Crew</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { red: '#f00000', black: '#0a0a0a', dark: '#121212' } }
+                }
+            }
+        }
+    </script>
+    <style>body { background-color: #050505; color: white; }</style>
+</head>
+<body class="p-8 max-w-6xl mx-auto">
+
+    <div class="flex justify-between items-center mb-10">
+        <h1 class="text-3xl font-black uppercase">Admin <span class="text-brand-red">Dashboard</span></h1>
+        <a href="dashboard.html" class="text-sm text-gray-500 hover:text-white">Back to App</a>
+    </div>
+
+    <!-- STATS -->
+    <div class="grid grid-cols-3 gap-6 mb-12">
+        <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
+            <h3 class="text-gray-500 text-xs font-bold uppercase">Total Users</h3>
+            <p id="total-users" class="text-4xl font-black mt-2">...</p>
+        </div>
+        <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
+            <h3 class="text-gray-500 text-xs font-bold uppercase">Pro Members</h3>
+            <p class="text-4xl font-black mt-2 text-brand-red">0</p>
+        </div>
+        <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
+            <h3 class="text-gray-500 text-xs font-bold uppercase">Revenue</h3>
+            <p class="text-4xl font-black mt-2">LKR 0</p>
+        </div>
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="bg-brand-dark rounded-xl border border-gray-800 overflow-hidden">
+        <table class="w-full text-left text-sm text-gray-400">
+            <thead class="bg-black text-white uppercase text-xs font-bold">
+                <tr>
+                    <th class="p-4">ID</th>
+                    <th class="p-4">Email</th>
+                    <th class="p-4">Joined</th>
+                    <th class="p-4">Plan</th>
+                    <th class="p-4 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="user-list">
+                <!-- Data injected via JS -->
+                <tr><td class="p-4" colspan="5">Loading users...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // 1. Fetch All Users (We need a backend API for this, see Step 4)
+        async function loadAdminData() {
+            try {
+                // We will create this API next
+                const res = await fetch('/api/admin/users');
+                const users = await res.json();
+
+                if (!users.length) return;
+
+                document.getElementById('total-users').innerText = users.length;
+                
+                const html = users.map(user => `
+                    <tr class="border-b border-gray-800 hover:bg-white/5 transition">
+                        <td class="p-4 font-mono text-xs">#${user.id}</td>
+                        <td class="p-4 text-white font-bold">${user.email}</td>
+                        <td class="p-4">${new Date(user.created_at).toLocaleDateString()}</td>
+                        <td class="p-4"><span class="bg-gray-800 text-white px-2 py-1 rounded text-xs">Starter</span></td>
+                        <td class="p-4 text-right">
+                            <button onclick="alert('Manage ' + ${user.id})" class="text-brand-red font-bold hover:underline">Manage</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('user-list').innerHTML = html;
+
+            } catch(e) {
+                console.error(e);
+                document.getElementById('user-list').innerHTML = '<tr><td class="p-4 text-red-500">Failed to load users.</td></tr>';
+            }
+        }
+
+        loadAdminData();
+    </script>
+
+</body>
+</html>
