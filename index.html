@@ -1,18 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Castle Cards - Smart NFC Business Cards</title>
-    
-    <!-- FAVICON LINK -->
+    <title>Castle Crew - Physical Branding Agency</title>
     <link rel="icon" type="image/png" href="assets/img/logo.png">
 
-    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <script>
         tailwind.config = {
             theme: {
@@ -27,371 +25,319 @@
                             dark: '#121212',
                             gray: '#1E1E1E'
                         }
-                    },
-                    animation: {
-                        'spin-slow': 'spin 3s linear infinite',
                     }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #050505; color: white; }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #f00000; }
-        
-        /* Preloader Styles */
-        #preloader.fade-out {
-            opacity: 0;
-            pointer-events: none;
+        body {
+            background-color: #050505;
+            color: white;
+        }
+
+        .img-zoom-container {
+            overflow: hidden;
+        }
+
+        .img-zoom-container img {
+            transition: transform 0.7s ease;
+        }
+
+        .img-zoom-container:hover img {
+            transform: scale(1.05);
         }
     </style>
 </head>
-<body class="antialiased selection:bg-brand-red selection:text-white relative overflow-x-hidden">
 
-    <!-- PRELOADER -->
-    <div id="preloader" class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
-        <div class="flex flex-col items-center gap-6">
-            <!-- Spinning Red Diamond -->
-            <div class="w-12 h-12 bg-brand-red rotate-45 animate-spin-slow rounded-sm shadow-[0_0_30px_rgba(240,0,0,0.5)]"></div>
-            <!-- Text -->
-            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
-                CASTLE CARDS
-            </div>
-        </div>
-    </div>
+<body class="antialiased selection:bg-brand-red selection:text-white">
 
-    <!-- NAVIGATION -->
-    <nav class="w-full py-6 px-6 md:px-12 lg:px-20 flex justify-between items-center">
-        <div class="text-2xl font-bold tracking-tighter flex items-center gap-2">
-            <!-- Simple square logo mark -->
+    <!-- NAV -->
+    <nav
+        class="w-full py-8 px-6 md:px-12 flex justify-between items-center sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md">
+        <a href="index.html" class="text-2xl font-black tracking-tighter flex items-center gap-2">
             <div class="w-3 h-3 bg-brand-red rotate-45"></div>
-            CASTLE CARDS
+            CASTLE CREW
+        </a>
+
+        <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+            <a href="index.html" class="hover:text-white transition">Home</a>
+            <a href="cards.html" class="hover:text-white transition">NFC Cards</a>
+            <a href="#packaging" class="hover:text-white transition">Packaging</a>
+            <a href="#signage" class="hover:text-white transition">Signage</a>
+            <a href="#merch" class="hover:text-white transition">Merch</a>
         </div>
-        <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
-            <a href="#" class="hover:text-white transition">Products</a>
-            <a href="#" class="hover:text-white transition">Features</a>
-            <a href="dashboard.html" class="hover:text-white transition">Templates</a>
-            <a href="#" class="hover:text-white transition">Castle Crew</a>
+
+        <!-- AUTH CONTAINER -->
+        <div id="auth-nav">
+            <!-- Populated by JS -->
+            <a href="login.html"
+                class="text-xs font-bold border-b border-white pb-1 hover:text-brand-red hover:border-brand-red transition">CLIENT
+                LOGIN</a>
         </div>
-        <a href="login.html" class="flex items-center gap-2 text-sm font-medium hover:text-brand-red transition">
-    Sign In <span class="text-xs">↗</span>
-</a>
     </nav>
 
     <!-- HERO SECTION -->
-    <section class="relative pt-12 pb-20 px-6 md:px-12 lg:px-20 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <!-- Text Content -->
-        <div class="z-10">
-            <h1 class="text-5xl md:text-7xl xl:text-8xl font-black leading-[1.1] tracking-tight mb-6 uppercase">
-                Secure Your <br>
-                <span class="text-brand-red">Digital</span> <br>
-                Legacy
-            </h1>
-            <p class="text-gray-400 text-lg mb-8 max-w-lg">
-                Custom NFC business cards by Castle Crew. One tap to share your contact info, portfolio, and socials. No app required.
-            </p>
-            
-            <div class="flex flex-wrap gap-4 items-center">
-                <a href="pricing.html" class="bg-brand-red text-white px-8 py-4 rounded-full font-bold hover:bg-red-700 transition flex items-center gap-2">
-                    GET YOUR CARD <span class="bg-white/20 rounded-full p-1 text-xs">↗</span>
+    <header class="px-4 md:px-6 mb-20">
+        <div class="relative w-full h-[80vh] rounded-[2rem] overflow-hidden border border-gray-800">
+            <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop"
+                class="w-full h-full object-cover opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+
+            <div class="absolute inset-0 flex flex-col justify-center items-center text-center p-6">
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-black uppercase mb-4 leading-none tracking-tight">
+                    Elevate Your <br> <span class="text-brand-red">Brand.</span>
+                </h1>
+                <p class="max-w-2xl mx-auto text-sm md:text-base text-gray-400 font-medium mb-8">
+                    Castle Crew specializes in creating custom branded products that help businesses promote their
+                    identity. From concept to delivery, we craft unique items tailored to your branding needs.
+                </p>
+                <a href="cards.html"
+                    class="bg-white text-black px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-brand-red hover:text-white transition">
+                    Explore Products
                 </a>
-                
-                <div class="flex flex-col ml-4">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="w-2 h-2 bg-brand-red rounded-full animate-pulse"></span>
-                        <span class="text-xs font-bold uppercase text-gray-500">Active Members</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <h3 class="text-2xl font-bold">15k+</h3>
-                        <!-- Placeholder for User Avatars -->
-                        <div class="flex -space-x-2">
-                            <div class="w-8 h-8 rounded-full bg-gray-700 border-2 border-black"></div>
-                            <div class="w-8 h-8 rounded-full bg-gray-600 border-2 border-black"></div>
-                            <div class="w-8 h-8 rounded-full bg-gray-500 border-2 border-black"></div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
+    </header>
 
-        <!-- Image Content (Centered in Column) -->
-        <div class="flex justify-center lg:justify-center w-full">
-            <!-- Relative Wrapper to keep stars attached to image -->
-            <div class="relative w-full max-w-2xl">
-                <!-- Decorative Elements -->
-                <div class="absolute -top-10 -right-10 text-brand-red text-6xl opacity-80 z-0">✦</div>
-                <div class="absolute -bottom-10 -left-10 text-white opacity-20 text-4xl z-0">★</div>
+    <!-- BENTO GRID SECTION -->
+    <section class="px-4 md:px-6 mb-32">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-auto lg:h-[600px]">
 
-                <!-- Main Hero Image -->
-                <img src="assets/img/hero-cards.png" alt="Castle Cards Stack" class="w-full h-auto object-contain relative z-10 transform hover:scale-105 transition duration-500 drop-shadow-2xl">
-                
-                <!-- Floating UI elements -->
-                <div class="absolute top-10 -right-12 hidden xl:flex flex-col gap-4 text-xs font-mono text-gray-400 text-right z-20">
-                    <div class="flex items-center gap-2 justify-end">
-                        <span>Select Template</span> <span class="text-white">↗</span>
-                    </div>
-                    <div class="w-32 h-[1px] bg-gray-700 ml-auto"></div>
-                    <div class="flex items-center gap-2 justify-end">
-                        <span>Edit Profile</span> <span class="text-white">→</span>
-                    </div>
-                    <div class="w-24 h-[1px] bg-gray-700 ml-auto"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End HERO SECTION -->
+            <!-- Left: Smart Cards (Large) -->
+            <div
+                class="lg:col-span-2 relative rounded-[2rem] overflow-hidden img-zoom-container group h-[400px] lg:h-full">
+                <img src="assets/img/nfc-cards01.jpg" class="w-full h-full object-cover">
 
-    <!-- STATS / ABOUT SECTION -->
-    <section class="py-10 px-6 md:px-12 lg:px-20 w-full">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-10 border-b border-gray-800 pb-8">
-            <h2 class="text-3xl md:text-4xl font-bold uppercase max-w-lg leading-none">
-                Getting to know <br> Castle Cards
-            </h2>
-            <p class="text-sm text-gray-400 max-w-xl text-right mt-4 md:mt-0">
-                We are more than just a printing service; Castle Crew provides the digital infrastructure to manage your professional identity securely.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-            <!-- Stat 1 -->
-            <div class="bg-brand-red p-8 rounded-xl min-h-[18rem] flex flex-col justify-between relative overflow-hidden group">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-black/20 rounded-full flex items-center justify-center">👤</div>
-                    <span class="font-bold">Users</span>
-                </div>
-                <div>
-                    <h3 class="text-6xl md:text-7xl font-black mb-2">50k</h3>
-                    <p class="text-xs opacity-80">Professionals networking smarter.</p>
-                </div>
-                <!-- Decoration -->
-                <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition"></div>
-            </div>
-
-            <!-- Stat 2 -->
-            <div class="bg-brand-dark border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center text-black font-bold">⚡</div>
-                    <span class="text-brand-red font-bold">Speed</span>
-                </div>
-                <div>
-                    <h3 class="text-6xl md:text-7xl font-black mb-2 text-white">0.1s</h3>
-                    <p class="text-gray-400 text-xs">Instant NFC transfer speed.</p>
-                </div>
-            </div>
-
-            <!-- Stat 3 -->
-            <div class="bg-white text-black p-8 rounded-xl min-h-[18rem] flex flex-col justify-between">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-xs">♻</div>
-                    <span class="font-bold">Eco-Friendly</span>
-                </div>
-                <div>
-                    <h3 class="text-6xl md:text-7xl font-black mb-2">100<span class="text-3xl align-top">%</span></h3>
-                    <p class="text-gray-600 text-xs">Reduction in paper waste.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FEATURES SECTION -->
-    <section class="py-20 px-6 md:px-12 lg:px-20 w-full my-10">
-        <div class="bg-gray-100 text-black rounded-3xl p-8 md:p-16 w-full">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full">
-                <!-- Left: List -->
-                <div class="flex flex-col justify-center">
-                    <h2 class="text-4xl md:text-5xl font-black uppercase mb-6">All-In-One Platform<br>For Networking</h2>
-                    <p class="text-gray-600 mb-12 max-w-lg">Simplify your professional life by securely connecting your accounts and automatically updating your details.</p>
-
-                    <div class="space-y-6">
-                        <div class="group cursor-pointer border-l-4 border-black pl-6 py-2 transition hover:border-brand-red">
-                            <h4 class="text-xl font-bold mb-1 group-hover:text-brand-red transition">01. Choose Your Template</h4>
-                            <p class="text-gray-500 text-sm">Select from 6 premium digital templates upon login.</p>
-                        </div>
-                        <div class="group cursor-pointer border-l-4 border-transparent pl-6 py-2 transition hover:border-brand-red">
-                            <h4 class="text-xl font-bold mb-1 group-hover:text-brand-red transition">02. Edit Real-Time</h4>
-                            <p class="text-gray-500 text-sm">Changed jobs? Update your dashboard and your card updates instantly.</p>
-                        </div>
-                        <div class="group cursor-pointer border-l-4 border-transparent pl-6 py-2 transition hover:border-brand-red">
-                            <h4 class="text-xl font-bold mb-1 group-hover:text-brand-red transition">03. Track Analytics</h4>
-                            <p class="text-gray-500 text-sm">See how many people are viewing your profile.</p>
-                        </div>
-                        <div class="group cursor-pointer border-l-4 border-transparent pl-6 py-2 transition hover:border-brand-red">
-                            <h4 class="text-xl font-bold mb-1 group-hover:text-brand-red transition">04. Compatible Everywhere</h4>
-                            <p class="text-gray-500 text-sm">Works on iPhone, Android, and saves to Apple Wallet.</p>
-                        </div>
+                <!-- Modern Masked Text Container -->
+                <div class="absolute bottom-0 left-0 bg-[#050505] pt-6 pr-8 rounded-tr-[3rem] z-10">
+                    <div class="relative z-20 pl-8 pb-8">
+                        <span
+                            class="bg-brand-red text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide">Flagship
+                            Product</span>
+                        <h2 class="text-4xl md:text-6xl font-black uppercase text-white mt-4 mb-2">Smart Cards</h2>
+                        <a href="cards.html"
+                            class="text-gray-300 text-sm border-b border-gray-500 pb-1 hover:text-white hover:border-white transition">View
+                            Collection ↗</a>
                     </div>
                 </div>
+            </div>
 
-                <!-- Right: UI Mockup -->
-                <div class="relative w-full flex items-center justify-center">
-                    <div class="bg-white rounded-2xl shadow-2xl p-6 border border-gray-200 w-full max-w-lg">
-                        <!-- Browser/App Header -->
-                        <div class="flex items-center gap-2 mb-4 border-b pb-4">
-                            <div class="flex gap-1">
-                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
-                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
-                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
-                            </div>
-                            <div class="ml-4 text-xs font-mono text-gray-400">castle-dashboard.html</div>
-                        </div>
-                        
-                        <!-- Mockup Content -->
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-bold">Latest Interactions</h3>
-                                <span class="text-brand-red text-xs font-bold bg-red-100 px-2 py-1 rounded">PRO</span>
-                            </div>
-                            <!-- Mock Data Rows -->
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-blue-500"></div>
-                                    <div>
-                                        <p class="text-sm font-bold">Meeting at Expo</p>
-                                        <p class="text-xs text-gray-500">4 July 2024</p>
-                                    </div>
-                                </div>
-                                <span class="text-xs font-bold text-green-600">CONNECTED</span>
-                            </div>
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-purple-500"></div>
-                                    <div>
-                                        <p class="text-sm font-bold">New Lead Scan</p>
-                                        <p class="text-xs text-gray-500">3 July 2024</p>
-                                    </div>
-                                </div>
-                                <span class="text-xs font-bold text-red-600">PENDING</span>
-                            </div>
-                             <!-- Button on mockup -->
-                             <div class="mt-6">
-                                <button class="w-full bg-black text-white py-3 rounded-lg text-sm font-bold">Edit Profile Content</button>
-                             </div>
-                        </div>
+            <!-- Right: Split Column -->
+            <div class="flex flex-col gap-6 h-full">
+                <!-- Text Box -->
+                <div
+                    class="bg-brand-dark border border-gray-800 px-8 py-6 rounded-[2rem] flex flex-col justify-center flex-1 relative group">
+                    <span
+                        class="inline-block px-3 py-1 border border-gray-700 rounded-full text-[10px] font-bold uppercase tracking-widest text-brand-red w-fit mb-2">
+                        New Feature
+                    </span>
+                    <h3 class="text-3xl font-bold mb-2 uppercase">Free Digital <br> Business Card.</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-12">
+                        Create your professional digital profile in seconds. Share your contact info, social links, and
+                        portfolio instantly, no app needed.
+                    </p>
+                    <a href="register.html"
+                        class="absolute bottom-6 right-8 h-10 w-40 group-hover:w-10 bg-white text-black rounded-full text-xs font-bold uppercase tracking-widest group-hover:bg-brand-red group-hover:text-white transition-all duration-500 shadow-lg flex items-center justify-center overflow-hidden">
+                        <span
+                            class="group-hover:opacity-0 group-hover:translate-x-full transition-all duration-300 whitespace-nowrap absolute">Create
+                            Account</span>
+                        <i
+                            class="bi bi-arrow-up-right opacity-0 -translate-x-full group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-lg"></i>
+                    </a>
+                </div>
+
+                <!-- Image Box -->
+                <div
+                    class="relative rounded-[2rem] overflow-hidden img-zoom-container flex-1 h-[250px] lg:h-auto border border-gray-800 group cursor-pointer">
+                    <img src="assets/img/templates.png"
+                        class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="bg-brand-red text-white border border-brand-red/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                            Premium
+                        </span>
+                    </div>
+
+                    <div class="absolute bottom-6 left-6 pr-16 z-10">
+                        <h3 class="text-3xl font-black uppercase text-white mb-2 leading-none">1000 LKR <br> Yearly.
+                        </h3>
+                        <p class="text-xs text-gray-300 font-medium max-w-[200px]">More professional templates
+                            available.</p>
+                    </div>
+
+                    <div
+                        class="absolute bottom-4 right-4 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center text-lg group-hover:bg-brand-red group-hover:text-white transition shadow-lg z-10">
+                        ↗
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- BENEFITS / PRODUCT SHOWCASE -->
-    <section class="py-20 px-6 md:px-12 lg:px-20 w-full flex flex-col md:flex-row items-center gap-16">
-        <div class="w-full md:w-1/2 flex justify-center">
-            <!-- Rotated Card Effect -->
-            <div class="relative group">
-                <div class="absolute inset-0 bg-brand-red blur-2xl opacity-20 group-hover:opacity-40 transition duration-500"></div>
-                <img src="assets/img/single-card.png" alt="Custom NFC Card" class="relative z-10 w-full max-w-lg transform rotate-[-12deg] group-hover:rotate-0 transition duration-500 ease-out">
+    <!-- STATS -->
+    <section class="py-10 border-t border-gray-900 border-b mb-32">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+            <div>
+                <h4 class="text-4xl md:text-5xl font-black mb-2 text-white">500+</h4>
+                <p class="text-xs uppercase tracking-widest text-brand-red font-bold">Brands Served</p>
             </div>
-        </div>
-        
-        <div class="w-full md:w-1/2 pl-0 md:pl-10">
-            <h5 class="text-brand-red font-bold text-sm tracking-widest mb-2">BENEFITS</h5>
-            <h2 class="text-4xl md:text-6xl font-black uppercase mb-8 leading-tight">
-                Networking on <br> International
-            </h2> 
-            
-            <ul class="space-y-8">
-                <li class="flex gap-6">
-                    <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-brand-red font-bold text-lg flex-shrink-0">1</div>
-                    <div>
-                        <h4 class="font-bold text-xl mb-1">QR Code Backup</h4>
-                        <p class="text-gray-400 text-base">Every card comes with a custom QR code for older devices.</p>
-                    </div>
-                </li>
-                <li class="flex gap-6">
-                    <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-brand-red font-bold text-lg flex-shrink-0">2</div>
-                    <div>
-                        <h4 class="font-bold text-xl mb-1">Custom Designs</h4>
-                        <p class="text-gray-400 text-base">Upload your logo and we laser print it on matte black or metal cards.</p>
-                    </div>
-                </li>
-                <li class="flex gap-6">
-                    <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-brand-red font-bold text-lg flex-shrink-0">3</div>
-                    <div>
-                        <h4 class="font-bold text-xl mb-1">Secure & Private</h4>
-                        <p class="text-gray-400 text-base">Bank-grade encryption for your data. You control what you share.</p>
-                    </div>
-                </li>
-            </ul>
-
-            <div class="mt-10 flex gap-4">
-                <a href="#" class="bg-brand-red px-8 py-4 rounded-full text-base font-bold hover:bg-red-700 transition">Design Card</a>
-                <a href="#" class="w-14 h-14 rounded-full border border-gray-600 flex items-center justify-center hover:bg-white hover:text-black transition text-xl">↗</a>
+            <div>
+                <h4 class="text-4xl md:text-5xl font-black mb-2 text-white">20+</h4>
+                <p class="text-xs uppercase tracking-widest text-gray-500">Countries</p>
+            </div>
+            <div>
+                <h4 class="text-4xl md:text-5xl font-black mb-2 text-white">50+</h4>
+                <p class="text-xs uppercase tracking-widest text-gray-500">Materials</p>
+            </div>
+            <div>
+                <h4 class="text-4xl md:text-5xl font-black mb-2 text-white">1st</h4>
+                <p class="text-xs uppercase tracking-widest text-gray-500">In Quality</p>
             </div>
         </div>
     </section>
 
-    <!-- TRUSTED PARTNERS / COMPATIBILITY -->
-    <section class="py-20 px-6 md:px-12 lg:px-20 w-full border-t border-gray-900">
-        <div class="flex flex-col md:flex-row justify-between items-start mb-16">
-            <h2 class="text-3xl md:text-5xl font-bold uppercase max-w-lg">
-                Real-Time <br> Digital Wallet
-            </h2>
-            <p class="text-gray-400 text-base max-w-xl mt-6 md:mt-0">
-                Compatible with the ecosystem you already use. Save your digital card directly to Apple Wallet or Google Pay for card-less sharing.
-            </p>
+    <!-- COLLECTION GRID -->
+    <section class="px-4 md:px-6 mb-32">
+        <div class="flex justify-between items-end mb-12 px-2">
+            <h2 class="text-4xl md:text-6xl font-black uppercase leading-tight">Explore Our <br> Products</h2>
+            <a href="#"
+                class="hidden md:block bg-brand-dark border border-gray-700 text-white px-6 py-3 rounded-full text-xs font-bold uppercase hover:bg-white hover:text-black transition">View
+                All Products</a>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Stat Box -->
-            <div class="bg-brand-dark p-8 rounded-2xl flex flex-col justify-end min-h-[18rem]">
-                <h3 class="text-7xl font-bold mb-2">98<span class="text-4xl">%</span></h3>
-                <p class="text-gray-400 text-sm">Users prefer adding our cards to their mobile wallets.</p>
+        <div class="columns-1 md:columns-2 lg:columns-4 gap-4 space-y-4">
+
+            <!-- Item 1: Smart Cards (Tall) -->
+            <a href="cards.html"
+                class="group relative block break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 h-[450px] mb-4">
+                <img src="assets/img/nfc-card.png"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-90 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-8 left-8 text-white text-3xl font-bold tracking-tight">
+                    Smart Cards
+                </div>
+                <div
+                    class="absolute bottom-8 right-8 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+                    <i class="bi bi-arrow-up-right text-xl"></i>
+                </div>
+            </a>
+
+            <!-- Item 2: Signage (Short) -->
+            <div
+                class="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[300px] mb-4">
+                <img src="assets/img/Lightbox.png"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+                </div>
+                <div class="absolute bottom-6 left-6 text-white text-xl font-bold tracking-tight">
+                    Signage
+                </div>
+                <div
+                    class="absolute bottom-6 right-6 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+                    <i class="bi bi-arrow-up-right"></i>
+                </div>
             </div>
 
-            <!-- Apple Pay Block -->
-            <div class="bg-brand-red p-8 rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition">
-                <div class="text-center">
-                    <img src="assets/img/icon-apple.png" alt="Apple Wallet" class="h-14 mx-auto mb-4 opacity-90 invert">
-                    <span class="font-bold text-2xl">Wallet</span>
+            <!-- Item 3: Brand Merch (Medium) -->
+            <div
+                class="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[380px] mb-4">
+                <img src="assets/img/hoodie.png"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+                </div>
+                <div class="absolute bottom-6 left-6 text-white text-xl font-bold tracking-tight">
+                    Brand Merch
+                </div>
+                <div
+                    class="absolute bottom-6 right-6 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+                    <i class="bi bi-arrow-up-right"></i>
                 </div>
             </div>
 
-            <!-- Paypal/Other Block -->
-            <div class="bg-brand-red p-8 rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition">
-                <div class="text-center">
-                    <img src="assets/img/icon-paypal.png" alt="PayPal" class="h-12 mx-auto mb-2 opacity-90 invert">
+            <!-- Item 4: Packaging (Tall) -->
+            <div
+                class="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[450px] mb-4">
+                <img src="assets/img/box.png"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+                </div>
+                <div class="absolute bottom-6 left-6 text-white text-xl font-bold tracking-tight">
+                    Packaging
+                </div>
+                <div
+                    class="absolute bottom-6 right-6 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+                    <i class="bi bi-arrow-up-right"></i>
                 </div>
             </div>
 
-            <!-- CTA Block -->
-            <div class="bg-brand-dark p-8 rounded-2xl flex flex-col justify-between min-h-[18rem]">
-                <div class="w-12 h-12 bg-gray-800 rounded flex items-center justify-center text-brand-red text-2xl font-bold">⚡</div>
-                <div>
-                    <h4 class="font-bold uppercase mb-4 text-xl">Creating Lasting<br>Connections</h4>
-                    <a href="#" class="inline-block bg-white text-black px-6 py-3 rounded-full text-xs font-bold mt-2 hover:bg-gray-200">LETS WORK TOGETHER</a>
+            <!-- Item 5: Custom Mugs (Short) -->
+            <div
+                class="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[300px] mb-4">
+                <img src="assets/img/mug.png"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+                </div>
+                <div class="absolute bottom-6 left-6 text-white text-xl font-bold tracking-tight">
+                    Custom Mugs
+                </div>
+                <div
+                    class="absolute bottom-6 right-6 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+                    <i class="bi bi-arrow-up-right"></i>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- TESTIMONIALS -->
-    <section class="pt-20 pb-10 px-6 md:px-12 lg:px-20 w-full bg-gray-50 text-black rounded-t-[3rem] mt-20">
-        <div class="w-full">
-            <p class="text-brand-red text-sm font-bold mb-6 tracking-widest">WHAT THEY SAY ABOUT US</p>
-            <h3 class="text-3xl md:text-6xl font-bold leading-tight mb-12 max-w-5xl">
-                "Castle Cards has completely transformed the way I network. The real-time updates and sleek card design always impress clients."
-            </h3>
-            <div class="flex items-center justify-between border-t border-gray-300 pt-10">
-                <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 rounded-full bg-gray-300 overflow-hidden">
-                        <!-- Avatar placeholder -->
-                        <img src="assets/img/active-users.png" class="w-full h-full object-cover">
-                    </div>
-                    <div>
-                        <h5 class="font-bold text-lg">Kelly Williams</h5>
-                        <p class="text-sm text-gray-500">Head of Design, Layers</p>
-                    </div>
+            <!-- Item 6: Custom Coasters (Medium) -->
+            <div
+                class="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[350px] mb-4">
+                <img src="assets/img/coaster.png"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
                 </div>
-                <div class="flex gap-4">
-                    <button class="w-14 h-14 rounded-full border border-gray-300 flex items-center justify-center hover:bg-black hover:text-white transition text-xl">←</button>
-                    <button class="w-14 h-14 rounded-full border border-gray-300 flex items-center justify-center hover:bg-black hover:text-white transition text-xl">→</button>
+                <div class="absolute bottom-6 left-6 text-white text-xl font-bold tracking-tight">
+                    Custom Coasters
+                </div>
+                <div
+                    class="absolute bottom-6 right-6 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+                    <i class="bi bi-arrow-up-right"></i>
                 </div>
             </div>
+
+            <!-- Item 7: Custom Stickers (Tall) -->
+            <div
+                class="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[420px] mb-4">
+                <img src="assets/img/sticker.png"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-60 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+                </div>
+                <div class="absolute bottom-6 left-6 text-white text-xl font-bold tracking-tight">
+                    Custom Stickers
+                </div>
+                <div
+                    class="absolute bottom-6 right-6 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+                    <i class="bi bi-arrow-up-right"></i>
+                </div>
+            </div>
+
+            <!-- Item 8: Kiosk Advertising (Medium) -->
+            <div
+                class="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[380px] mb-4">
+                <img src="assets/img/kiosk.png"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-8 left-8 text-white text-2xl font-bold tracking-tight">
+                    Kiosk Advertising
+                </div>
+                <div
+                    class="absolute bottom-8 right-8 w-12 h-12 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+                    <i class="bi bi-arrow-up-right text-xl"></i>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -407,10 +353,13 @@
         <div class="w-full relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20 text-white">
                 <div>
-                    <h4 class="font-bold text-3xl mb-8 leading-tight">READY TO TAKE<br>CONTROL OF YOUR<br>NETWORKING?</h4>
-                    <a href="#" class="bg-white text-brand-red px-8 py-4 rounded-full text-sm font-bold inline-block hover:bg-black hover:text-white transition shadow-lg">GET STARTED</a>
+                    <h4 class="font-bold text-3xl mb-8 leading-tight">READY TO TAKE<br>CONTROL OF YOUR<br>NETWORKING?
+                    </h4>
+                    <a href="#"
+                        class="bg-white text-brand-red px-8 py-4 rounded-full text-sm font-bold inline-block hover:bg-black hover:text-white transition shadow-lg">GET
+                        STARTED</a>
                 </div>
-                
+
                 <div class="md:pl-10">
                     <h5 class="font-bold mb-6 text-red-200 text-lg">Features</h5>
                     <ul class="space-y-4 text-base opacity-90">
@@ -452,20 +401,28 @@
         </div>
     </footer>
 
-    <!-- PRELOADER SCRIPT -->
+    <!-- AUTH LOGIC -->
     <script>
-        window.addEventListener('load', () => {
-            const preloader = document.getElementById('preloader');
-            // Slight delay to ensure the animations are seen
-            setTimeout(() => {
-                preloader.classList.add('fade-out');
-                // Remove from DOM after transition to clean up
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                }, 700);
-            }, 800);
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('castle_token');
+            const nav = document.getElementById('auth-nav');
+
+            if (token) {
+                // Logged In: Show Profile Icon
+                nav.innerHTML = `
+                    <a href="profile.html" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-red hover:text-white transition">
+                        <i class="bi bi-person-fill text-lg"></i>
+                    </a>
+                `;
+            } else {
+                // Guest: Show Login
+                nav.innerHTML = `
+                    <a href="login.html" class="text-xs font-bold border-b border-white pb-1 hover:text-brand-red hover:border-brand-red transition">CLIENT LOGIN</a>
+                `;
+            }
         });
     </script>
 
 </body>
+
 </html>

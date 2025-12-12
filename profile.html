@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Castle Cards</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { red: '#f00000', black: '#0a0a0a', dark: '#121212', sidebar: '#0f0f0f' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6 z-20">
+        <div>
+            <div class="flex items-center gap-2 mb-10 text-xl font-bold tracking-tight">
+                <div class="w-3 h-3 bg-brand-red rotate-45"></div> CASTLE CREW
+            </div>
+            <nav class="space-y-2">
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-house-door-fill"></i> Home Page
+                </a>
+                <a href="profile.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-brand-red/10 text-brand-red rounded-lg text-sm font-bold">
+                    <i class="bi bi-person-circle"></i> Profile
+                </a>
+                <a href="leads.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-people-fill"></i> Connections
+                </a>
+                <a href="dashboard.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-grid-fill"></i> Templates
+                </a>
+                <a href="analytics.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-bar-chart-fill"></i> Analytics
+                </a>
+                <a href="settings.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-gear-fill"></i> Settings
+                </a>
+            </nav>
+        </div>
+        <div class="pt-6 border-t border-gray-800">
+            <button onclick="logout()"
+                class="flex items-center gap-2 text-gray-500 hover:text-white text-xs font-bold uppercase">
+                <i class="bi bi-box-arrow-left"></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 relative">
+        <!-- Mobile Header -->
+        <div
+            class="md:hidden p-4 flex justify-between items-center border-b border-gray-800 bg-brand-black sticky top-0 z-20">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMenu()" class="text-white text-2xl focus:outline-none">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="font-bold tracking-tight">CASTLE CREW</div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs">👤</div>
+        </div>
+
+        <div class="p-6 md:p-12 pb-32 md:pb-12 max-w-4xl mx-auto h-full md:overflow-y-auto">
+
+            <!-- Welcome Header -->
+            <div
+                class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-8 border-b border-gray-800">
+                <div>
+                    <h1 class="text-3xl font-black uppercase mb-1">My <span class="text-brand-red">Profile</span></h1>
+                    <p class="text-gray-400 text-sm">Manage your account and card settings.</p>
+                </div>
+                <div class="mt-4 md:mt-0 text-right">
+                    <div id="plan-badge"
+                        class="inline-block bg-gray-800 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
+                        Loading...</div>
+
+                    <!-- UPDATED: Added ID -->
+                    <div id="member-since" class="mt-2 text-xs text-gray-500">Member since ...</div>
+                </div>
+            </div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <a href="leads.html"
+                    class="bg-brand-dark border border-gray-800 p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-brand-red transition group">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center group-hover:bg-brand-red group-hover:text-white transition text-gray-400">
+                        <i class="bi bi-people-fill text-lg"></i>
+                    </div>
+                    <span
+                        class="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Connections</span>
+                </a>
+
+                <a href="dashboard.html"
+                    class="bg-brand-dark border border-gray-800 p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-brand-red transition group">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center group-hover:bg-brand-red group-hover:text-white transition text-gray-400">
+                        <i class="bi bi-grid-fill text-lg"></i>
+                    </div>
+                    <span
+                        class="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Templates</span>
+                </a>
+
+                <a href="analytics.html"
+                    class="bg-brand-dark border border-gray-800 p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-brand-red transition group">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center group-hover:bg-brand-red group-hover:text-white transition text-gray-400">
+                        <i class="bi bi-bar-chart-fill text-lg"></i>
+                    </div>
+                    <span
+                        class="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Analytics</span>
+                </a>
+
+                <a href="settings.html"
+                    class="bg-brand-dark border border-gray-800 p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-brand-red transition group">
+                    <div
+                        class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center group-hover:bg-brand-red group-hover:text-white transition text-gray-400">
+                        <i class="bi bi-gear-fill text-lg"></i>
+                    </div>
+                    <span
+                        class="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Settings</span>
+                </a>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Active Card -->
+                <div class="bg-brand-dark border border-gray-800 rounded-2xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition">
+                        <i class="bi bi-nfc text-6xl text-brand-red/20"></i>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-6">Active Card</h3>
+
+                    <div class="mb-6">
+                        <p class="text-gray-500 text-xs uppercase font-bold mb-1">Your Link</p>
+                        <a id="profile-link" href="#" target="_blank"
+                            class="text-xl font-mono text-brand-red hover:underline">...</a>
+                    </div>
+
+                    <div class="mb-8">
+                        <p class="text-gray-500 text-xs uppercase font-bold mb-1">Current Theme</p>
+                        <p id="profile-theme" class="text-white font-bold capitalize">...</p>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <a href="editor.html"
+                            class="bg-white text-black px-6 py-3 rounded-lg text-sm font-bold hover:bg-gray-200 transition">Edit
+                            Card</a>
+                        <button onclick="shareLink()"
+                            class="border border-gray-700 px-4 py-3 rounded-lg text-sm font-bold hover:bg-gray-800"><i
+                                class="bi bi-share-fill"></i></button>
+                    </div>
+                </div>
+
+                <!-- Subscription -->
+                <div class="bg-brand-dark border border-gray-800 rounded-2xl p-8 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold mb-2">Subscription</h3>
+                        <p id="plan-desc" class="text-gray-400 text-sm mb-6">You are currently on the Free Starter plan.
+                        </p>
+                        <ul id="plan-features" class="space-y-2 text-sm text-gray-300 mb-6"></ul>
+                    </div>
+
+                    <a href="pricing.html" id="btn-upgrade"
+                        class="block w-full text-center border border-brand-red text-brand-red py-3 rounded-lg text-sm font-bold hover:bg-brand-red hover:text-white transition">
+                        UPGRADE PLAN
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-50 hidden flex-col p-6 transition-opacity duration-300">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-2 text-xl font-bold tracking-tight">
+                <div class="w-3 h-3 bg-brand-red rotate-45"></div> CASTLE CREW
+            </div>
+            <button onclick="toggleMenu()" class="text-gray-400 text-3xl"><i class="bi bi-x"></i></button>
+        </div>
+        <nav class="space-y-4 text-lg">
+            <a href="index.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition">
+                <i class="bi bi-house-door-fill text-xl"></i> Home Page
+            </a>
+            <a href="profile.html"
+                class="flex items-center gap-4 py-2 text-brand-red font-bold border-b border-brand-red/30 transition"><i
+                    class="bi bi-person-circle text-xl"></i> Profile</a>
+            <a href="leads.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-people-fill text-xl"></i> Connections</a>
+            <a href="dashboard.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-grid-fill text-xl"></i> Templates</a>
+            <a href="analytics.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-bar-chart-fill text-xl"></i> Analytics</a>
+            <a href="settings.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-gear-fill text-xl"></i> Settings</a>
+        </nav>
+        <div class="mt-auto">
+            <button onclick="logout()"
+                class="flex items-center gap-3 text-gray-500 hover:text-white font-bold uppercase transition"><i
+                    class="bi bi-box-arrow-left text-xl"></i> Sign Out</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); menu.classList.add('flex'); }
+            else { menu.classList.add('hidden'); menu.classList.remove('flex'); }
+        }
+
+        async function loadProfile() {
+            const token = localStorage.getItem('castle_token');
+            if (!token) return window.location.href = 'login.html';
+
+            try {
+                const res = await fetch('/api/card', { headers: { 'Authorization': token } });
+                const data = await res.json();
+
+                if ((!data.template_id || data.template_id === 'signature') && !data.slug) {
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+
+                // UPDATED: Set Member Date
+                if (data.created_at) {
+                    const date = new Date(data.created_at);
+                    document.getElementById('member-since').innerText = `Member since ${date.getFullYear()}`;
+                }
+
+                const plan = data.plan || 'starter';
+                if (plan === 'starter') {
+                    document.getElementById('plan-badge').innerText = "STARTER PLAN";
+                    document.getElementById('plan-desc').innerText = "Basic features active. Upgrade to unlock all themes.";
+                    document.getElementById('plan-features').innerHTML = `<li class="flex gap-2"><i class="bi bi-check text-green-500"></i> Castle Signature Theme</li><li class="flex gap-2"><i class="bi bi-x text-red-500"></i> Premium Themes Locked</li>`;
+                } else {
+                    document.getElementById('plan-badge').innerText = plan.toUpperCase() + " MEMBER";
+                    document.getElementById('plan-badge').classList.add('bg-brand-red');
+                    document.getElementById('plan-desc').innerText = "You have full access to all features.";
+                    document.getElementById('plan-features').innerHTML = `<li class="flex gap-2"><i class="bi bi-check text-white"></i> All Themes Unlocked</li>`;
+                    document.getElementById('btn-upgrade').style.display = 'none';
+                }
+
+                document.getElementById('profile-link').href = `/${data.slug}`;
+                document.getElementById('profile-link').innerText = `castlecrew.cc/${data.slug}`;
+
+                let themeName = "Castle Signature";
+                if (data.template_id === 'realestate') themeName = "Eco Real Estate";
+                if (data.template_id === 'creative') themeName = "The Creative";
+                document.getElementById('profile-theme').innerText = themeName;
+
+            } catch (e) { console.error(e); }
+        }
+
+        function logout() { localStorage.removeItem('castle_token'); window.location.href = 'index.html'; }
+        function shareLink() { navigator.clipboard.writeText(document.getElementById('profile-link').href); alert("Copied!"); }
+        loadProfile();
+    </script>
+</body>
+
+</html>

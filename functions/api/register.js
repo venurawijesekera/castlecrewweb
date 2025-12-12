@@ -16,21 +16,23 @@ export async function onRequestPost(context) {
             return new Response(JSON.stringify({ error: "Email already taken" }), { status: 409 });
         }
 
-        // 3. Create User
-        // Note: In production, we MUST hash passwords (e.g., bcrypt). For now, we store plain text as per previous steps.
-        const result = await env.DB.prepare("INSERT INTO users (email, password) VALUES (?, ?) RETURNING id")
-            .bind(email, password)
+        // 3. Create User (Updated to save full_name immediately)
+        const result = await env.DB.prepare("INSERT INTO users (email, password, full_name) VALUES (?, ?, ?) RETURNING id")
+            .bind(email, password, full_name)
             .first();
 
         const newUserId = result.id;
 
-        // 4. Create a Default Card for them
-        // We create a "slug" from their name (e.g., "Venura Wijesekera" -> "venura-wijesekera")
-        const slug = full_name.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(Math.random() * 1000);
+        // 4. Create a Default Card
+        // Generate a unique slug from name (e.g. "John Doe" -> "john-doe-452")
+        const slugBase = full_name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        const randomSuffix = Math.floor(Math.random() * 10000);
+        const slug = `${slugBase}-${randomSuffix}`;
 
+        // Create the card entry
         await env.DB.prepare(`
             INSERT INTO cards (user_id, slug, template_id, full_name, email, job_title, company) 
-            VALUES (?, ?, 'executive', ?, ?, 'New Member', 'Castle Cards')
+            VALUES (?, ?, 'signature', ?, ?, 'New Member', 'Castle Cards')
         `).bind(newUserId, slug, full_name, email).run();
 
         return new Response(JSON.stringify({ success: true, user_id: newUserId }), { 

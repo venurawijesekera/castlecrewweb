@@ -60,13 +60,11 @@
             <form onsubmit="event.preventDefault(); handleLogin();" class="space-y-5">
                 <div>
                     <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Email Address</label>
-                    <!-- Added ID="email" -->
                     <input type="email" id="email" placeholder="name@company.com" class="w-full bg-brand-dark border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition placeholder-gray-700">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Password</label>
-                    <!-- Added ID="password" -->
                     <input type="password" id="password" placeholder="••••••••" class="w-full bg-brand-dark border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition placeholder-gray-700">
                 </div>
 
@@ -74,14 +72,14 @@
                     <a href="#" class="text-xs text-brand-red hover:text-red-400">Forgot password?</a>
                 </div>
 
-                <!-- Updated onclick to call handleLogin() -->
                 <button type="submit" id="loginBtn" class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition transform hover:scale-[1.02]">
                     SIGN IN
                 </button>
             </form>
 
+            <!-- UPDATED TEXT HERE -->
             <p class="mt-8 text-center text-sm text-gray-500">
-                Don't have a card yet? <a href="index.html" class="text-white font-bold hover:underline">Get started</a>
+                Don't have an account yet? <a href="register.html" class="text-white font-bold hover:underline">Sign Up</a>
             </p>
         </div>
     </div>
@@ -94,19 +92,16 @@
             const btn = document.getElementById('loginBtn');
             const originalText = btn.innerText;
 
-            // Simple Validation
             if(!email || !password) {
                 alert("Please fill in all fields");
                 return;
             }
 
-            // Show Loading State
             btn.innerText = "Signing in...";
             btn.disabled = true;
             btn.classList.add('opacity-50', 'cursor-not-allowed');
             
             try {
-                // Call the Backend API
                 const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -116,22 +111,18 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    // Login Successful
-                    // Save the token to browser storage
                     localStorage.setItem('castle_token', data.token);
                     localStorage.setItem('castle_user_id', data.user_id);
                     
-                    // Redirect to Dashboard
-                    window.location.href = 'dashboard.html';
+                    // Redirect to Profile. 
+                    window.location.href = 'profile.html';
                 } else {
-                    // Login Failed
                     alert("Login Failed: " + (data.error || "Unknown error"));
                     resetButton();
                 }
             } catch (error) {
-                // System Error
                 console.error(error);
-                alert("System Error. Are you running the backend?");
+                alert("System Error. Please try again.");
                 resetButton();
             }
 

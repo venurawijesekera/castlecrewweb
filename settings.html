@@ -1,0 +1,343 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Castle Cards</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { brand: { red: '#f00000', black: '#0a0a0a', dark: '#121212', sidebar: '#0f0f0f' } } } } }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6 z-20">
+        <div>
+            <div class="flex items-center gap-2 mb-10 text-xl font-bold tracking-tight">
+                <div class="w-3 h-3 bg-brand-red rotate-45"></div> CASTLE CREW
+            </div>
+            <nav class="space-y-2">
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-house-door-fill"></i> Home Page
+                </a>
+                <a href="profile.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-person-circle"></i> Profile</a>
+                <a href="leads.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-people-fill"></i> Connections</a>
+                <a href="dashboard.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-grid-fill"></i> Templates</a>
+                <a href="analytics.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-bar-chart-fill"></i> Analytics</a>
+                <!-- ACTIVE -->
+                <a href="settings.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-brand-red/10 text-brand-red rounded-lg text-sm font-bold"><i
+                        class="bi bi-gear-fill"></i> Settings</a>
+            </nav>
+        </div>
+        <div class="pt-6 border-t border-gray-800">
+            <button onclick="logout()"
+                class="flex items-center gap-2 text-gray-500 hover:text-white text-xs font-bold uppercase"><i
+                    class="bi bi-box-arrow-left"></i> Sign Out</button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 relative">
+        <div
+            class="md:hidden p-4 flex justify-between items-center border-b border-gray-800 bg-brand-black sticky top-0 z-20">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMenu()" class="text-white text-2xl focus:outline-none"><i
+                        class="bi bi-list"></i></button>
+                <div class="font-bold tracking-tight flex items-center gap-2">
+                    <div class="w-2 h-2 bg-brand-red rotate-45"></div> CASTLE
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs">👤</div>
+        </div>
+
+        <div class="p-6 md:p-12 pb-32 md:pb-12 max-w-3xl mx-auto h-full md:overflow-y-auto no-scrollbar">
+            <div class="border-b border-gray-800 pb-6">
+                <h1 class="text-3xl font-black uppercase mb-2">Account <span class="text-brand-red">Settings</span></h1>
+                <p class="text-gray-400 text-sm">Manage your personal information and security.</p>
+            </div>
+
+            <!-- PERSONAL & BILLING -->
+            <div class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
+                <h3 class="text-lg font-bold mb-6 flex items-center gap-2"><i class="bi bi-person-vcard"></i> Personal &
+                    Billing</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Full Name</label>
+                        <input type="text" id="set-name"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Email Address</label>
+                        <input type="email" id="set-email"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Contact Number</label>
+                        <input type="tel" id="set-phone"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                    <div class="md:col-span-2 border-t border-gray-800 my-2 pt-4">
+                        <label class="block text-xs font-bold text-brand-red uppercase mb-4 tracking-widest">Billing
+                            Address</label>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Street Address</label>
+                        <input type="text" id="bill-street" placeholder="123 Main St"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2">City</label>
+                        <input type="text" id="bill-city"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Postal Code</label>
+                        <input type="text" id="bill-zip"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Country</label>
+                        <input type="text" id="bill-country"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHIPPING -->
+            <div class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold flex items-center gap-2"><i class="bi bi-truck"></i> Shipping Address
+                    </h3>
+                    <button onclick="copyAddress()"
+                        class="text-xs bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded text-gray-300 transition flex items-center gap-2"><i
+                            class="bi bi-copy"></i> Copy from Billing</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Street Address</label>
+                        <input type="text" id="ship-street"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2">City</label>
+                        <input type="text" id="ship-city"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Postal Code</label>
+                        <input type="text" id="ship-zip"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Country</label>
+                        <input type="text" id="ship-country"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
+                    </div>
+                </div>
+                <div class="mt-6 text-right">
+                    <button onclick="saveSettings()"
+                        class="bg-white text-black font-bold px-6 py-3 rounded-lg text-sm hover:bg-gray-200 transition">SAVE
+                        DETAILS</button>
+                </div>
+            </div>
+
+            <!-- SECURITY -->
+            <div class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
+                <h3 class="text-lg font-bold mb-6 flex items-center gap-2"><i class="bi bi-shield-lock"></i> Security
+                </h3>
+                <div class="space-y-4 max-w-md">
+                    <div><label class="block text-xs font-bold text-gray-500 mb-2">Current Password</label><input
+                            type="password" id="pwd-current"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm text-white">
+                    </div>
+                    <div><label class="block text-xs font-bold text-gray-500 mb-2">New Password</label><input
+                            type="password" id="pwd-new"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm text-white">
+                    </div>
+                    <div><label class="block text-xs font-bold text-gray-500 mb-2">Confirm New Password</label><input
+                            type="password" id="pwd-confirm"
+                            class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm text-white">
+                    </div>
+                    <button onclick="changePassword()"
+                        class="bg-brand-red text-white font-bold px-6 py-3 rounded-lg text-sm hover:bg-red-700 transition">UPDATE
+                        PASSWORD</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-50 hidden flex-col p-6 transition-opacity duration-300">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-2 text-xl font-bold tracking-tight">
+                <div class="w-3 h-3 bg-brand-red rotate-45"></div> CASTLE CREW
+            </div>
+            <button onclick="toggleMenu()" class="text-gray-400 text-3xl hover:text-white transition"><i
+                    class="bi bi-x"></i></button>
+        </div>
+        <nav class="space-y-4 text-lg">
+            <a href="index.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition">
+                <i class="bi bi-house-door-fill text-xl"></i> Home Page
+            </a>
+            <a href="profile.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-person-circle text-xl"></i> Profile</a>
+            <a href="leads.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-people-fill text-xl"></i> Connections</a>
+            <a href="dashboard.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-grid-fill text-xl"></i> Templates</a>
+            <a href="analytics.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-bar-chart-fill text-xl"></i> Analytics</a>
+            <a href="settings.html"
+                class="flex items-center gap-4 py-2 text-brand-red font-bold border-b border-brand-red/30 transition"><i
+                    class="bi bi-gear-fill text-xl"></i> Settings</a>
+        </nav>
+        <div class="mt-auto"><button onclick="logout()"
+                class="flex items-center gap-3 text-gray-500 hover:text-white font-bold uppercase transition"><i
+                    class="bi bi-box-arrow-left text-xl"></i> Sign Out</button></div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); menu.classList.add('flex'); }
+            else { menu.classList.add('hidden'); menu.classList.remove('flex'); }
+        }
+
+        async function loadSettings() {
+            const token = localStorage.getItem('castle_token');
+            if (!token) return window.location.href = 'login.html';
+
+            try {
+                const res = await fetch('/api/settings', { headers: { 'Authorization': token } });
+                const data = await res.json();
+
+                if (data.id) {
+                    document.getElementById('set-name').value = data.full_name || "";
+                    document.getElementById('set-email').value = data.email || "";
+                    document.getElementById('set-phone').value = data.phone || "";
+
+                    let bill = {};
+                    try { bill = JSON.parse(data.address || '{}'); } catch (e) { bill = { street: data.address || "" }; }
+                    document.getElementById('bill-street').value = bill.street || "";
+                    document.getElementById('bill-city').value = bill.city || "";
+                    document.getElementById('bill-zip').value = bill.zip || "";
+                    document.getElementById('bill-country').value = bill.country || "";
+
+                    const ship = JSON.parse(data.shipping_info || '{}');
+                    document.getElementById('ship-street').value = ship.street || "";
+                    document.getElementById('ship-city').value = ship.city || "";
+                    document.getElementById('ship-zip').value = ship.zip || "";
+                    document.getElementById('ship-country').value = ship.country || "";
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function saveSettings() {
+            const token = localStorage.getItem('castle_token');
+            const btn = event.target;
+            btn.innerText = "SAVING...";
+
+            const billingData = {
+                street: document.getElementById('bill-street').value,
+                city: document.getElementById('bill-city').value,
+                zip: document.getElementById('bill-zip').value,
+                country: document.getElementById('bill-country').value
+            };
+
+            const payload = {
+                full_name: document.getElementById('set-name').value,
+                email: document.getElementById('set-email').value,
+                phone: document.getElementById('set-phone').value,
+                address: JSON.stringify(billingData),
+                shipping_info: {
+                    street: document.getElementById('ship-street').value,
+                    city: document.getElementById('ship-city').value,
+                    zip: document.getElementById('ship-zip').value,
+                    country: document.getElementById('ship-country').value
+                }
+            };
+
+            try {
+                const res = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) alert("Settings Saved Successfully!");
+                else alert("Failed to save settings.");
+            } catch (e) { alert("Error saving."); }
+            btn.innerText = "SAVE DETAILS";
+        }
+
+        function copyAddress() {
+            document.getElementById('ship-street').value = document.getElementById('bill-street').value;
+            document.getElementById('ship-city').value = document.getElementById('bill-city').value;
+            document.getElementById('ship-zip').value = document.getElementById('bill-zip').value;
+            document.getElementById('ship-country').value = document.getElementById('bill-country').value;
+        }
+
+        async function changePassword() {
+            const cur = document.getElementById('pwd-current').value;
+            const nw = document.getElementById('pwd-new').value;
+            const cnf = document.getElementById('pwd-confirm').value;
+            if (!cur || !nw) return alert("Please fill in passwords");
+            if (nw !== cnf) return alert("Passwords do not match");
+
+            const token = localStorage.getItem('castle_token');
+            try {
+                const res = await fetch('/api/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                    body: JSON.stringify({ current_password: cur, new_password: nw })
+                });
+                const data = await res.json();
+                if (res.ok) { alert("Password Changed!"); logout(); } else { alert(data.error); }
+            } catch (e) { alert("Error"); }
+        }
+
+        function logout() { localStorage.removeItem('castle_token'); window.location.href = 'index.html'; }
+        loadSettings();
+    </script>
+</body>
+
+</html>
