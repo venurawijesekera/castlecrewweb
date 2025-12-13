@@ -27,9 +27,7 @@
                             gray: '#1E1E1E'
                         }
                     },
-                    animation: {
-                        'spin-slow': 'spin 3s linear infinite',
-                    }
+                    // Removed 'spin-slow' animation definition
                 }
             }
         }
@@ -58,6 +56,15 @@
             background: #f00000;
         }
 
+        /* Glow animation for preloader logo */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
         /* Preloader Styles */
         #preloader.fade-out {
             opacity: 0;
@@ -72,9 +79,9 @@
             justify-content: center;
             padding: 12px 24px;
             /* Slightly reduced padding */
-            background-color: #f00000;
+            background-color: '#f00000';
             /* Brand Red */
-            border: 4px solid transparent; /* MODIFIED: Removed white border */
+            border: 4px solid transparent; 
             color: white;
             gap: 8px;
             border-radius: 50px;
@@ -109,14 +116,14 @@
         }
 
         .uiverse-button:hover {
-            border: 4px solid transparent; /* MODIFIED: Removed white border on hover */
+            border: 4px solid transparent; 
             background-color: #cc0000;
             transform: translateY(-2px);
             /* Subtle lift */
         }
 
         .uiverse-button:active {
-            border: 4px solid transparent; /* MODIFIED: Removed white border on active */
+            border: 4px solid transparent; 
             transform: translateY(0);
         }
 
@@ -269,8 +276,9 @@
     <div id="preloader"
         class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
         <div class="flex flex-col items-center gap-6">
-            <div
-                class="w-12 h-12 bg-brand-red rotate-45 animate-spin-slow rounded-sm shadow-[0_0_30px_rgba(240,0,0,0.5)]">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
             </div>
             <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
                 CASTLE CARDS
@@ -503,88 +511,6 @@
             </div>
         </div>
     </section>
-
-    <script>
-        function switchFeature(el, imgSrc) {
-            // Reset all active states
-            document.querySelectorAll('.feature-item').forEach(item => {
-                // Remove active classes
-                item.classList.remove('border-brand-red', 'bg-white/5');
-                item.classList.add('border-transparent');
-
-                // Reset text colors
-                const title = item.querySelector('h4');
-                const desc = item.querySelector('p');
-                title.classList.remove('text-white');
-                title.classList.add('text-gray-500');
-                desc.classList.remove('text-gray-400');
-                desc.classList.add('text-gray-500');
-            });
-
-            // Set active state on clicked element
-            el.classList.remove('border-transparent');
-            el.classList.add('border-brand-red', 'bg-white/5');
-
-            // Set active text colors
-            const title = el.querySelector('h4');
-            const desc = el.querySelector('p');
-            title.classList.remove('text-gray-500');
-            title.classList.add('text-white');
-            desc.classList.remove('text-gray-500');
-            desc.classList.add('text-gray-400');
-
-            // Change image with fade
-            const img = document.getElementById('feature-img');
-            img.style.opacity = '0';
-            setTimeout(() => {
-                img.src = imgSrc;
-                img.style.opacity = '1';
-            }, 200);
-
-            // Toggle Browse Templates Button visibility (RE-ADDED LOGIC)
-            const btn = document.getElementById('browse-btn-container');
-            if (imgSrc.includes('templates.png')) {
-                btn.style.opacity = '1';
-                btn.style.pointerEvents = 'auto';
-            } else {
-                btn.style.opacity = '0';
-                btn.style.pointerEvents = 'none';
-            }
-        }
-
-
-        window.addEventListener('load', () => {
-            const preloader = document.getElementById('preloader');
-            // Slight delay to ensure the animations are seen
-            setTimeout(() => {
-                preloader.classList.add('fade-out');
-                // Remove from DOM after transition to clean up
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                }, 700);
-            }, 800);
-
-            // --- AUTH LOGIC (Added) ---
-            const token = localStorage.getItem('castle_token');
-            const nav = document.getElementById('auth-nav');
-
-            if (token) {
-                // Logged In: Show Profile Icon
-                nav.innerHTML = `
-                    <a href="profile.html" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-red hover:text-white transition">
-                        <i class="bi bi-person-fill text-lg"></i>
-                    </a>
-                `;
-            } else {
-                // Guest: Show Sign In
-                nav.innerHTML = `
-                    <a href="login.html" class="flex items-center gap-2 text-sm font-medium hover:text-brand-red transition">
-                        Sign In <span class="text-xs">↗</span>
-                    </a>
-                `;
-            }
-        });
-    </script>
 
     <section class="py-20 px-6 md:px-12 lg:px-20 w-full flex flex-col md:flex-row items-center gap-16">
         <div class="w-full md:w-1/2 flex justify-center">
