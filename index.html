@@ -383,8 +383,13 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('castle_token');
             const nav = document.getElementById('auth-nav');
-            const defaultAvatar = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="%230a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
 
+            const defaultIconHTML = `
+                <a href="profile.html" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-red hover:text-white transition">
+                    <i class="bi bi-person-fill text-lg"></i>
+                </a>
+            `;
+            
             if (token) {
                 try {
                     // Fetch user card data
@@ -392,30 +397,27 @@
                     const data = await response.json();
                     
                     if (response.ok && data) {
-                        const avatarUrl = data.avatar_url || defaultAvatar;
+                        const avatarUrl = data.avatar_url;
 
-                        // Logged In: Show Profile Picture
-                        nav.innerHTML = `
-                            <a href="profile.html" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-red hover:text-white transition overflow-hidden">
-                                <img src="${avatarUrl}" alt="Profile Avatar" class="w-full h-full object-cover">
-                            </a>
-                        `;
+                        if (avatarUrl) {
+                            // OPTION 1: Show actual profile picture
+                            nav.innerHTML = `
+                                <a href="profile.html" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-red hover:text-white transition overflow-hidden">
+                                    <img src="${avatarUrl}" alt="Profile Avatar" class="w-full h-full object-cover">
+                                </a>
+                            `;
+                        } else {
+                            // OPTION 2: Show Bootstrap icon (if logged in but no avatar)
+                            nav.innerHTML = defaultIconHTML;
+                        }
                     } else {
                         // Fallback to default icon if API fails or session is bad
-                        nav.innerHTML = `
-                            <a href="profile.html" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-red hover:text-white transition">
-                                <i class="bi bi-person-fill text-lg"></i>
-                            </a>
-                        `;
+                        nav.innerHTML = defaultIconHTML;
                     }
                 } catch (e) {
                     console.error('Error fetching card data:', e);
                      // Fallback to default icon on error
-                    nav.innerHTML = `
-                        <a href="profile.html" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-red hover:text-white transition">
-                            <i class="bi bi-person-fill text-lg"></i>
-                        </a>
-                    `;
+                    nav.innerHTML = defaultIconHTML;
                 }
             } else {
                 // Guest: Show Login
