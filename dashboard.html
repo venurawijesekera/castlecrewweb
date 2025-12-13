@@ -25,12 +25,47 @@
             background-color: #050505;
             color: white;
         }
+
+        /* Preloader Styles */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glow animation for preloader logo */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
     </style>
 </head>
 
 <body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
 
-    <!-- SIDEBAR -->
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                DASHBOARD
+            </div>
+        </div>
+    </div>
+
     <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6 z-20">
         <div>
             <div class="flex items-center gap-2 mb-10 text-xl font-bold tracking-tight">
@@ -49,7 +84,6 @@
                     class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
                     <i class="bi bi-people-fill"></i> Connections
                 </a>
-                <!-- ACTIVE -->
                 <a href="dashboard.html"
                     class="flex items-center gap-3 px-4 py-3 bg-brand-red/10 text-brand-red rounded-lg text-sm font-bold">
                     <i class="bi bi-grid-fill"></i> Templates
@@ -73,7 +107,6 @@
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-1 relative">
         <div
             class="md:hidden p-4 flex justify-between items-center border-b border-gray-800 bg-brand-black sticky top-0 z-20">
@@ -95,7 +128,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Real Estate -->
                 <div
                     class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
                     <div class="h-64 bg-gray-900 relative p-6 flex flex-col items-center justify-center gap-4">
@@ -120,7 +152,6 @@
                     </div>
                 </div>
 
-                <!-- Castle Signature -->
                 <div
                     class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300 ring-2 ring-brand-red/20">
                     <div
@@ -144,7 +175,6 @@
                     </div>
                 </div>
 
-                <!-- The Creative -->
                 <div
                     class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
                     <div class="h-64 bg-gray-900 relative overflow-hidden">
@@ -171,7 +201,6 @@
         </div>
     </main>
 
-    <!-- MOBILE MENU -->
     <div id="mobile-menu"
         class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-50 hidden flex-col p-6 transition-opacity duration-300">
         <div class="flex justify-between items-center mb-8">
@@ -210,8 +239,13 @@
     <script>
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
-            if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); menu.classList.add('flex'); }
-            else { menu.classList.add('hidden'); menu.classList.remove('flex'); }
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
         }
 
         let userPlan = 'starter';
@@ -232,7 +266,10 @@
                     document.querySelectorAll('.btn-select[data-premium="true"]').forEach(btn => {
                         btn.innerText = "🔒 Upgrade";
                         btn.className = "flex-1 py-3 bg-gray-800 text-gray-500 rounded-lg text-sm font-bold cursor-not-allowed border border-gray-700";
-                        btn.onclick = (e) => { e.preventDefault(); if (confirm("Requires PRO plan.")) window.location.href = "pricing.html"; };
+                        btn.onclick = (e) => {
+                            e.preventDefault();
+                            if (confirm("Requires PRO plan.")) window.location.href = "pricing.html";
+                        };
                     });
                 }
 
@@ -244,7 +281,9 @@
                     activeBtn.onclick = () => window.location.href = 'editor.html';
                 }
 
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         async function selectTemplate(templateName) {
@@ -259,24 +298,58 @@
                 let socialsObj = {};
                 let phonesArr = [];
                 let emailsArr = [];
-                try { socialsObj = JSON.parse(current.socials || '{}'); } catch (e) { }
-                try { phonesArr = JSON.parse(current.phones || '[]'); } catch (e) { }
-                try { emailsArr = JSON.parse(current.emails || '[]'); } catch (e) { }
+                try {
+                    socialsObj = JSON.parse(current.socials || '{}');
+                } catch (e) {}
+                try {
+                    phonesArr = JSON.parse(current.phones || '[]');
+                } catch (e) {}
+                try {
+                    emailsArr = JSON.parse(current.emails || '[]');
+                } catch (e) {}
 
-                const payload = { ...current, socials: socialsObj, phones: phonesArr, emails: emailsArr, template_id: templateName };
+                const payload = {
+                    ...current,
+                    socials: socialsObj,
+                    phones: phonesArr,
+                    emails: emailsArr,
+                    template_id: templateName
+                };
 
                 const res = await fetch('/api/card', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
                     body: JSON.stringify(payload)
                 });
 
                 if (res.ok) window.location.href = 'editor.html';
-            } catch (e) { alert("Error saving template"); }
+            } catch (e) {
+                alert("Error saving template");
+            }
             btn.innerText = oldText;
         }
 
-        function logout() { localStorage.removeItem('castle_token'); window.location.href = 'index.html'; }
+        function logout() {
+            localStorage.removeItem('castle_token');
+            window.location.href = 'index.html';
+        }
+
+        // Preloader Logic (NEW)
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            // Slight delay to ensure the animations are seen
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                // Remove from DOM after transition to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
+        
         initDashboard();
     </script>
 </body>

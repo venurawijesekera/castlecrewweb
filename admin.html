@@ -19,9 +19,39 @@
             }
         }
     </script>
-    <style>body { background-color: #050505; color: white; }</style>
+    <style>
+        body { background-color: #050505; color: white; }
+
+        /* Preloader Styles */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glow animation for preloader logo */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+    </style>
 </head>
 <body class="p-8 max-w-7xl mx-auto">
+
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                ADMIN PANEL
+            </div>
+        </div>
+    </div>
 
     <div class="flex justify-between items-center mb-10">
         <h1 class="text-3xl font-black uppercase">Admin <span class="text-brand-red">Dashboard</span></h1>
@@ -31,7 +61,6 @@
         </div>
     </div>
 
-    <!-- STATS -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
             <h3 class="text-gray-500 text-xs font-bold uppercase">Total Users</h3>
@@ -47,7 +76,6 @@
         </div>
     </div>
 
-    <!-- USERS TABLE -->
     <div class="bg-brand-dark rounded-xl border border-gray-800 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-gray-400">
@@ -55,8 +83,7 @@
                     <tr>
                         <th class="p-4">ID</th>
                         <th class="p-4">Email</th>
-                        <th class="p-4">Castle Link (Slug)</th> <!-- NEW -->
-                        <th class="p-4">Plan</th>
+                        <th class="p-4">Castle Link (Slug)</th> <th class="p-4">Plan</th>
                         <th class="p-4 text-right">Actions</th>
                     </tr>
                 </thead>
@@ -67,7 +94,6 @@
         </div>
     </div>
 
-    <!-- EDIT USER MODAL -->
     <div id="edit-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50">
         <div class="bg-[#111] w-full max-w-sm p-6 rounded-2xl border border-gray-800 shadow-2xl relative">
             <h2 class="text-xl font-bold mb-1">Manage User</h2>
@@ -95,6 +121,19 @@
     </div>
 
     <script>
+        // Preloader Logic (NEW)
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            // Slight delay to ensure the animations are seen
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                // Remove from DOM after transition to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
+
         let currentUserId = null;
 
         // 1. Fetch Users & Populate Table
@@ -125,11 +164,9 @@
                             <span class="${getPlanBadge(user.plan)}">${user.plan || 'starter'}</span>
                         </td>
                         <td class="p-4 text-right flex justify-end gap-2">
-                            <!-- LOGIN AS USER BUTTON -->
                             <button onclick="loginAsUser(${user.id})" title="Login as User" class="bg-gray-800 text-white w-8 h-8 rounded flex items-center justify-center hover:bg-white hover:text-black transition">
                                 <i class="bi bi-key-fill"></i>
                             </button>
-                            <!-- MANAGE BUTTON -->
                             <button onclick="openModal(${user.id}, '${user.email}', '${user.plan || 'starter'}')" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
                                 MANAGE
                             </button>
@@ -191,6 +228,7 @@
             if(!currentUserId) return;
             const newPlan = document.getElementById('plan-select').value;
             const btn = document.querySelector('#edit-modal button.bg-brand-red');
+            const originalText = btn.innerText;
             btn.innerText = "SAVING...";
 
             try {
@@ -208,7 +246,7 @@
                     alert("Failed to update.");
                 }
             } catch(e) { alert("Error"); }
-            btn.innerText = "SAVE CHANGES";
+            btn.innerText = originalText;
         }
 
         async function deleteUser() {

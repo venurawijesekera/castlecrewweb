@@ -25,13 +25,46 @@
             background-color: #050505;
             color: white;
         }
+
+        /* Preloader Styles */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glow animation for preloader logo */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
     </style>
 </head>
-<!-- LAYOUT FIX: Flex Column for mobile, Row for Desktop. Natural scroll on mobile. -->
-
 <body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
 
-    <!-- SIDEBAR (Desktop Only) -->
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                ANALYTICS
+            </div>
+        </div>
+    </div>
+
     <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6 z-20">
         <div>
             <div class="flex items-center gap-2 mb-10 text-xl font-bold tracking-tight">
@@ -54,7 +87,6 @@
                     class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
                     <i class="bi bi-grid-fill"></i> Templates
                 </a>
-                <!-- ACTIVE -->
                 <a href="analytics.html"
                     class="flex items-center gap-3 px-4 py-3 bg-brand-red/10 text-brand-red rounded-lg text-sm font-bold">
                     <i class="bi bi-bar-chart-fill"></i> Analytics
@@ -73,10 +105,8 @@
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-1 relative">
 
-        <!-- MOBILE HEADER (Sticky) -->
         <div
             class="md:hidden p-4 flex justify-between items-center border-b border-gray-800 bg-brand-black sticky top-0 z-20">
             <div class="flex items-center gap-4">
@@ -90,7 +120,6 @@
             <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs">👤</div>
         </div>
 
-        <!-- SCROLLABLE CONTENT (Padding added for mobile bottom) -->
         <div class="p-6 md:p-12 pb-32 md:pb-12 max-w-7xl mx-auto h-full md:overflow-y-auto">
 
             <div class="mb-10 flex justify-between items-end">
@@ -105,10 +134,8 @@
                 </button>
             </div>
 
-            <!-- STATS GRID -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                <!-- 1. Profile Visits -->
                 <div class="bg-brand-dark border border-gray-800 p-6 rounded-2xl relative overflow-hidden group">
                     <div
                         class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/5 rounded-full blur-xl group-hover:bg-blue-500/10 transition">
@@ -124,7 +151,6 @@
                     <p class="text-xs text-gray-500 mt-2 relative z-10">Unique page loads.</p>
                 </div>
 
-                <!-- 2. Contact Saves -->
                 <div class="bg-brand-dark border border-gray-800 p-6 rounded-2xl relative overflow-hidden group">
                     <div
                         class="absolute -right-4 -top-4 w-24 h-24 bg-green-500/5 rounded-full blur-xl group-hover:bg-green-500/10 transition">
@@ -140,7 +166,6 @@
                     <p class="text-xs text-gray-500 mt-2 relative z-10">"Save Contact" clicks.</p>
                 </div>
 
-                <!-- 3. Exchanges -->
                 <div class="bg-brand-dark border border-gray-800 p-6 rounded-2xl relative overflow-hidden group">
                     <div
                         class="absolute -right-4 -top-4 w-24 h-24 bg-purple-500/5 rounded-full blur-xl group-hover:bg-purple-500/10 transition">
@@ -156,7 +181,6 @@
                     <p class="text-xs text-gray-500 mt-2 relative z-10">Leads collected.</p>
                 </div>
 
-                <!-- 4. Calls -->
                 <div class="bg-brand-dark border border-gray-800 p-6 rounded-2xl relative overflow-hidden group">
                     <div
                         class="absolute -right-4 -top-4 w-24 h-24 bg-red-500/5 rounded-full blur-xl group-hover:bg-red-500/10 transition">
@@ -176,7 +200,6 @@
         </div>
     </main>
 
-    <!-- MOBILE MENU OVERLAY -->
     <div id="mobile-menu"
         class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-50 hidden flex-col p-6 transition-opacity duration-300">
         <div class="flex justify-between items-center mb-8">
@@ -204,7 +227,6 @@
                 <i class="bi bi-grid-fill text-xl"></i> Templates
             </a>
 
-            <!-- ACTIVE ANALYTICS LINK -->
             <a href="analytics.html"
                 class="flex items-center gap-4 py-2 text-brand-red font-bold border-b border-brand-red/30 transition">
                 <i class="bi bi-bar-chart-fill text-xl"></i> Analytics
@@ -262,7 +284,10 @@
         function animateValue(id, end) {
             const obj = document.getElementById(id);
             if (!obj) return;
-            if (end === 0) { obj.innerText = "0"; return; }
+            if (end === 0) {
+                obj.innerText = "0";
+                return;
+            }
             let start = 0;
             const duration = 1000;
             let startTimestamp = null;
@@ -276,6 +301,19 @@
         }
 
         function logout() { localStorage.removeItem('castle_token'); window.location.href = 'index.html'; }
+
+        // Preloader Logic (NEW)
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            // Slight delay to ensure the animations are seen
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                // Remove from DOM after transition to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
 
         // Init
         loadStats();

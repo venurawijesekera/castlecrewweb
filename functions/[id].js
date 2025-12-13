@@ -6,8 +6,8 @@ export async function onRequest(context) {
     // Added 'cards' to this list
     const systemPages = [
         'login', 'register', 'dashboard', 'editor', 'admin', 'profile',
-        'settings', 'leads', 'analytics', 'cards',
-        'pricing', 'order', 'index', 'card', 'assets', 'api'
+        'settings', 'leads', 'analytics', 'cards', 'templates', // <-- ADDED 'templates' HERE
+        'pricing', 'order', 'index', 'card', 'assets', 'api', 'theme-realestate', 'theme-creative'
     ];
 
     // 2. IGNORE SYSTEM FILES & EXTENSIONS

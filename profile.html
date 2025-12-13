@@ -25,12 +25,47 @@
             background-color: #050505;
             color: white;
         }
+
+        /* Preloader Styles (NEW) */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glow animation for preloader logo (NEW) */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
     </style>
 </head>
 
 <body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
 
-    <!-- SIDEBAR -->
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                MY PROFILE
+            </div>
+        </div>
+    </div>
+
     <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6 z-20">
         <div>
             <div class="flex items-center gap-2 mb-10 text-xl font-bold tracking-tight">
@@ -71,9 +106,7 @@
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-1 relative">
-        <!-- Mobile Header -->
         <div
             class="md:hidden p-4 flex justify-between items-center border-b border-gray-800 bg-brand-black sticky top-0 z-20">
             <div class="flex items-center gap-4">
@@ -87,7 +120,6 @@
 
         <div class="p-6 md:p-12 pb-32 md:pb-12 max-w-4xl mx-auto h-full md:overflow-y-auto">
 
-            <!-- Welcome Header -->
             <div
                 class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-8 border-b border-gray-800">
                 <div>
@@ -99,12 +131,10 @@
                         class="inline-block bg-gray-800 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
                         Loading...</div>
 
-                    <!-- UPDATED: Added ID -->
                     <div id="member-since" class="mt-2 text-xs text-gray-500">Member since ...</div>
                 </div>
             </div>
 
-            <!-- QUICK ACTIONS -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <a href="leads.html"
                     class="bg-brand-dark border border-gray-800 p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-brand-red transition group">
@@ -147,9 +177,7 @@
                 </a>
             </div>
 
-            <!-- Content Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Active Card -->
                 <div class="bg-brand-dark border border-gray-800 rounded-2xl p-8 relative overflow-hidden group">
                     <div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition">
                         <i class="bi bi-nfc text-6xl text-brand-red/20"></i>
@@ -178,7 +206,6 @@
                     </div>
                 </div>
 
-                <!-- Subscription -->
                 <div class="bg-brand-dark border border-gray-800 rounded-2xl p-8 flex flex-col justify-between">
                     <div>
                         <h3 class="text-lg font-bold mb-2">Subscription</h3>
@@ -196,7 +223,6 @@
         </div>
     </main>
 
-    <!-- MOBILE MENU -->
     <div id="mobile-menu"
         class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-50 hidden flex-col p-6 transition-opacity duration-300">
         <div class="flex justify-between items-center mb-8">
@@ -236,8 +262,13 @@
     <script>
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
-            if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); menu.classList.add('flex'); }
-            else { menu.classList.add('hidden'); menu.classList.remove('flex'); }
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
         }
 
         async function loadProfile() {
@@ -285,6 +316,20 @@
 
         function logout() { localStorage.removeItem('castle_token'); window.location.href = 'index.html'; }
         function shareLink() { navigator.clipboard.writeText(document.getElementById('profile-link').href); alert("Copied!"); }
+
+        // Preloader Logic (NEW)
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            // Slight delay to ensure the animations are seen
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                // Remove from DOM after transition to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
+        
         loadProfile();
     </script>
 </body>

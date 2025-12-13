@@ -6,13 +6,10 @@
     <title>Edit Card - Castle Cards</title>
     <link rel="icon" type="image/png" href="assets/img/logo.png">
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <script>
@@ -32,14 +29,49 @@
         .phone-screen::-webkit-scrollbar { display: none; }
         select option { background-color: #0a0a0a; color: white; }
         .color-btn.selected { ring: 2px solid white; transform: scale(1.1); }
+        
+        /* Preloader Styles (NEW) */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glow animation for preloader logo (NEW) */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
 
-    <!-- LEFT: EDITOR PANEL -->
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                CARD EDITOR
+            </div>
+        </div>
+    </div>
+
+
     <div class="w-full md:w-1/2 lg:w-[600px] flex flex-col border-r border-gray-800 bg-brand-sidebar relative z-10">
         
-        <!-- Header -->
         <div class="sticky top-0 z-50 h-16 border-b border-gray-800 flex items-center justify-between px-4 md:px-6 bg-brand-black shadow-md md:shadow-none">
             <a href="profile.html" class="text-sm text-gray-400 hover:text-white flex items-center gap-2 transition">
                 <i class="bi bi-arrow-left"></i> <span class="hidden sm:inline">Back</span>
@@ -55,23 +87,19 @@
             </div>
         </div>
 
-        <!-- Form Inputs -->
         <div class="p-4 md:p-6 space-y-6 pb-32 md:flex-1 md:overflow-y-auto md:pb-6" id="editor-form">
             
-            <!-- DESIGN & COLOR -->
             <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
                 <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
                     <i class="bi bi-palette-fill"></i> Design & Color
                 </h3>
                 
-                <!-- Color Palette -->
                 <div class="mb-4">
                     <label class="block text-xs text-gray-400 mb-2">Accent Color</label>
                     <div class="flex flex-wrap gap-3" id="color-palette"></div>
                     <input type="hidden" id="input-accent" value="#f00000">
                 </div>
 
-                <!-- Dark/Light Mode -->
                 <div>
                     <label class="block text-xs text-gray-400 mb-2">Background Theme</label>
                     <select id="input-theme" onchange="updatePreview()" class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm text-white focus:border-brand-red focus:outline-none">
@@ -81,7 +109,6 @@
                 </div>
             </div>
 
-            <!-- CARD SETTINGS -->
             <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
                 <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
                     <i class="bi bi-gear-fill"></i> Settings
@@ -98,14 +125,12 @@
                     <label class="block text-xs text-gray-400 mb-1">Template</label>
                     <div class="relative">
                         <i class="bi bi-palette absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <!-- Options are now populated via JS -->
                         <select id="input-template" onchange="updatePreview()" class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red text-white appearance-none">
                         </select>
                     </div>
                 </div>
             </div>
             
-            <!-- PROFILE -->
             <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
                 <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
                     <i class="bi bi-person-fill"></i> Profile
@@ -133,7 +158,6 @@
                 </div>
             </div>
 
-            <!-- CONTACT -->
             <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
                 <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
                     <i class="bi bi-telephone-fill"></i> Contact Info
@@ -142,7 +166,6 @@
                 <div><label class="block text-xs text-gray-400 mb-2">Email Addresses</label><div id="email-list" class="space-y-2"></div><button onclick="addEmailRow()" class="mt-2 text-xs text-brand-red font-bold hover:text-white flex items-center gap-1 transition"><i class="bi bi-plus-circle"></i> Add Email</button></div>
             </div>
 
-            <!-- SOCIAL MEDIA -->
             <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
                 <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
                     <i class="bi bi-share-fill"></i> Social Media
@@ -158,7 +181,6 @@
         </div>
     </div>
 
-    <!-- RIGHT: PREVIEW PANEL -->
     <div class="hidden md:flex flex-1 bg-[#050505] items-center justify-center relative overflow-hidden">
         <div class="absolute inset-0 bg-[linear-gradient(rgba(30,30,30,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(30,30,30,0.5)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
         <div class="relative w-[375px] h-[750px] bg-black rounded-[50px] border-[12px] border-gray-900 shadow-2xl flex flex-col overflow-hidden">
@@ -186,7 +208,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
         const colors = ['#f00000', '#F59E0B', '#3B82F6', '#10B981', '#EC4899', '#6B7280', '#FFFFFF', '#000000'];
         const palette = document.getElementById('color-palette');
@@ -247,6 +268,7 @@
 
                     const design = JSON.parse(data.design || '{}');
                     document.getElementById('input-accent').value = design.accent || '#f00000';
+                    setAccent(document.getElementById('input-accent').value); // Select the color button
                     document.getElementById('input-theme').value = design.theme || 'dark';
 
                     const socials = JSON.parse(data.socials || '{}');
@@ -299,7 +321,17 @@
             reader.readAsDataURL(file);
         }
 
-        function setAccent(color, btn) { document.getElementById('input-accent').value = color; document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('ring-2', 'ring-white', 'scale-110')); if(btn) btn.classList.add('ring-2', 'ring-white', 'scale-110'); updatePreview(); }
+        function setAccent(color, btn) { 
+            document.getElementById('input-accent').value = color; 
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('ring-2', 'ring-white', 'scale-110')); 
+            
+            // Find the button that matches the color and add the classes
+            const targetButton = Array.from(document.querySelectorAll('.color-btn')).find(b => b.style.backgroundColor.toLowerCase() === color.toLowerCase());
+            if(targetButton) targetButton.classList.add('ring-2', 'ring-white', 'scale-110');
+            
+            updatePreview(); 
+        }
+
         function splitPhone(fullStr) { if(!fullStr) return { code: "+94", num: "" }; const found = countries.find(c => fullStr.startsWith(c.code)); return found ? { code: found.code, num: fullStr.substring(found.code.length) } : { code: "+94", num: fullStr }; }
         function formatStringPhone(val) { val = val.replace(/\D/g, ''); if (val.startsWith('0')) val = val.substring(1); if (val.length > 5) return val.replace(/^(\d{2})(\d{3})(\d+).*/, '$1 $2 $3'); else if (val.length > 2) return val.replace(/^(\d{2})(\d+)/, '$1 $2'); return val; }
         function formatAndSetPhone(index, input) { input.value = formatStringPhone(input.value); phones[index].number = input.value; updatePreview(); }
@@ -344,6 +376,7 @@
             const sTwit = document.getElementById('social-twitter').value;
             const iconColor = theme === 'light' ? 'text-gray-600 hover:text-black' : 'text-gray-300 hover:text-white';
             let sHtml = '';
+            // NOTE: For live preview, we use the accent color as the explicit style
             if(sInsta) sHtml += `<i class="bi bi-instagram ${iconColor} transition" style="color:${accent}"></i>`;
             if(sFace) sHtml += `<i class="bi bi-facebook ${iconColor} transition" style="color:${accent}"></i>`;
             if(sLink) sHtml += `<i class="bi bi-linkedin ${iconColor} transition" style="color:${accent}"></i>`;
@@ -415,6 +448,19 @@
             } catch (err) { alert("Save Failed: " + err.message); } 
             finally { btn.innerHTML = '<i class="bi bi-cloud-upload"></i> PUBLISH'; btn.disabled = false; }
         }
+
+        // Preloader Logic (NEW)
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            // Slight delay to ensure the animations are seen
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                // Remove from DOM after transition to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
 
         loadData();
     </script>

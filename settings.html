@@ -29,12 +29,47 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* Preloader Styles (NEW) */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glow animation for preloader logo (NEW) */
+        @keyframes pulse-glow {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
     </style>
 </head>
 
 <body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
 
-    <!-- SIDEBAR -->
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                SETTINGS
+            </div>
+        </div>
+    </div>
+
     <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6 z-20">
         <div>
             <div class="flex items-center gap-2 mb-10 text-xl font-bold tracking-tight">
@@ -57,7 +92,6 @@
                 <a href="analytics.html"
                     class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
                         class="bi bi-bar-chart-fill"></i> Analytics</a>
-                <!-- ACTIVE -->
                 <a href="settings.html"
                     class="flex items-center gap-3 px-4 py-3 bg-brand-red/10 text-brand-red rounded-lg text-sm font-bold"><i
                         class="bi bi-gear-fill"></i> Settings</a>
@@ -70,7 +104,6 @@
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="flex-1 relative">
         <div
             class="md:hidden p-4 flex justify-between items-center border-b border-gray-800 bg-brand-black sticky top-0 z-20">
@@ -90,7 +123,6 @@
                 <p class="text-gray-400 text-sm">Manage your personal information and security.</p>
             </div>
 
-            <!-- PERSONAL & BILLING -->
             <div class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
                 <h3 class="text-lg font-bold mb-6 flex items-center gap-2"><i class="bi bi-person-vcard"></i> Personal &
                     Billing</h3>
@@ -137,7 +169,6 @@
                 </div>
             </div>
 
-            <!-- SHIPPING -->
             <div class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold flex items-center gap-2"><i class="bi bi-truck"></i> Shipping Address
@@ -175,7 +206,6 @@
                 </div>
             </div>
 
-            <!-- SECURITY -->
             <div class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
                 <h3 class="text-lg font-bold mb-6 flex items-center gap-2"><i class="bi bi-shield-lock"></i> Security
                 </h3>
@@ -200,7 +230,6 @@
         </div>
     </main>
 
-    <!-- MOBILE MENU -->
     <div id="mobile-menu"
         class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-50 hidden flex-col p-6 transition-opacity duration-300">
         <div class="flex justify-between items-center mb-8">
@@ -239,8 +268,13 @@
     <script>
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
-            if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); menu.classList.add('flex'); }
-            else { menu.classList.add('hidden'); menu.classList.remove('flex'); }
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
         }
 
         async function loadSettings() {
@@ -331,11 +365,33 @@
                     body: JSON.stringify({ current_password: cur, new_password: nw })
                 });
                 const data = await res.json();
-                if (res.ok) { alert("Password Changed!"); logout(); } else { alert(data.error); }
+                if (res.ok) {
+                    alert("Password Changed!");
+                    // Clear fields
+                    document.getElementById('pwd-current').value = '';
+                    document.getElementById('pwd-new').value = '';
+                    document.getElementById('pwd-confirm').value = '';
+                    // Force re-login
+                    logout();
+                } else { alert(data.error); }
             } catch (e) { alert("Error"); }
         }
 
         function logout() { localStorage.removeItem('castle_token'); window.location.href = 'index.html'; }
+
+        // Preloader Logic (NEW)
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            // Slight delay to ensure the animations are seen
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                // Remove from DOM after transition to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
+
         loadSettings();
     </script>
 </body>
