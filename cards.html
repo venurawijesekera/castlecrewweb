@@ -1,716 +1,1441 @@
 ﻿<!DOCTYPE html>
+
 <html lang="en" class="scroll-smooth">
 
+
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Castle Cards - Smart NFC Business Cards</title>
+
+
 
     <link rel="icon" type="image/png" href="assets/img/logo.png">
 
+
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+
+
     <script>
+
         tailwind.config = {
+
             theme: {
+
                 extend: {
+
                     fontFamily: {
+
                         sans: ['Inter', 'sans-serif'],
+
                     },
+
                     colors: {
+
                         brand: {
+
                             red: '#f00000',
+
                             black: '#0a0a0a',
+
                             dark: '#121212',
+
                             gray: '#1E1E1E'
+
                         }
+
                     },
-                    // Removed 'spin-slow' animation definition
+
                 }
+
             }
+
         }
+
     </script>
+
     <style>
+
         body {
+
             background-color: #050505;
+
             color: white;
+
         }
+
+
 
         /* Custom scrollbar */
+
         ::-webkit-scrollbar {
+
             width: 8px;
+
         }
+
+
 
         ::-webkit-scrollbar-track {
+
             background: #0a0a0a;
+
         }
+
+
 
         ::-webkit-scrollbar-thumb {
+
             background: #333;
+
             border-radius: 4px;
+
         }
+
+
 
         ::-webkit-scrollbar-thumb:hover {
+
             background: #f00000;
+
         }
+
+
 
         /* Glow animation for preloader logo */
+
         @keyframes pulse-glow {
+
             0%, 100% { opacity: 0.5; transform: scale(1); }
+
             50% { opacity: 0.8; transform: scale(1.1); }
+
         }
+
         .animate-pulse-glow {
+
             animation: pulse-glow 2s infinite ease-in-out;
+
         }
+
+
 
         /* Preloader Styles */
+
         #preloader.fade-out {
+
             opacity: 0;
+
             pointer-events: none;
+
         }
 
+
+
         /* Uiverse Button Styles */
+
         /* Discover Button Styles (Uiverse.io by vinodjangid07) */
+
         .uiverse-button {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 12px 24px;
+
+            /* Slightly reduced padding */
+
+            background-color: '#f00000';
+
+            /* Brand Red */
+
+            border: 4px solid transparent; 
+
+            color: white;
+
+            gap: 8px;
+
+            border-radius: 50px;
+
+            cursor: pointer;
+
+            transition: all 0.3s;
+
+            text-decoration: none;
+
+            /* Ensure link underline is gone */
+
+            box-shadow: 0 10px 20px -5px rgba(240, 0, 0, 0.4);
+
+            /* Add shadow */
+
+        }
+
+
+
+        .uiverse-button .text {
+
+            font-size: 1em;
+
+            /* Adjusted size */
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+
+        }
+
+
+
+        .uiverse-button .svg {
+
+            padding-top: 5px;
+
+            height: 100%;
+
+            width: fit-content;
+
+            display: flex;
+
+            align-items: center;
+
+        }
+
+
+
+        .uiverse-button .svg svg {
+
+            width: 30px;
+
+            /* Reduced SVG size */
+
+            height: 18px;
+
+        }
+
+
+
+        .uiverse-button:hover {
+
+            border: 4px solid transparent; 
+
+            background-color: #cc0000;
+
+            transform: translateY(-2px);
+
+            /* Subtle lift */
+
+        }
+
+
+
+        .uiverse-button:active {
+
+            border: 4px solid transparent; 
+
+            transform: translateY(0);
+
+        }
+
+
+
+        .uiverse-button:hover .svg svg {
+
+            animation: jello-vertical 0.9s both;
+
+            transform-origin: left;
+
+        }
+
+
+
+        @keyframes jello-vertical {
+
+            0% {
+
+                transform: scale3d(1, 1, 1);
+
+            }
+
+
+
+            30% {
+
+                transform: scale3d(0.75, 1.25, 1);
+
+            }
+
+
+
+            40% {
+
+                transform: scale3d(1.25, 0.75, 1);
+
+            }
+
+
+
+            50% {
+
+                transform: scale3d(0.85, 1.15, 1);
+
+            }
+
+
+
+            65% {
+
+                transform: scale3d(1.05, 0.95, 1);
+
+            }
+
+
+
+            75% {
+
+                transform: scale3d(0.95, 1.05, 1);
+
+            }
+
+
+
+            100% {
+
+                transform: scale3d(1, 1, 1);
+
+            }
+
+        }
+
+
+
+        /* Bubble Button Styles (Uiverse.io by zjssun) - Adapted */
+
+        .bubble-button {
+
+            position: relative;
+
+            padding: 16px 32px;
+
+            /* Matched to previous button size */
+
+            border-radius: 50px;
+
+            /* Kept rounded-full */
+
+            border: none;
+
+            color: #fff;
+
+            cursor: pointer;
+
+            background-color: #f00000;
+
+            transition: all 0.2s ease;
+
+            font-weight: 700;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            text-transform: uppercase;
+
+            overflow: visible;
+
+            /* Ensure bubbles are seen */
+
+            z-index: 1;
+
+            /* Ensure button is above particles */
+
+        }
+
+
+
+        .bubble-button:active {
+
+            transform: scale(0.96);
+
+        }
+
+
+
+        .bubble-button:before,
+
+        .bubble-button:after {
+
+            position: absolute;
+
+            content: "";
+
+            width: 150%;
+
+            left: 50%;
+
+            height: 100%;
+
+            transform: translateX(-50%);
+
+            z-index: -1000;
+
+            background-repeat: no-repeat;
+
+            pointer-events: none;
+
+        }
+
+
+
+        .bubble-button:hover:before {
+
+            top: -70%;
+
+            background-image: radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, transparent 20%, #f00000 20%, transparent 30%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, transparent 10%, #f00000 15%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%);
+
+            background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
+
+                10% 10%, 18% 18%;
+
+            background-position: 50% 120%;
+
+            animation: greentopBubbles 0.6s ease;
+
+        }
+
+
+
+        @keyframes greentopBubbles {
+
+            0% {
+
+                background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
+
+                    40% 90%, 55% 90%, 70% 90%;
+
+            }
+
+
+
+            50% {
+
+                background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
+
+                    50% 50%, 65% 20%, 90% 30%;
+
+            }
+
+
+
+            100% {
+
+                background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
+
+                    50% 40%, 65% 10%, 90% 20%;
+
+                background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+
+            }
+
+        }
+
+
+
+        .bubble-button:hover::after {
+
+            bottom: -70%;
+
+            background-image: radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, transparent 10%, #f00000 15%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%),
+
+                radial-gradient(circle, #f00000 20%, transparent 20%);
+
+            background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
+
+            background-position: 50% 0%;
+
+            animation: greenbottomBubbles 0.6s ease;
+
+        }
+
+
+
+        @keyframes greenbottomBubbles {
+
+            0% {
+
+                background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
+
+                    70% -10%, 70% 0%;
+
+            }
+
+
+
+            50% {
+
+                background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
+
+                    105% 0%;
+
+            }
+
+
+
+            100% {
+
+                background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
+
+                    110% 10%;
+
+                background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+
+            }
+
+        }
+
+        
+        /* CSS for the profile picture container to show the default icon */
+        .profile-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 24px;
-            /* Slightly reduced padding */
-            background-color: '#f00000';
-            /* Brand Red */
-            border: 4px solid transparent; 
-            color: white;
-            gap: 8px;
-            border-radius: 50px;
-            cursor: pointer;
+            background-color: white;
+            color: black;
+            border-radius: 9999px; /* full rounded */
             transition: all 0.3s;
-            text-decoration: none;
-            /* Ensure link underline is gone */
-            box-shadow: 0 10px 20px -5px rgba(240, 0, 0, 0.4);
-            /* Add shadow */
-        }
-
-        .uiverse-button .text {
-            font-size: 1em;
-            /* Adjusted size */
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .uiverse-button .svg {
-            padding-top: 5px;
-            height: 100%;
-            width: fit-content;
-            display: flex;
-            align-items: center;
-        }
-
-        .uiverse-button .svg svg {
-            width: 30px;
-            /* Reduced SVG size */
-            height: 18px;
-        }
-
-        .uiverse-button:hover {
-            border: 4px solid transparent; 
-            background-color: #cc0000;
-            transform: translateY(-2px);
-            /* Subtle lift */
-        }
-
-        .uiverse-button:active {
-            border: 4px solid transparent; 
-            transform: translateY(0);
-        }
-
-        .uiverse-button:hover .svg svg {
-            animation: jello-vertical 0.9s both;
-            transform-origin: left;
-        }
-
-        @keyframes jello-vertical {
-            0% {
-                transform: scale3d(1, 1, 1);
-            }
-
-            30% {
-                transform: scale3d(0.75, 1.25, 1);
-            }
-
-            40% {
-                transform: scale3d(1.25, 0.75, 1);
-            }
-
-            50% {
-                transform: scale3d(0.85, 1.15, 1);
-            }
-
-            65% {
-                transform: scale3d(1.05, 0.95, 1);
-            }
-
-            75% {
-                transform: scale3d(0.95, 1.05, 1);
-            }
-
-            100% {
-                transform: scale3d(1, 1, 1);
-            }
-        }
-
-        /* Bubble Button Styles (Uiverse.io by zjssun) - Adapted */
-        .bubble-button {
-            position: relative;
-            padding: 16px 32px;
-            /* Matched to previous button size */
-            border-radius: 50px;
-            /* Kept rounded-full */
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            background-color: #f00000;
-            transition: all 0.2s ease;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            overflow: visible;
-            /* Ensure bubbles are seen */
-            z-index: 1;
-            /* Ensure button is above particles */
-        }
-
-        .bubble-button:active {
-            transform: scale(0.96);
-        }
-
-        .bubble-button:before,
-        .bubble-button:after {
-            position: absolute;
-            content: "";
-            width: 150%;
-            left: 50%;
-            height: 100%;
-            transform: translateX(-50%);
-            z-index: -1000;
+            width: 40px;
+            height: 40px;
+            /* Default icon fallback */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-fill' viewBox='0 0 16 16'%3E%3Cpath d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'/%3E%3C/svg%3E");
+            background-size: 60%;
+            background-position: center;
             background-repeat: no-repeat;
-            pointer-events: none;
         }
 
-        .bubble-button:hover:before {
-            top: -70%;
-            background-image: radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, transparent 20%, #f00000 20%, transparent 30%),
-                radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, transparent 10%, #f00000 15%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%);
-            background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
-                10% 10%, 18% 18%;
-            background-position: 50% 120%;
-            animation: greentopBubbles 0.6s ease;
+        .profile-icon:hover {
+            background-color: #f00000; /* brand-red */
+            color: white;
         }
 
-        @keyframes greentopBubbles {
-            0% {
-                background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
-                    40% 90%, 55% 90%, 70% 90%;
-            }
-
-            50% {
-                background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
-                    50% 50%, 65% 20%, 90% 30%;
-            }
-
-            100% {
-                background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
-                    50% 40%, 65% 10%, 90% 20%;
-                background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-            }
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 9999px;
         }
 
-        .bubble-button:hover::after {
-            bottom: -70%;
-            background-image: radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, transparent 10%, #f00000 15%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%),
-                radial-gradient(circle, #f00000 20%, transparent 20%);
-            background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
-            background-position: 50% 0%;
-            animation: greenbottomBubbles 0.6s ease;
-        }
 
-        @keyframes greenbottomBubbles {
-            0% {
-                background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
-                    70% -10%, 70% 0%;
-            }
-
-            50% {
-                background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
-                    105% 0%;
-            }
-
-            100% {
-                background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
-                    110% 10%;
-                background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-            }
-        }
     </style>
+
 </head>
+
+
 
 <body class="antialiased selection:bg-brand-red selection:text-white relative overflow-x-hidden">
 
+
+
     <div id="preloader"
+
         class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+
         <div class="flex flex-col items-center gap-6">
+
             <div class="relative w-16 h-16 flex items-center justify-center">
+
                 <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+
                 <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+
             </div>
+
             <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+
                 CASTLE CARDS
+
             </div>
+
         </div>
+
     </div>
 
+
+
     <nav
+
         class="w-full py-6 px-6 md:px-12 lg:px-20 flex justify-between items-center sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md">
+
         <a href="index.html" class="text-2xl font-bold tracking-tighter flex items-center gap-2">
+
             <div class="w-3 h-3 bg-brand-red rotate-45"></div>
+
             CASTLE CARDS
+
         </a>
+
         <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+
             <a href="index.html" class="hover:text-white transition">Home</a>
+
             <a href="#" class="hover:text-white transition">Features</a>
+
             <a href="dashboard.html" class="hover:text-white transition">Templates</a>
+
             <a href="#" class="hover:text-white transition">Castle Crew</a>
+
         </div>
+
+
 
         <div id="auth-nav">
+
             <a href="login.html" class="flex items-center gap-2 text-sm font-medium hover:text-brand-red transition">
+
                 Sign In <span class="text-xs">↗</span>
+
             </a>
+
         </div>
+
     </nav>
 
+
+
     <section
+
         class="relative pt-12 pb-20 px-6 md:px-12 lg:px-20 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
         <div class="z-10">
+
             <h1 class="text-5xl md:text-7xl xl:text-8xl font-black leading-[1.1] tracking-tight mb-6 uppercase">
+
                 Secure Your <br>
+
                 <span class="text-brand-red">Digital</span> <br>
+
                 Legacy
+
             </h1>
+
             <p class="text-gray-400 text-lg mb-8 max-w-lg">
+
                 Custom NFC business cards by Castle Crew. One tap to share your contact info, portfolio, and socials. No
+
                 app required.
+
             </p>
+
+
 
             <div class="flex flex-wrap gap-4 items-center">
+
                 <a href="pricing.html" class="bubble-button">
+
                     GET YOUR CARD <span class="bg-white/20 rounded-full p-1 text-xs">↗</span>
+
                 </a>
 
+
+
                 <div class="flex flex-col ml-4">
+
                     <div class="flex items-center gap-2 mb-1">
+
                         <span class="w-2 h-2 bg-brand-red rounded-full animate-pulse"></span>
+
                         <span class="text-xs font-bold uppercase text-gray-500">Active Members</span>
+
                     </div>
-                    <div class="flex items-center gap-3">
+
+                    <div class="flex items-center gap-3" id="dynamic-user-avatars"> 
                         <h3 class="text-2xl font-bold">15k+</h3>
-                        <div class="flex -space-x-2">
-                            <div class="w-8 h-8 rounded-full bg-gray-700 border-2 border-black"></div>
-                            <div class="w-8 h-8 rounded-full bg-gray-600 border-2 border-black"></div>
-                            <div class="w-8 h-8 rounded-full bg-gray-500 border-2 border-black"></div>
-                        </div>
+                        <div class="text-gray-500 text-sm">Loading...</div>
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
+
 
         <div class="flex justify-center lg:justify-center w-full">
+
             <div class="relative w-full max-w-2xl">
+
                 <div class="absolute -top-10 -right-10 text-brand-red text-6xl opacity-80 z-0">✦</div>
+
                 <div class="absolute -bottom-10 -left-10 text-white opacity-20 text-4xl z-0">★</div>
 
+
+
                 <img id="hero-img" src="assets/img/hero-cards.png" alt="Castle Cards Stack"
+
                     class="w-full h-auto object-contain relative z-10 transform hover:scale-105 transition duration-500 drop-shadow-2xl">
 
+
+
                 <div
+
                     class="absolute top-10 -right-12 hidden xl:flex flex-col gap-4 text-xs font-mono text-gray-400 text-right z-20">
+
                     <div class="flex items-center gap-2 justify-end">
+
                         <span>Select Template</span> <span class="text-white">↗</span>
+
                     </div>
+
                     <div class="w-32 h-[1px] bg-gray-700 ml-auto"></div>
+
                     <div class="flex items-center gap-2 justify-end">
+
                         <span>Edit Profile</span> <span class="text-white">→</span>
+
                     </div>
+
                     <div class="w-24 h-[1px] bg-gray-700 ml-auto"></div>
+
                 </div>
+
             </div>
+
         </div>
+
     </section>
+
+
+
     <section class="py-10 px-6 md:px-12 lg:px-20 w-full">
+
         <div class="flex flex-col md:flex-row justify-between items-end mb-10 border-b border-gray-800 pb-8">
+
             <h2 class="text-3xl md:text-4xl font-bold uppercase max-w-lg leading-none">
+
                 Getting to know <br> Castle Cards
+
             </h2>
+
             <p class="text-sm text-gray-400 max-w-xl text-right mt-4 md:mt-0">
+
                 We are more than just a printing service; Castle Crew provides the digital infrastructure to manage your
+
                 professional identity securely.
+
             </p>
+
         </div>
+
+
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+
             <div
+
                 class="bg-gradient-to-br from-brand-red to-[#b00000] p-8 rounded-xl min-h-[18rem] flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:-translate-y-2 shadow-lg hover:shadow-brand-red/20">
+
                 <div class="flex items-center gap-2 relative z-10">
+
                     <div class="w-8 h-8 bg-black/20 rounded-full flex items-center justify-center backdrop-blur-sm">👤
+
                     </div>
+
                     <span class="font-bold text-white tracking-wide">Users</span>
+
                 </div>
+
                 <div class="relative z-10">
+
                     <h3 class="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">50k</h3>
+
                     <p class="text-sm text-white/80 font-medium">Professionals networking smarter.</p>
+
                 </div>
+
                 <div
+
                     class="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition duration-700">
+
                 </div>
+
                 <div
+
                     class="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay">
+
                 </div>
+
             </div>
 
+
+
             <div
+
                 class="bg-[#080808] border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-brand-red/30 relative overflow-hidden">
+
                 <div
+
                     class="absolute inset-0 bg-brand-red/5 opacity-0 group-hover:opacity-100 transition duration-500 blur-xl">
+
                 </div>
+
+
 
                 <div class="flex items-center gap-2 relative z-10">
+
                     <div
+
                         class="w-8 h-8 bg-brand-red/10 rounded-full flex items-center justify-center text-brand-red font-bold">
+
                         ⚡</div>
+
                     <span class="text-brand-red font-bold tracking-wide">Speed</span>
+
                 </div>
+
                 <div class="relative z-10">
+
                     <h3 class="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">0.1s</h3>
+
                     <p class="text-gray-400 text-sm">Instant NFC transfer speed.</p>
+
                 </div>
+
             </div>
 
+
+
             <div
+
                 class="bg-gradient-to-br from-[#111] to-black border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-green-500/30">
+
                 <div class="flex items-center gap-2">
+
                     <div
+
                         class="w-8 h-8 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center text-sm">
+
                         ♻
+
                     </div>
+
                     <span class="font-bold text-green-500 tracking-wide">Eco-Friendly</span>
+
                 </div>
+
                 <div>
+
                     <h3 class="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">100<span
+
                             class="text-3xl align-top text-green-500">%</span></h3>
+
                     <p class="text-gray-400 text-sm">Reduction in paper waste.</p>
+
                 </div>
+
             </div>
+
         </div>
+
     </section>
 
+
+
     <section class="py-20 px-6 md:px-12 lg:px-20 w-full my-10">
+
         <div
+
             class="bg-gradient-to-br from-[#111] to-black text-white rounded-3xl p-8 md:p-16 w-full border border-gray-800 shadow-2xl">
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full">
+
                 <div class="flex flex-col justify-center">
+
                     <h2 class="text-4xl md:text-5xl font-black uppercase mb-6">All-In-One Platform<br>For Networking
+
                     </h2>
+
                     <p class="text-gray-400 mb-12 max-w-lg">Simplify your professional life by securely connecting your
+
                         accounts and automatically updating your details.</p>
 
+
+
                     <div class="space-y-6">
+
                         <div onclick="switchFeature(this, 'assets/img/templates.png')"
+
                             class="feature-item group cursor-pointer border-l-4 border-brand-red pl-6 py-2 transition bg-white/5 rounded-r-lg">
+
                             <h4 class="text-xl font-bold mb-1 text-white transition">01. Choose Your
+
                                 Template</h4>
+
                             <p class="text-gray-400 text-sm">Select from 6 premium digital templates upon login.</p>
+
                         </div>
+
                         <div onclick="switchFeature(this, 'assets/img/edit.png')"
+
                             class="feature-item group cursor-pointer border-l-4 border-transparent pl-6 py-2 transition hover:bg-white/5 hover:border-gray-700 rounded-r-lg">
+
                             <h4 class="text-xl font-bold mb-1 text-gray-500 group-hover:text-white transition">02. Edit
+
                                 Real-Time
+
                             </h4>
+
                             <p class="text-gray-500 text-sm group-hover:text-gray-400 transition">Changed jobs? Update
+
                                 your dashboard and your card updates
+
                                 instantly.</p>
+
                         </div>
+
                         <div onclick="switchFeature(this, 'assets/img/analytics.png')"
+
                             class="feature-item group cursor-pointer border-l-4 border-transparent pl-6 py-2 transition hover:bg-white/5 hover:border-gray-700 rounded-r-lg">
+
                             <h4 class="text-xl font-bold mb-1 text-gray-500 group-hover:text-white transition">03. Track
+
                                 Analytics
+
                             </h4>
+
                             <p class="text-gray-500 text-sm group-hover:text-gray-400 transition">See how many people
+
                                 are viewing your profile.</p>
+
                         </div>
+
                         <div
+
                             class="feature-item group cursor-pointer border-l-4 border-transparent pl-6 py-2 transition hover:bg-white/5 hover:border-gray-700 rounded-r-lg">
+
                             <h4 class="text-xl font-bold mb-1 text-gray-500 group-hover:text-white transition">04.
+
                                 Compatible
+
                                 Everywhere</h4>
+
                             <p class="text-gray-500 text-sm group-hover:text-gray-400 transition">Works on iPhone,
+
                                 Android, and any samrt device.</p>
+
                         </div>
+
                     </div>
+
                 </div>
+
+
+
 
 
                 <div class="relative w-full flex items-center justify-center">
+
                     <div
+
                         class="relative bg-[#050505] rounded-2xl shadow-2xl border border-gray-800 w-full max-w-2xl overflow-hidden group">
 
+
+
                         <div
+
                             class="absolute -inset-1 bg-gradient-to-r from-brand-red to-purple-600 opacity-20 blur-lg group-hover:opacity-30 transition duration-1000">
+
                         </div>
+
+
+
 
 
                         <div class="relative w-full">
+
                             <img id="feature-img" src="assets/img/templates.png"
+
                                 class="w-full h-auto object-cover hover:scale-105 transition-all duration-500"
+
                                 alt="UI Templates">
+
                         </div>
+
+
 
                         <div class="absolute bottom-0 inset-x-0 z-10 transition-opacity duration-300 flex justify-center py-0"
+
                             id="browse-btn-container">
+
                             <a href="templates.html"
+
                                 class="uiverse-button w-full mx-0 rounded-none border-0 !p-4 !px-6">
+
                                 <span class="text">Browse Templates</span>
+
                                 <span class="svg">
+
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="20" viewBox="0 0 38 15"
+
                                         fill="none">
+
                                         <path fill="white"
+
                                             d="M10 7.519l-.939-.344h0l.939.344zm14.386-1.205l-.981-.192.981.192zm1.276 5.509l.537.843.148-.094.107-.139-.792-.611zm4.819-4.304l-.385-.923h0l.385.923zm7.227.707a1 1 0 0 0 0-1.414L31.343.448a1 1 0 0 0-1.414 0 1 1 0 0 0 0 1.414l5.657 5.657-5.657 5.657a1 1 0 0 0 1.414 1.414l6.364-6.364zM1 7.519l.554.833.029-.019.094-.061.361-.23 1.277-.77c1.054-.609 2.397-1.32 3.629-1.787.611-.234 1.17-.392 1.623-.455.477-.066.707-.008.788.034.025.013.031.021.039.034a.56.56 0 0 1 .058.235c.029.327-.047.906-.39 1.842l1.878.689c.383-1.044.571-1.949.505-2.705-.072-.815-.45-1.493-1.16-1.865-.627-.329-1.358-.332-1.993-.244-.659.092-1.367.305-2.056.566-1.381.523-2.833 1.297-3.921 1.925l-1.341.808-.385.245-.104.068-.028.018c-.011.007-.011.007.543.84zm8.061-.344c-.198.54-.328 1.038-.36 1.484-.032.441.024.94.325 1.364.319.45.786.64 1.21.697.403.054.824-.001 1.21-.09.775-.179 1.694-.566 2.633-1.014l3.023-1.554c2.115-1.122 4.107-2.168 5.476-2.524.329-.086.573-.117.742-.115s.195.038.161.014c-.15-.105.085-.139-.076.685l1.963.384c.192-.98.152-2.083-.74-2.707-.405-.283-.868-.37-1.28-.376s-.849.069-1.274.179c-1.65.43-3.888 1.621-5.909 2.693l-2.948 1.517c-.92.439-1.673.743-2.221.87-.276.064-.429.065-.492.057-.043-.006.066.003.155.127.07.099.024.131.038-.063.014-.187.078-.49.243-.94l-1.878-.689zm14.343-1.053c-.361 1.844-.474 3.185-.413 4.161.059.95.294 1.72.811 2.215.567.544 1.242.546 1.664.459a2.34 2.34 0 0 0 .502-.167l.15-.076.049-.028.018-.011c.013-.008.013-.008-.524-.852l-.536-.844.019-.012c-.038.018-.064.027-.084.032-.037.008.053-.013.125.056.021.02-.151-.135-.198-.895-.046-.734.034-1.887.38-3.652l-1.963-.384zm2.257 5.701l.791.611.024-.031.08-.101.311-.377 1.093-1.213c.922-.954 2.005-1.894 2.904-2.27l-.771-1.846c-1.31.547-2.637 1.758-3.572 2.725l-1.184 1.314-.341.414-.093.117-.025.032c-.01.013-.01.013.781.624zm5.204-3.381c.989-.413 1.791-.42 2.697-.307.871.108 2.083.385 3.437.385v-2c-1.197 0-2.041-.226-3.19-.369-1.114-.139-2.297-.146-3.715.447l.771 1.846z">
+
                                         </path>
+
                                     </svg>
+
                                 </span>
+
                             </a>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </section>
+
+
 
     <section class="py-20 px-6 md:px-12 lg:px-20 w-full flex flex-col md:flex-row items-center gap-16">
+
         <div class="w-full md:w-1/2 flex justify-center">
+
             <div class="relative group">
+
                 <div
+
                     class="absolute inset-0 bg-brand-red blur-2xl opacity-20 group-hover:opacity-40 transition duration-500">
+
                 </div>
+
                 <img src="assets/img/card.png" alt="Custom NFC Card"
+
                     class="relative z-10 w-full max-w-lg transform rotate-[-12deg] group-hover:rotate-0 transition duration-500 ease-out">
+
             </div>
+
         </div>
+
+
 
         <div class="w-full md:w-1/2 pl-0 md:pl-10">
+
             <h5 class="text-brand-red font-bold text-sm tracking-widest mb-2">BENEFITS</h5>
+
             <h2 class="text-4xl md:text-6xl font-black uppercase mb-8 leading-tight">
+
                 Networking on <br> International
+
             </h2>
+
+
 
             <ul class="space-y-8">
+
                 <li class="flex gap-6">
+
                     <div
+
                         class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-brand-red font-bold text-lg flex-shrink-0">
+
                         1</div>
+
                     <div>
+
                         <h4 class="font-bold text-xl mb-1">QR Code Backup</h4>
+
                         <p class="text-gray-400 text-base">Every card comes with a custom QR code for older devices.</p>
+
                     </div>
+
                 </li>
+
                 <li class="flex gap-6">
+
                     <div
+
                         class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-brand-red font-bold text-lg flex-shrink-0">
+
                         2</div>
+
                     <div>
+
                         <h4 class="font-bold text-xl mb-1">Custom Designs</h4>
+
                         <p class="text-gray-400 text-base">Upload your logo and we laser print it on matte black or
+
                             metal cards.</p>
+
                     </div>
+
                 </li>
+
                 <li class="flex gap-6">
+
                     <div
+
                         class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-brand-red font-bold text-lg flex-shrink-0">
+
                         3</div>
+
                     <div>
+
                         <h4 class="font-bold text-xl mb-1">Secure & Private</h4>
+
                         <p class="text-gray-400 text-base">Bank-grade encryption for your data. You control what you
+
                             share.</p>
+
                     </div>
+
                 </li>
+
             </ul>
 
+
+
             <div class="mt-10 flex gap-4">
+
                 <a href="#"
+
                     class="bg-brand-red px-8 py-4 rounded-full text-base font-bold hover:bg-red-700 transition">Design
+
                     Card</a>
+
                 <a href="#"
+
                     class="w-14 h-14 rounded-full border border-gray-600 flex items-center justify-center hover:bg-white hover:text-black transition text-xl">↗</a>
+
             </div>
+
         </div>
+
     </section>
+
+
 
     <section class="py-20 px-6 md:px-12 lg:px-20 w-full border-t border-gray-900">
+
         <div class="flex flex-col md:flex-row justify-between items-start mb-16">
+
             <h2 class="text-3xl md:text-5xl font-bold uppercase max-w-lg">
+
                 Real-Time <br> Digital Wallet
+
             </h2>
+
             <p class="text-gray-400 text-base max-w-xl mt-6 md:mt-0">
+
                 Compatible with the ecosystem you already use. Save your digital card directly to Apple Wallet or Google
+
                 Pay for card-less sharing.
+
             </p>
+
         </div>
+
+
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
             <div class="bg-brand-dark p-8 rounded-2xl flex flex-col justify-end min-h-[18rem]">
+
                 <h3 class="text-7xl font-bold mb-2">98<span class="text-4xl">%</span></h3>
+
                 <p class="text-gray-400 text-sm">Users prefer adding our cards to their mobile wallets.</p>
+
             </div>
 
+
+
             <div
+
                 class="bg-brand-red p-8 rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition">
+
                 <div class="text-center">
+
                     <img src="assets/img/icon-apple.png" alt="Apple Wallet" class="h-14 mx-auto mb-4 opacity-90 invert">
+
                     <span class="font-bold text-2xl">Wallet</span>
+
                 </div>
+
             </div>
 
+
+
             <div
+
                 class="bg-brand-red p-8 rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition">
+
                 <div class="text-center">
+
                     <img src="assets/img/icon-paypal.png" alt="PayPal" class="h-12 mx-auto mb-2 opacity-90 invert">
+
                 </div>
+
             </div>
+
+
 
             <div class="bg-brand-dark p-8 rounded-2xl flex flex-col justify-between min-h-[18rem]">
+
                 <div
+
                     class="w-12 h-12 bg-gray-800 rounded flex items-center justify-center text-brand-red text-2xl font-bold">
+
                     ⚡</div>
+
                 <div>
+
                     <h4 class="font-bold uppercase mb-4 text-xl">Creating Lasting<br>Connections</h4>
+
                     <a href="#"
+
                         class="inline-block bg-white text-black px-6 py-3 rounded-full text-xs font-bold mt-2 hover:bg-gray-200">LETS
+
                         WORK TOGETHER</a>
+
                 </div>
+
             </div>
+
         </div>
+
     </section>
+
+
 
     <section class="pt-20 pb-10 px-6 md:px-12 lg:px-20 w-full bg-gray-50 text-black rounded-t-[3rem] mt-20">
+
         <div class="w-full">
+
             <p class="text-brand-red text-sm font-bold mb-6 tracking-widest">WHAT THEY SAY ABOUT US</p>
+
             <h3 class="text-3xl md:text-6xl font-bold leading-tight mb-12 max-w-5xl">
+
                 "Castle Cards has completely transformed the way I network. The real-time updates and sleek card design
+
                 always impress clients."
+
             </h3>
+
             <div class="flex items-center justify-between border-t border-gray-300 pt-10">
+
                 <div class="flex items-center gap-4">
+
                     <div class="w-16 h-16 rounded-full bg-gray-300 overflow-hidden">
+
                         <img src="assets/img/active-users.png" class="w-full h-full object-cover">
+
                     </div>
+
                     <div>
+
                         <h5 class="font-bold text-lg">Kelly Williams</h5>
+
                         <p class="text-sm text-gray-500">Head of Design, Layers</p>
+
                     </div>
+
                 </div>
+
                 <div class="flex gap-4">
+
                     <button
+
                         class="w-14 h-14 rounded-full border border-gray-300 flex items-center justify-center hover:bg-black hover:text-white transition text-xl">←</button>
+
                     <button
+
                         class="w-14 h-14 rounded-full border border-gray-300 flex items-center justify-center hover:bg-black hover:text-white transition text-xl">→</button>
+
                 </div>
+
             </div>
+
         </div>
+
     </section>
 
+
+
     <footer class="bg-brand-red pt-24 pb-10 px-6 md:px-12 lg:px-20 overflow-hidden relative w-full">
+
         <div class="absolute bottom-0 left-0 w-full overflow-hidden select-none pointer-events-none">
+
             <h1 class="text-[18vw] font-black text-red-800/30 leading-none text-center transform translate-y-1/4">
+
                 CASTLE
+
             </h1>
+
         </div>
+
+
 
         <div class="w-full relative z-10">
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20 text-white">
+
                 <div>
+
                     <h4 class="font-bold text-3xl mb-8 leading-tight">READY TO TAKE<br>CONTROL OF YOUR<br>NETWORKING?
+
                     </h4>
+
                     <a href="#"
+
                         class="bg-white text-brand-red px-8 py-4 rounded-full text-sm font-bold inline-block hover:bg-black hover:text-white transition shadow-lg">GET
+
                         STARTED</a>
+
                 </div>
+
+
 
                 <div class="md:pl-10">
+
                     <h5 class="font-bold mb-6 text-red-200 text-lg">Features</h5>
+
                     <ul class="space-y-4 text-base opacity-90">
+
                         <li><a href="#" class="hover:underline">Analytics</a></li>
+
                         <li><a href="#" class="hover:underline">Collaboration</a></li>
+
                         <li><a href="#" class="hover:underline">Data Management</a></li>
+
                         <li><a href="#" class="hover:underline">Security</a></li>
+
                     </ul>
+
                 </div>
 
+
+
                 <div>
+
                     <h5 class="font-bold mb-6 text-red-200 text-lg">Castle Crew</h5>
+
                     <ul class="space-y-4 text-base opacity-90">
+
                         <li><a href="#" class="hover:underline">About us</a></li>
+
                         <li><a href="#" class="hover:underline">Blog</a></li>
+
                         <li><a href="#" class="hover:underline">Careers</a></li>
+
                         <li><a href="#" class="hover:underline">Contact</a></li>
+
                     </ul>
+
                 </div>
 
+
+
                 <div>
+
                     <h5 class="font-bold mb-6 text-red-200 text-lg">Support</h5>
+
                     <ul class="space-y-4 text-base opacity-90">
+
                         <li><a href="#" class="hover:underline">Help Center</a></li>
+
                         <li><a href="#" class="hover:underline">Terms of Service</a></li>
+
                         <li><a href="#" class="hover:underline">Privacy Policy</a></li>
+
                     </ul>
+
                 </div>
+
             </div>
+
+
 
             <div class="border-t border-red-400/50 pt-8 flex justify-between items-center text-sm text-red-100">
+
                 <p>&copy; 2024 Castle Crew.</p>
+
                 <div class="flex gap-6 font-bold">
+
                     <a href="#" class="hover:text-white">X</a>
+
                     <a href="#" class="hover:text-white">LinkedIn</a>
+
                     <a href="#" class="hover:text-white">Instagram</a>
+
                 </div>
+
             </div>
+
         </div>
+
     </footer>
 
+
+
     <script>
+
+        // Utility function to toggle feature content
         function switchFeature(el, imgSrc) {
-            // Reset all active states
+            // Reset logic
             document.querySelectorAll('.feature-item').forEach(item => {
-                // Remove active classes
                 item.classList.remove('border-brand-red', 'bg-white/5');
                 item.classList.add('border-transparent');
 
-                // Reset text colors
                 const title = item.querySelector('h4');
                 const desc = item.querySelector('p');
                 title.classList.remove('text-white');
@@ -719,7 +1444,7 @@
                 desc.classList.add('text-gray-500');
             });
 
-            // Set active state on clicked element
+            // Set active state
             el.classList.remove('border-transparent');
             el.classList.add('border-brand-red', 'bg-white/5');
 
@@ -739,7 +1464,7 @@
                 img.style.opacity = '1';
             }, 200);
 
-            // Toggle Browse Templates Button visibility (RE-ADDED LOGIC)
+            // Toggle Browse Templates Button visibility
             const btn = document.getElementById('browse-btn-container');
             if (imgSrc.includes('templates.png')) {
                 btn.style.opacity = '1';
@@ -749,41 +1474,146 @@
                 btn.style.pointerEvents = 'none';
             }
         }
+        
+        // --- FUNCTION TO LOAD RANDOM AVATARS (Only updates the Hero section) ---
+        async function loadRandomAvatars() {
+            const dynamicAvatars = document.getElementById('dynamic-user-avatars');
+
+            // Static Fallback HTML (The original look of the avatar placeholders)
+            const staticFallbackHTML = `<h3 class="text-2xl font-bold">15k+</h3>
+                    <div class="flex -space-x-2">
+                        <div class="w-8 h-8 rounded-full bg-gray-700 border-2 border-black"></div>
+                        <div class="w-8 h-8 rounded-full bg-gray-600 border-2 border-black"></div>
+                        <div class="w-8 h-8 rounded-full bg-gray-500 border-2 border-black"></div>
+                    </div>`;
+
+            try {
+                // Set initial loading state
+                dynamicAvatars.innerHTML = `<h3 class="text-2xl font-bold">15k+</h3><div class="text-gray-500 text-sm">Loading...</div>`;
+
+                // Fetch data from the new API endpoint
+                const response = await fetch('/api/random-avatars'); 
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch avatars: ${response.status}`);
+                }
+
+                const avatarUrls = await response.json();
+                
+                if (avatarUrls.length === 0) {
+                    dynamicAvatars.innerHTML = staticFallbackHTML; // Fallback if list is empty
+                    return;
+                }
+
+                // 1. Populate the Hero section (max 3, stacked)
+                const heroAvatarHTML = avatarUrls.slice(0, 3).map((url, index) => `
+                    <img src="${url}" 
+                         alt="User Avatar"
+                         class="w-8 h-8 rounded-full object-cover border-2 border-black"
+                         style="z-index: ${3 - index};"
+                         loading="lazy"
+                         onerror="this.src='assets/img/logo.png';" />
+                `).join('');
+                
+                // Update the Hero section: keep 15k+ and inject the stacked avatars
+                dynamicAvatars.innerHTML = `
+                    <h3 class="text-2xl font-bold">15k+</h3>
+                    <div class="flex" style="padding-left: 8px;"> 
+                        <div class="flex -space-x-2"> 
+                            ${heroAvatarHTML}
+                        </div>
+                    </div>
+                `;
+
+            } catch (e) {
+                console.error("Error loading random avatars:", e);
+                // On error, revert to the original static look
+                dynamicAvatars.innerHTML = staticFallbackHTML;
+            }
+        }
+        // --- END loadRandomAvatars() FUNCTION ---
+        
+        // --- FUNCTION FOR NAV PROFILE PICTURE (FIXED) ---
+        async function loadNavProfilePicture() {
+            const token = localStorage.getItem('castle_token');
+            const nav = document.getElementById('auth-nav');
+
+            const signInHtml = `
+                <a href="login.html" class="flex items-center gap-2 text-sm font-medium hover:text-brand-red transition">
+                    Sign In <span class="text-xs">↗</span>
+                </a>
+            `;
+
+            if (!token) {
+                nav.innerHTML = signInHtml;
+                return;
+            }
+
+            // Create the base link element for the profile button
+            const profileLink = document.createElement('a');
+            profileLink.href = 'profile.html';
+            profileLink.className = 'profile-icon w-10 h-10'; // Use new CSS class for styling/icon fallback
+
+            // Start by showing the link with the default CSS icon background
+            nav.innerHTML = '';
+            nav.appendChild(profileLink);
+            
+            try {
+                // Fetch user card data to check for avatar_url
+                const response = await fetch('/api/card', { headers: { 'Authorization': token } });
+                const data = await response.json();
+                
+                if (response.ok && data && data.avatar_url) {
+                    const avatarUrl = data.avatar_url;
+                    
+                    // Create an image element if the URL exists
+                    const img = document.createElement('img');
+                    img.src = avatarUrl;
+                    img.alt = 'Profile Avatar';
+                    
+                    // On error (e.g., broken URL), the link element will automatically revert to showing the CSS background icon.
+                    img.onerror = function() {
+                        this.remove(); // Remove the broken image
+                        profileLink.classList.remove('overflow-hidden'); // Ensure CSS background icon shows
+                    };
+                    
+                    profileLink.classList.add('overflow-hidden'); // Hide default icon background while image loads
+                    profileLink.innerHTML = ''; // Clear default icon (if text was used)
+                    profileLink.appendChild(img);
+                } else {
+                    // Logged in but no avatar, or API failed -> default profile icon (already in place)
+                    profileLink.classList.remove('overflow-hidden'); 
+                }
+            } catch (e) {
+                console.error('Error fetching card data for nav:', e);
+                // On any error, keep the default profile icon (already in place)
+                profileLink.classList.remove('overflow-hidden'); 
+            }
+        }
+        // --- END FUNCTION FOR NAV PROFILE PICTURE ---
 
 
         window.addEventListener('load', () => {
+
+            // Preloader logic
             const preloader = document.getElementById('preloader');
-            // Slight delay to ensure the animations are seen
             setTimeout(() => {
                 preloader.classList.add('fade-out');
-                // Remove from DOM after transition to clean up
                 setTimeout(() => {
                     preloader.style.display = 'none';
                 }, 700);
             }, 800);
 
-            // --- AUTH LOGIC (Added) ---
-            const token = localStorage.getItem('castle_token');
-            const nav = document.getElementById('auth-nav');
-
-            if (token) {
-                // Logged In: Show Profile Icon
-                nav.innerHTML = `
-                    <a href="profile.html" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-red hover:text-white transition">
-                        <i class="bi bi-person-fill text-lg"></i>
-                    </a>
-                `;
-            } else {
-                // Guest: Show Sign In
-                nav.innerHTML = `
-                    <a href="login.html" class="flex items-center gap-2 text-sm font-medium hover:text-brand-red transition">
-                        Sign In <span class="text-xs">↗</span>
-                    </a>
-                `;
-            }
+            // Execute the dynamic content loaders
+            loadNavProfilePicture();
+            loadRandomAvatars();
         });
     </script>
 
+
+
 </body>
+
+
 
 </html>

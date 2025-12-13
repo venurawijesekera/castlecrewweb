@@ -31,13 +31,13 @@
             color: white;
         }
 
-        /* Preloader Styles (NEW) */
+        /* Preloader Styles */
         #preloader.fade-out {
             opacity: 0;
             pointer-events: none;
         }
 
-        /* Glow animation for preloader logo (NEW) */
+        /* Glow animation for preloader logo */
         @keyframes pulse-glow {
             0%, 100% {
                 opacity: 0.5;
@@ -52,6 +52,18 @@
 
         .animate-pulse-glow {
             animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        /* Utility class to hide sections */
+        /* IMPORTANT: Ensuring the class is applied via JS correctly controls visibility */
+        .hidden-section {
+            display: none !important; 
+        }
+
+        /* Default state of Enterprise container is hidden in HTML/CSS, restored by JS when needed */
+        #personal-plans-container {
+             /* Explicitly set the correct display type for the grid */
+             display: grid;
         }
     </style>
 </head>
@@ -88,14 +100,16 @@
         <p class="text-gray-400 text-lg mb-10">Select the card material that suits your style. Use our free basic
             software, link directly to your website, or upgrade for premium features.</p>
 
-        <div class="inline-flex items-center bg-brand-dark rounded-full p-1 border border-gray-800">
-            <button class="bg-brand-red text-white px-6 py-2 rounded-full text-xs font-bold shadow-lg">Personal</button>
-            <button class="text-gray-400 px-6 py-2 rounded-full text-xs font-bold hover:text-white">Business</button>
+        <div class="inline-flex items-center bg-brand-dark rounded-full p-1 border border-gray-800" id="pricing-toggle">
+            <button id="personal-toggle"
+                class="bg-brand-red text-white px-6 py-2 rounded-full text-xs font-bold shadow-lg">Personal</button>
+            <button id="enterprise-toggle"
+                class="text-gray-400 px-6 py-2 rounded-full text-xs font-bold hover:text-white">Enterprise</button>
         </div>
     </section>
 
     <section class="pb-24 px-4 md:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 max-w-[1400px] mx-auto">
+        <div id="personal-plans-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 max-w-[1400px] mx-auto">
 
             <div
                 class="bg-brand-dark border border-gray-800 rounded-3xl p-6 flex flex-col hover:border-brand-red/50 transition group h-full">
@@ -247,8 +261,96 @@
             </div>
 
         </div>
-    </section>
+        <div id="enterprise-features-container" class="hidden-section max-w-[1400px] mx-auto pt-4">
+            <div class="bg-brand-dark border-2 border-brand-red rounded-3xl p-10 md:p-16 shadow-[0_0_40px_rgba(240,0,0,0.2)]">
+                <h2 class="text-4xl md:text-5xl font-black uppercase mb-4 text-brand-red">Enterprise Solutions</h2>
+                <p class="text-gray-300 text-lg mb-10 max-w-4xl">
+                    This option is tailored for companies requiring centralized management, high security, and large volume ordering for staff, access, and loyalty programs. **Contact us to negotiate pricing.**
+                </p>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-white">
+                            <i class="bi bi-shield-lock-fill text-brand-red text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">High-Security NFC</h4>
+                                <p class="text-gray-400 text-sm">Secure NFC card versions (Desfire) for advanced access cards.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-white">
+                            <i class="bi bi-person-badge-fill text-brand-red text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Staff ID & Access Cards</h4>
+                                <p class="text-gray-400 text-sm">Best for company staff IDs, access cards, loyalty cards, gift cards, etc.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-white">
+                            <i class="bi bi-server text-brand-red text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">System Integrations</h4>
+                                <p class="text-gray-400 text-sm">Seamless integration with your existing IT infrastructure.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-white">
+                            <i class="bi bi-diagram-3-fill text-brand-red text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Fleet Control Interface</h4>
+                                <p class="text-gray-400 text-sm">Dedicated interface for managing all cards, users, and adding data centrally.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-white">
+                            <i class="bi bi-globe text-brand-red text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Custom Domain Integration</h4>
+                                <p class="text-gray-400 text-sm">Use your own company domain for all card profiles.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-white">
+                            <i class="bi bi-hdd-fill text-brand-red text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Custom Data Plans</h4>
+                                <p class="text-gray-400 text-sm">Tailored data storage and analytics plans.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                         <div class="flex items-center gap-3 text-white">
+                            <i class="bi bi-currency-dollar text-brand-red text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Volume Discounts</h4>
+                                <p class="text-gray-400 text-sm">Significant bulk card discounts when purchasing cards.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-white">
+                            <i class="bi bi-tools text-brand-red text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">NFC Programming Module</h4>
+                                <p class="text-gray-400 text-sm">Module provided for changing card programming in-house.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 text-white">
+                            <i class="bi bi-arrow-repeat text-brand-red text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Replacement Discounts</h4>
+                                <p class="text-gray-400 text-sm">Discounts provided for misplaced or damaged replacement cards.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="mailto:sales@castlecrew.com?subject=Enterprise Pricing Enquiry"
+                        class="bg-white text-brand-red px-10 py-4 rounded-full text-base font-bold hover:bg-black hover:text-white transition shadow-lg">
+                        CONTACT SALES FOR QUOTE
+                    </a>
+                </div>
+            </div>
+        </div>
+        </section>
     <section class="py-20 px-6 border-t border-gray-900 bg-[#0a0a0a]">
         <div class="max-w-3xl mx-auto">
             <h2 class="text-3xl font-bold mb-12 text-center uppercase">Common Questions</h2>
@@ -282,6 +384,44 @@
     </footer>
 
     <script>
+        // Function to handle switching between Personal and Enterprise views
+        function switchPricingView(view) {
+            const personalContainer = document.getElementById('personal-plans-container');
+            const enterpriseContainer = document.getElementById('enterprise-features-container');
+            const personalToggle = document.getElementById('personal-toggle');
+            const enterpriseToggle = document.getElementById('enterprise-toggle');
+
+            if (view === 'enterprise') {
+                // HIDE Personal grid, SHOW Enterprise content
+                personalContainer.classList.add('hidden-section');
+                enterpriseContainer.classList.remove('hidden-section');
+                
+                // Set toggle button styles (Enterprise active)
+                enterpriseToggle.classList.add('bg-brand-red', 'text-white', 'shadow-lg');
+                enterpriseToggle.classList.remove('text-gray-400', 'hover:text-white');
+                personalToggle.classList.remove('bg-brand-red', 'text-white', 'shadow-lg');
+                personalToggle.classList.add('text-gray-400', 'hover:text-white');
+                
+            } else { // 'personal'
+                // SHOW Personal grid, HIDE Enterprise content
+                personalContainer.classList.remove('hidden-section');
+                enterpriseContainer.classList.add('hidden-section');
+
+                // Set toggle button styles (Personal active)
+                personalToggle.classList.add('bg-brand-red', 'text-white', 'shadow-lg');
+                personalToggle.classList.remove('text-gray-400', 'hover:text-white');
+                enterpriseToggle.classList.remove('bg-brand-red', 'text-white', 'shadow-lg');
+                enterpriseToggle.classList.add('text-gray-400', 'hover:text-white');
+            }
+        }
+        
+        // Initial setup on load (default to Personal)
+        window.onload = function() {
+            // This ensures the correct view is loaded immediately
+            switchPricingView('personal');
+        };
+
+
         document.addEventListener('DOMContentLoaded', () => {
             const preloader = document.getElementById('preloader');
             // Slight delay to ensure the animations are seen
@@ -292,6 +432,19 @@
                     preloader.style.display = 'none';
                 }, 700);
             }, 800);
+            
+            // Set up click handlers for the toggles
+            document.getElementById('personal-toggle').addEventListener('click', () => {
+                switchPricingView('personal');
+                // Optional: Scroll to the pricing section if it's far down
+                document.querySelector('.pb-24').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            document.getElementById('enterprise-toggle').addEventListener('click', () => {
+                switchPricingView('enterprise');
+                // Scroll to the new container
+                document.querySelector('.pb-24').scrollIntoView({ behavior: 'smooth' }); // Scroll to the section containing the pricing info
+            });
         });
     </script>
 </body>
