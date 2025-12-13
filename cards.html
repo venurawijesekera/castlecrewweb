@@ -6,12 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Castle Cards - Smart NFC Business Cards</title>
 
-    <!-- FAVICON LINK -->
     <link rel="icon" type="image/png" href="assets/img/logo.png">
 
-    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -77,8 +74,7 @@
             /* Slightly reduced padding */
             background-color: #f00000;
             /* Brand Red */
-            border: 4px solid #ffffff;
-            /* White border to match card theme */
+            border: 4px solid transparent; /* MODIFIED: Removed white border */
             color: white;
             gap: 8px;
             border-radius: 50px;
@@ -113,14 +109,14 @@
         }
 
         .uiverse-button:hover {
-            border: 4px solid #ffe6e6;
+            border: 4px solid transparent; /* MODIFIED: Removed white border on hover */
             background-color: #cc0000;
             transform: translateY(-2px);
             /* Subtle lift */
         }
 
         .uiverse-button:active {
-            border: 4px solid #ffffff;
+            border: 4px solid transparent; /* MODIFIED: Removed white border on active */
             transform: translateY(0);
         }
 
@@ -270,26 +266,21 @@
 
 <body class="antialiased selection:bg-brand-red selection:text-white relative overflow-x-hidden">
 
-    <!-- PRELOADER -->
     <div id="preloader"
         class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
         <div class="flex flex-col items-center gap-6">
-            <!-- Spinning Red Diamond -->
             <div
                 class="w-12 h-12 bg-brand-red rotate-45 animate-spin-slow rounded-sm shadow-[0_0_30px_rgba(240,0,0,0.5)]">
             </div>
-            <!-- Text -->
             <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
                 CASTLE CARDS
             </div>
         </div>
     </div>
 
-    <!-- NAVIGATION -->
     <nav
         class="w-full py-6 px-6 md:px-12 lg:px-20 flex justify-between items-center sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md">
         <a href="index.html" class="text-2xl font-bold tracking-tighter flex items-center gap-2">
-            <!-- Simple square logo mark -->
             <div class="w-3 h-3 bg-brand-red rotate-45"></div>
             CASTLE CARDS
         </a>
@@ -300,19 +291,15 @@
             <a href="#" class="hover:text-white transition">Castle Crew</a>
         </div>
 
-        <!-- DYNAMIC AUTH NAV -->
         <div id="auth-nav">
-            <!-- Default Content -->
             <a href="login.html" class="flex items-center gap-2 text-sm font-medium hover:text-brand-red transition">
                 Sign In <span class="text-xs">↗</span>
             </a>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <section
         class="relative pt-12 pb-20 px-6 md:px-12 lg:px-20 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <!-- Text Content -->
         <div class="z-10">
             <h1 class="text-5xl md:text-7xl xl:text-8xl font-black leading-[1.1] tracking-tight mb-6 uppercase">
                 Secure Your <br>
@@ -336,7 +323,6 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <h3 class="text-2xl font-bold">15k+</h3>
-                        <!-- Placeholder for User Avatars -->
                         <div class="flex -space-x-2">
                             <div class="w-8 h-8 rounded-full bg-gray-700 border-2 border-black"></div>
                             <div class="w-8 h-8 rounded-full bg-gray-600 border-2 border-black"></div>
@@ -347,19 +333,14 @@
             </div>
         </div>
 
-        <!-- Image Content (Centered in Column) -->
         <div class="flex justify-center lg:justify-center w-full">
-            <!-- Relative Wrapper to keep stars attached to image -->
             <div class="relative w-full max-w-2xl">
-                <!-- Decorative Elements -->
                 <div class="absolute -top-10 -right-10 text-brand-red text-6xl opacity-80 z-0">✦</div>
                 <div class="absolute -bottom-10 -left-10 text-white opacity-20 text-4xl z-0">★</div>
 
-                <!-- Main Hero Image -->
-                <img src="assets/img/hero-cards.png" alt="Castle Cards Stack"
+                <img id="hero-img" src="assets/img/hero-cards.png" alt="Castle Cards Stack"
                     class="w-full h-auto object-contain relative z-10 transform hover:scale-105 transition duration-500 drop-shadow-2xl">
 
-                <!-- Floating UI elements -->
                 <div
                     class="absolute top-10 -right-12 hidden xl:flex flex-col gap-4 text-xs font-mono text-gray-400 text-right z-20">
                     <div class="flex items-center gap-2 justify-end">
@@ -374,9 +355,6 @@
             </div>
         </div>
     </section>
-    <!-- End HERO SECTION -->
-
-    <!-- STATS / ABOUT SECTION -->
     <section class="py-10 px-6 md:px-12 lg:px-20 w-full">
         <div class="flex flex-col md:flex-row justify-between items-end mb-10 border-b border-gray-800 pb-8">
             <h2 class="text-3xl md:text-4xl font-bold uppercase max-w-lg leading-none">
@@ -389,7 +367,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-            <!-- Stat 1: Users (Red Gradient) -->
             <div
                 class="bg-gradient-to-br from-brand-red to-[#b00000] p-8 rounded-xl min-h-[18rem] flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:-translate-y-2 shadow-lg hover:shadow-brand-red/20">
                 <div class="flex items-center gap-2 relative z-10">
@@ -401,17 +378,14 @@
                     <h3 class="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">50k</h3>
                     <p class="text-sm text-white/80 font-medium">Professionals networking smarter.</p>
                 </div>
-                <!-- Decoration -->
                 <div
                     class="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition duration-700">
                 </div>
-                <!-- Texture Overlay -->
                 <div
                     class="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay">
                 </div>
             </div>
 
-            <!-- Stat 2: Speed (Dark with Glow) -->
             <div
                 class="bg-[#080808] border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-brand-red/30 relative overflow-hidden">
                 <div
@@ -430,7 +404,6 @@
                 </div>
             </div>
 
-            <!-- Stat 3: Eco-Friendly (Dark Theme) -->
             <div
                 class="bg-gradient-to-br from-[#111] to-black border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-green-500/30">
                 <div class="flex items-center gap-2">
@@ -449,12 +422,10 @@
         </div>
     </section>
 
-    <!-- FEATURES SECTION -->
     <section class="py-20 px-6 md:px-12 lg:px-20 w-full my-10">
         <div
             class="bg-gradient-to-br from-[#111] to-black text-white rounded-3xl p-8 md:p-16 w-full border border-gray-800 shadow-2xl">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full">
-                <!-- Left: List -->
                 <div class="flex flex-col justify-center">
                     <h2 class="text-4xl md:text-5xl font-black uppercase mb-6">All-In-One Platform<br>For Networking
                     </h2>
@@ -497,27 +468,25 @@
                 </div>
 
 
-                <!-- Right: UI Mockup -->
                 <div class="relative w-full flex items-center justify-center">
                     <div
                         class="relative bg-[#050505] rounded-2xl shadow-2xl border border-gray-800 w-full max-w-2xl overflow-hidden group">
 
-                        <!-- Glow Effect -->
                         <div
                             class="absolute -inset-1 bg-gradient-to-r from-brand-red to-purple-600 opacity-20 blur-lg group-hover:opacity-30 transition duration-1000">
                         </div>
 
 
-                        <!-- Templates Preview -->
                         <div class="relative w-full">
                             <img id="feature-img" src="assets/img/templates.png"
                                 class="w-full h-auto object-cover hover:scale-105 transition-all duration-500"
                                 alt="UI Templates">
                         </div>
 
-                        <div class="absolute bottom-4 right-4 z-10 transition-opacity duration-300"
+                        <div class="absolute bottom-0 inset-x-0 z-10 transition-opacity duration-300 flex justify-center py-0"
                             id="browse-btn-container">
-                            <a href="templates.html" class="uiverse-button">
+                            <a href="templates.html"
+                                class="uiverse-button w-full mx-0 rounded-none border-0 !p-4 !px-6">
                                 <span class="text">Browse Templates</span>
                                 <span class="svg">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="20" viewBox="0 0 38 15"
@@ -572,7 +541,7 @@
                 img.style.opacity = '1';
             }, 200);
 
-            // Toggle Browse Templates Button
+            // Toggle Browse Templates Button visibility (RE-ADDED LOGIC)
             const btn = document.getElementById('browse-btn-container');
             if (imgSrc.includes('templates.png')) {
                 btn.style.opacity = '1';
@@ -582,12 +551,43 @@
                 btn.style.pointerEvents = 'none';
             }
         }
+
+
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            // Slight delay to ensure the animations are seen
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                // Remove from DOM after transition to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+
+            // --- AUTH LOGIC (Added) ---
+            const token = localStorage.getItem('castle_token');
+            const nav = document.getElementById('auth-nav');
+
+            if (token) {
+                // Logged In: Show Profile Icon
+                nav.innerHTML = `
+                    <a href="profile.html" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:bg-brand-red hover:text-white transition">
+                        <i class="bi bi-person-fill text-lg"></i>
+                    </a>
+                `;
+            } else {
+                // Guest: Show Sign In
+                nav.innerHTML = `
+                    <a href="login.html" class="flex items-center gap-2 text-sm font-medium hover:text-brand-red transition">
+                        Sign In <span class="text-xs">↗</span>
+                    </a>
+                `;
+            }
+        });
     </script>
 
-    <!-- BENEFITS / PRODUCT SHOWCASE -->
     <section class="py-20 px-6 md:px-12 lg:px-20 w-full flex flex-col md:flex-row items-center gap-16">
         <div class="w-full md:w-1/2 flex justify-center">
-            <!-- Rotated Card Effect -->
             <div class="relative group">
                 <div
                     class="absolute inset-0 bg-brand-red blur-2xl opacity-20 group-hover:opacity-40 transition duration-500">
@@ -645,7 +645,6 @@
         </div>
     </section>
 
-    <!-- TRUSTED PARTNERS / COMPATIBILITY -->
     <section class="py-20 px-6 md:px-12 lg:px-20 w-full border-t border-gray-900">
         <div class="flex flex-col md:flex-row justify-between items-start mb-16">
             <h2 class="text-3xl md:text-5xl font-bold uppercase max-w-lg">
@@ -658,13 +657,11 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Stat Box -->
             <div class="bg-brand-dark p-8 rounded-2xl flex flex-col justify-end min-h-[18rem]">
                 <h3 class="text-7xl font-bold mb-2">98<span class="text-4xl">%</span></h3>
                 <p class="text-gray-400 text-sm">Users prefer adding our cards to their mobile wallets.</p>
             </div>
 
-            <!-- Apple Pay Block -->
             <div
                 class="bg-brand-red p-8 rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition">
                 <div class="text-center">
@@ -673,7 +670,6 @@
                 </div>
             </div>
 
-            <!-- Paypal/Other Block -->
             <div
                 class="bg-brand-red p-8 rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition">
                 <div class="text-center">
@@ -681,7 +677,6 @@
                 </div>
             </div>
 
-            <!-- CTA Block -->
             <div class="bg-brand-dark p-8 rounded-2xl flex flex-col justify-between min-h-[18rem]">
                 <div
                     class="w-12 h-12 bg-gray-800 rounded flex items-center justify-center text-brand-red text-2xl font-bold">
@@ -696,7 +691,6 @@
         </div>
     </section>
 
-    <!-- TESTIMONIALS -->
     <section class="pt-20 pb-10 px-6 md:px-12 lg:px-20 w-full bg-gray-50 text-black rounded-t-[3rem] mt-20">
         <div class="w-full">
             <p class="text-brand-red text-sm font-bold mb-6 tracking-widest">WHAT THEY SAY ABOUT US</p>
@@ -707,7 +701,6 @@
             <div class="flex items-center justify-between border-t border-gray-300 pt-10">
                 <div class="flex items-center gap-4">
                     <div class="w-16 h-16 rounded-full bg-gray-300 overflow-hidden">
-                        <!-- Avatar placeholder -->
                         <img src="assets/img/active-users.png" class="w-full h-full object-cover">
                     </div>
                     <div>
@@ -725,9 +718,7 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="bg-brand-red pt-24 pb-10 px-6 md:px-12 lg:px-20 overflow-hidden relative w-full">
-        <!-- Big Text Background -->
         <div class="absolute bottom-0 left-0 w-full overflow-hidden select-none pointer-events-none">
             <h1 class="text-[18vw] font-black text-red-800/30 leading-none text-center transform translate-y-1/4">
                 CASTLE
@@ -785,8 +776,55 @@
         </div>
     </footer>
 
-    <!-- PRELOADER SCRIPT -->
     <script>
+        function switchFeature(el, imgSrc) {
+            // Reset all active states
+            document.querySelectorAll('.feature-item').forEach(item => {
+                // Remove active classes
+                item.classList.remove('border-brand-red', 'bg-white/5');
+                item.classList.add('border-transparent');
+
+                // Reset text colors
+                const title = item.querySelector('h4');
+                const desc = item.querySelector('p');
+                title.classList.remove('text-white');
+                title.classList.add('text-gray-500');
+                desc.classList.remove('text-gray-400');
+                desc.classList.add('text-gray-500');
+            });
+
+            // Set active state on clicked element
+            el.classList.remove('border-transparent');
+            el.classList.add('border-brand-red', 'bg-white/5');
+
+            // Set active text colors
+            const title = el.querySelector('h4');
+            const desc = el.querySelector('p');
+            title.classList.remove('text-gray-500');
+            title.classList.add('text-white');
+            desc.classList.remove('text-gray-500');
+            desc.classList.add('text-gray-400');
+
+            // Change image with fade
+            const img = document.getElementById('feature-img');
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = imgSrc;
+                img.style.opacity = '1';
+            }, 200);
+
+            // Toggle Browse Templates Button visibility (RE-ADDED LOGIC)
+            const btn = document.getElementById('browse-btn-container');
+            if (imgSrc.includes('templates.png')) {
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            } else {
+                btn.style.opacity = '0';
+                btn.style.pointerEvents = 'none';
+            }
+        }
+
+
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
             // Slight delay to ensure the animations are seen
