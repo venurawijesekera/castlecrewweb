@@ -9,7 +9,7 @@ export async function onRequestPost(context) {
             throw new Error("Database binding 'DB' is missing!");
         }
 
-        // 2. Check Database - FIX: Use SELECT * to retrieve all available columns (plan, role, enterprise_id) safely
+        // 1. Check Database - Use SELECT * to retrieve all available columns
         const user = await env.DB.prepare("SELECT * FROM users WHERE email = ? AND password = ?")
             .bind(email, password)
             .first();
@@ -18,25 +18,35 @@ export async function onRequestPost(context) {
             return new Response(JSON.stringify({ error: "Invalid credentials" }), { status: 401 });
         }
 
-        // 3. Create Session
-        const token = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+        // 2. Create Session Token
+        const token = crypto.randomUUID(); // Use standard crypto.randomUUID
+
+        // Note: D1 uses seconds for expiry, but JS Date.now() is milliseconds.
+        // We use milliseconds here because your original code did, but be mindful of units.
+        const expires_at_ms = Date.now() + 86400000; // 24 hours in milliseconds
 
         await env.DB.prepare("INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)")
-            .bind(token, user.id, Date.now() + 86400000)
+            .bind(token, user.id, expires_at_ms) 
             .run();
 
-        // 4. Return Success - FIX: Safely return role and enterprise_id (they might be null if the column is missing in the DB, but the frontend logic needs them)
-        return new Response(JSON.stringify({ 
-            success: true, 
+        // 3. Prepare Response Data
+        const responseData = {
+            success: true,
             token: token,
             user_id: user.id,
-            role: user.role || 'staff', // Default role if the column is still missing
+            role: user.role || 'staff',
             enterprise_id: user.enterprise_id || null
-        }), {
-            headers: { "Content-Type": "application/json" }
+        };
+
+        // --- CRITICAL FIX: Set the session_token cookie ---
+        const headers = {
+            "Content-Type": "application/json",
+            // Set session_token cookie: Expires in 24 hours (86400 seconds)
+            "Set-Cookie": `session_token=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=86400` 
+        };
+
+        return new Response(JSON.stringify(responseData), {
+            headers: headers
         });
 
     } catch (e) {

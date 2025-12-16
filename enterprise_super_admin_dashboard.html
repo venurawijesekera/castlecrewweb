@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -20,18 +21,23 @@
         }
     </script>
     <style>
-        body { background-color: #050505; color: white; }
+        body {
+            background-color: #050505;
+            color: white;
+        }
 
         /* Preloader Styles */
         #preloader.fade-out {
             opacity: 0;
             pointer-events: none;
         }
+
         .hidden-element {
             display: none !important;
         }
     </style>
 </head>
+
 <body class="p-8 max-w-7xl mx-auto">
 
     <div id="preloader"
@@ -48,10 +54,13 @@
     </div>
 
     <div class="flex justify-between items-center mb-10">
-        <h1 class="text-3xl font-black uppercase"><span id="company-name">Acme Corp</span> <span class="text-blue-500">Dashboard</span></h1>
+        <h1 class="text-3xl font-black uppercase"><span id="company-name">Acme Corp</span> <span
+                class="text-blue-500">Dashboard</span></h1>
         <div class="flex gap-4">
-            <button onclick="loadDashboardData()" class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">Refresh</button>
-            <a href="dashboard.html" class="text-sm bg-brand-red px-4 py-2 rounded font-bold">Log Out</a>
+            <button onclick="loadDashboardData()"
+                class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">Refresh</button>
+            <a href="profile.html" class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded font-bold">Back to
+                Profile</a>
         </div>
     </div>
 
@@ -79,7 +88,8 @@
     <div class="bg-brand-dark rounded-xl border border-gray-800 overflow-hidden mb-12">
         <div class="p-4 bg-black flex justify-between items-center border-b border-gray-800">
             <h3 class="text-white font-bold text-lg">Admin Accounts</h3>
-            <button onclick="openCreateAdminModal()" class="bg-brand-red text-white px-3 py-1.5 rounded text-sm font-bold hover:bg-red-700 transition">
+            <button onclick="openCreateAdminModal()"
+                class="bg-brand-red text-white px-3 py-1.5 rounded text-sm font-bold hover:bg-red-700 transition">
                 + ADD NEW ADMIN
             </button>
         </div>
@@ -95,7 +105,9 @@
                     </tr>
                 </thead>
                 <tbody id="admin-list">
-                    <tr><td class="p-4" colspan="5">Loading admins...</td></tr>
+                    <tr>
+                        <td class="p-4" colspan="5">Loading admins...</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -110,28 +122,70 @@
                     <tr>
                         <th class="p-4">ID</th>
                         <th class="p-4">Email / Name</th>
-                        <th class="p-4">Link (Slug)</th> 
+                        <th class="p-4">Link (Slug)</th>
                         <th class="p-4">Assigned Admin</th>
                         <th class="p-4 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="staff-user-list">
-                    <tr><td class="p-4" colspan="5">Loading staff users...</td></tr>
+                    <tr>
+                        <td class="p-4" colspan="5">Loading staff users...</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div id="manage-admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden-element flex items-center justify-center z-50">
+    <div id="create-admin-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden-element flex items-center justify-center z-50">
+        <div class="bg-[#111] w-full max-w-sm p-6 rounded-2xl border border-gray-800 shadow-2xl relative">
+            <h2 class="text-xl font-bold mb-6">Create New Admin</h2>
+
+            <form onsubmit="event.preventDefault(); createAdmin();" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Full Name</label>
+                    <input type="text" id="new-admin-name" required
+                        class="w-full bg-brand-dark border border-gray-800 rounded px-3 py-2 text-white focus:border-brand-red focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Email Address</label>
+                    <input type="email" id="new-admin-email" required
+                        class="w-full bg-brand-dark border border-gray-800 rounded px-3 py-2 text-white focus:border-brand-red focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Password</label>
+                    <input type="password" id="new-admin-password" required
+                        class="w-full bg-brand-dark border border-gray-800 rounded px-3 py-2 text-white focus:border-brand-red focus:outline-none">
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="btn-create-admin"
+                        class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">
+                        CREATE ADMIN
+                    </button>
+                    <p id="create-admin-error" class="text-red-500 text-xs mt-2 hidden"></p>
+                </div>
+            </form>
+            <button onclick="closeCreateAdminModal()"
+                class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+        </div>
+    </div>
+
+    <div id="manage-admin-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden-element flex items-center justify-center z-50">
         <div class="bg-[#111] w-full max-w-sm p-6 rounded-2xl border border-gray-800 shadow-2xl relative">
             <h2 class="text-xl font-bold mb-1">Manage Admin</h2>
             <p id="admin-modal-email" class="text-xs text-gray-500 mb-6">admin@email.com</p>
-            
+
             <div class="space-y-4">
                 <p class="text-sm text-gray-400">Manage their access permissions here.</p>
-                <button onclick="saveAdminChanges()" class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">SAVE CHANGES</button>
+                <button onclick="saveAdminChanges()"
+                    class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">SAVE
+                    CHANGES</button>
                 <div class="border-t border-gray-800 pt-4 mt-4">
-                    <button onclick="deleteAdmin()" class="w-full text-red-500 text-xs font-bold hover:text-red-400">REMOVE ADMIN PERMANENTLY</button>
+                    <button onclick="deleteAdmin()"
+                        class="w-full text-red-500 text-xs font-bold hover:text-red-400">REMOVE ADMIN
+                        PERMANENTLY</button>
                 </div>
             </div>
             <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
@@ -139,28 +193,7 @@
     </div>
 
     <script>
-        // *** SIMULATED DATA (Replace with API fetch calls) ***
-        let companyId = 101;
-        let totalLicenses = 50;
-        let currentAdminId = null;
-
-        let simulatedStats = {
-            active_staff_count: 38,
-            total_views: 12450,
-            total_leads: 215
-        };
-
-        let simulatedAdmins = [
-            { id: 201, email: 'john.admin@acmecorp.com', name: 'John Admin', staff_managed: 18, last_login: '2024-12-14' },
-            { id: 202, email: 'sally.manager@acmecorp.com', name: 'Sally Manager', staff_managed: 20, last_login: '2024-12-13' },
-        ];
-
-        let simulatedStaff = [
-            { id: 301, name: 'User A', email: 'user.a@acmecorp.com', slug: 'usera-acme', admin_id: 201 },
-            { id: 302, name: 'User B', email: 'user.b@acmecorp.com', slug: 'userb-acme', admin_id: 201 },
-            { id: 303, name: 'User C', email: 'user.c@acmecorp.com', slug: 'userc-acme', admin_id: 202 },
-            { id: 304, name: 'User D', email: 'user.d@acmecorp.com', slug: 'userd-acme', admin_id: 202 },
-        ];
+        // *** CORE DASHBOARD LOGIC ***
 
         // *** CORE DASHBOARD LOGIC ***
 
@@ -171,77 +204,126 @@
                 preloader.classList.add('fade-out');
                 setTimeout(() => { preloader.style.display = 'none'; }, 700);
             }, 500);
-            
-            // In a real app, the company ID and name would be loaded from the user's session token.
-            document.getElementById('company-name').innerText = 'Acme Corp';
+
             loadDashboardData();
         });
 
-
         async function loadDashboardData() {
             try {
-                // *** 1. LOAD ENTERPRISE STATS ***
-                // New API endpoint needed: /api/enterprise/stats?companyId=101
-                // Replace simulatedStats with: const stats = await fetch(`/api/enterprise/stats?companyId=${companyId}`).then(res => res.json()); 
-                const stats = simulatedStats; 
-                
-                document.getElementById('total-licenses').innerText = totalLicenses;
-                document.getElementById('active-staff').innerText = stats.active_staff_count;
-                document.getElementById('total-views').innerText = stats.total_views.toLocaleString();
-                document.getElementById('total-leads').innerText = stats.total_leads.toLocaleString();
+                const res = await fetch('/api/enterprise/dashboard');
+                if (!res.ok) {
+                    if (res.status === 401 || res.status === 403) window.location.href = 'login.html';
+                    throw new Error("Failed to fetch data");
+                }
+                const data = await res.json();
 
-                // *** 2. LOAD DELEGATED ADMINS ***
-                // New API endpoint needed: /api/enterprise/admins?companyId=101
-                // Replace simulatedAdmins with: const admins = await fetch(`/api/enterprise/admins?companyId=${companyId}`).then(res => res.json()); 
-                const admins = simulatedAdmins; 
-                
-                const adminHtml = admins.map(admin => `
-                    <tr class="border-b border-gray-800 hover:bg-white/5 transition">
-                        <td class="p-4 font-mono text-xs">#${admin.id}</td>
-                        <td class="p-4 text-white font-bold">${admin.name}<br><span class="text-xs text-gray-500">${admin.email}</span></td>
-                        <td class="p-4">${admin.staff_managed}</td>
-                        <td class="p-4">${admin.last_login}</td>
-                        <td class="p-4 text-right">
-                            <button onclick="openManageAdminModal(${admin.id}, '${admin.email}')" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
-                                MANAGE
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-                document.getElementById('admin-list').innerHTML = adminHtml;
+                // 1. Company Info
+                document.getElementById('company-name').innerText = data.company.name;
 
-                // *** 3. LOAD STAFF USERS ***
-                // New API endpoint needed: /api/enterprise/users?companyId=101
-                // Replace simulatedStaff with: const staff = await fetch(`/api/enterprise/users?companyId=${companyId}`).then(res => res.json()); 
-                const staff = simulatedStaff;
-                
-                const staffHtml = staff.map(user => `
-                    <tr class="border-b border-gray-800 hover:bg-white/5 transition">
-                        <td class="p-4 font-mono text-xs">#${user.id}</td>
-                        <td class="p-4 text-white font-bold">${user.name}<br><span class="text-xs text-gray-500">${user.email}</span></td>
-                        <td class="p-4">
-                            <a href="/${user.slug}" target="_blank" class="text-blue-400 hover:underline flex items-center gap-1"><i class="bi bi-box-arrow-up-right"></i> /${user.slug}</a>
-                        </td>
-                        <td class="p-4">${admins.find(a => a.id === user.admin_id)?.name || 'Unassigned'}</td>
-                        <td class="p-4 text-right">
-                            <button onclick="manageStaffUser(${user.id})" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
-                                MANAGE
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-                document.getElementById('staff-user-list').innerHTML = staffHtml;
+                // 2. Stats
+                document.getElementById('total-licenses').innerText = data.company.license_count;
+                document.getElementById('active-staff').innerText = data.stats.active_staff_count;
+                document.getElementById('total-views').innerText = data.stats.total_views.toLocaleString();
+                document.getElementById('total-leads').innerText = data.stats.total_leads.toLocaleString();
 
-            } catch(e) {
+                // 3. Admins List
+                const admins = data.admins || [];
+                if (admins.length === 0) {
+                    document.getElementById('admin-list').innerHTML = '<tr><td class="p-4" colspan="5">No delegated admins found.</td></tr>';
+                } else {
+                    const adminHtml = admins.map(admin => `
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition">
+                            <td class="p-4 font-mono text-xs">#${admin.id}</td>
+                            <td class="p-4 text-white font-bold">${admin.name || 'No Name'}<br><span class="text-xs text-gray-500">${admin.email}</span></td>
+                            <td class="p-4">${admin.staff_managed}</td>
+                            <td class="p-4">${admin.last_login}</td>
+                            <td class="p-4 text-right">
+                                <button onclick="openManageAdminModal(${admin.id}, '${admin.email}')" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
+                                    MANAGE
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('admin-list').innerHTML = adminHtml;
+                }
+
+                // 4. Staff List
+                const staff = data.staff || [];
+                if (staff.length === 0) {
+                    document.getElementById('staff-user-list').innerHTML = '<tr><td class="p-4" colspan="5">No staff users found.</td></tr>';
+                } else {
+                    const staffHtml = staff.map(user => `
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition">
+                            <td class="p-4 font-mono text-xs">#${user.id}</td>
+                            <td class="p-4 text-white font-bold">${user.name || 'No Name'}<br><span class="text-xs text-gray-500">${user.email}</span></td>
+                            <td class="p-4">
+                                ${user.slug ? `<a href="/${user.slug}" target="_blank" class="text-blue-400 hover:underline flex items-center gap-1"><i class="bi bi-box-arrow-up-right"></i> /${user.slug}</a>` : '<span class="text-gray-600">No Card</span>'}
+                            </td>
+                            <td class="p-4">${admins.find(a => a.id === user.assigned_admin_id)?.name || 'Unassigned'}</td>
+                            <td class="p-4 text-right">
+                                <button onclick="manageStaffUser(${user.id})" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
+                                    MANAGE
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('staff-user-list').innerHTML = staffHtml;
+                }
+
+            } catch (e) {
                 console.error("Failed to load Enterprise data:", e);
-                alert("Failed to load dashboard data. Check API.");
+                // alert("Failed to load dashboard data. Check API.");
             }
         }
 
 
         // *** ADMIN MANAGEMENT MODAL LOGIC ***
         function openCreateAdminModal() {
-            alert("Functionality to create a new Enterprise Admin. This typically involves inputting an email and assigning staff capacity.");
+            document.getElementById('create-admin-modal').classList.remove('hidden-element');
+        }
+
+        function closeCreateAdminModal() {
+            document.getElementById('create-admin-modal').classList.add('hidden-element');
+            document.getElementById('new-admin-name').value = '';
+            document.getElementById('new-admin-email').value = '';
+            document.getElementById('new-admin-password').value = '';
+            document.getElementById('create-admin-error').innerText = '';
+            document.getElementById('create-admin-error').classList.add('hidden');
+        }
+
+        async function createAdmin() {
+            const btn = document.getElementById('btn-create-admin');
+            const errorMsg = document.getElementById('create-admin-error');
+            const name = document.getElementById('new-admin-name').value;
+            const email = document.getElementById('new-admin-email').value;
+            const password = document.getElementById('new-admin-password').value;
+
+            btn.disabled = true;
+            btn.innerText = "Creating...";
+            errorMsg.classList.add('hidden');
+
+            try {
+                const res = await fetch('/api/enterprise/create-admin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    closeCreateAdminModal();
+                    loadDashboardData(); // Refresh list
+                    alert("Admin created successfully!");
+                } else {
+                    throw new Error(data.error || "Failed to create admin");
+                }
+            } catch (e) {
+                errorMsg.innerText = e.message;
+                errorMsg.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "CREATE ADMIN";
+            }
         }
 
         function openManageAdminModal(id, email) {
@@ -254,16 +336,16 @@
             document.getElementById('manage-admin-modal').classList.add('hidden-element');
             currentAdminId = null;
         }
-        
+
         async function saveAdminChanges() {
-            if(!currentAdminId) return;
+            if (!currentAdminId) return;
             alert(`Simulating save changes for Admin #${currentAdminId}. (Requires new API endpoint: /api/enterprise/update-admin)`);
             closeAdminModal();
             loadDashboardData();
         }
 
         async function deleteAdmin() {
-            if(!confirm("Are you sure? This will remove the delegated Admin role.")) return;
+            if (!confirm("Are you sure? This will remove the delegated Admin role.")) return;
             alert(`Simulating deletion of Admin #${currentAdminId}. (Requires new API endpoint: /api/enterprise/update-admin)`);
             closeAdminModal();
             loadDashboardData();
@@ -271,11 +353,12 @@
 
         // *** STAFF USER MANAGEMENT LOGIC ***
         function manageStaffUser(id) {
-             alert(`Managing Staff User #${id}. This would link to a detailed page or open a modal allowing the Super Admin to update user details, plan, or reassign them to a Delegated Admin.`);
-             // In a real app, this would redirect to a user-specific management page:
-             // window.location.href = `enterprise_staff_user_management.html?id=${id}`;
+            alert(`Managing Staff User #${id}. This would link to a detailed page or open a modal allowing the Super Admin to update user details, plan, or reassign them to a Delegated Admin.`);
+            // In a real app, this would redirect to a user-specific management page:
+            // window.location.href = `enterprise_staff_user_management.html?id=${id}`;
         }
     </script>
 
 </body>
+
 </html>

@@ -3,16 +3,18 @@ import { getUserIdFromToken } from '../../utils/auth';
 export async function onRequestPost(context) {
     const { request, env } = context;
 
+    // 1. Authentication Check
     const currentUserId = await getUserIdFromToken(request, env);
     if (!currentUserId) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     
     try {
         const body = await request.json();
-        const { user_id, plan, role, enterprise_id, action } = body;
+        // 2. Pull in ALL possible update fields
+        const { user_id, plan, role, enterprise_id, action } = body; 
 
         if (!user_id) return new Response(JSON.stringify({ error: "Missing user ID" }), { status: 400 });
 
-        // 1. DELETE USER ACTION
+        // DELETE ACTION
         if (action === 'delete') {
             await env.DB.prepare("DELETE FROM users WHERE id = ?").bind(user_id).run();
             await env.DB.prepare("DELETE FROM cards WHERE user_id = ?").bind(user_id).run();
@@ -20,7 +22,7 @@ export async function onRequestPost(context) {
             return new Response(JSON.stringify({ success: true, message: "User deleted" }), { headers: { "Content-Type": "application/json" } });
         }
 
-        // 2. UPDATE PLAN/ROLE/ENTERPRISE_ID ACTION
+        // UPDATE ACTION (handles plan, role, and enterprise_id)
         if (plan || role || enterprise_id !== undefined) {
             let setClauses = [];
             let bindings = [];
@@ -30,17 +32,14 @@ export async function onRequestPost(context) {
                 bindings.push(plan);
             }
             
-            // NEW: Allow Admin to change the user's role
             if (role) {
                 setClauses.push("role = ?");
                 bindings.push(role);
             }
             
-            // NEW: Allow Admin to change the user's enterprise membership
             if (enterprise_id !== undefined) {
                 setClauses.push("enterprise_id = ?");
-                // If enterprise_id is null/0, set it to NULL in the database
-                bindings.push(enterprise_id || null); 
+                bindings.push(enterprise_id || null); // Converts 0/null to SQL NULL
             }
 
             if (setClauses.length === 0) {
@@ -58,6 +57,6 @@ export async function onRequestPost(context) {
         return new Response(JSON.stringify({ error: "No action specified" }), { status: 400 });
 
     } catch (e) {
-        return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+        return new Response(JSON.stringify({ success: false, error: e.message }), { status: 500 });
     }
 }

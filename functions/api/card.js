@@ -6,14 +6,14 @@ export async function onRequest(context) {
     // Use the central utility for auth
     const userId = await getUserIdFromToken(request, env);
     if (!userId) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-    
+
     if (request.method === "GET") {
-        // SAFE QUERY: Uses the original simple JOIN to get card and plan data,
-        // without relying on the yet-to-be-created 'enterprises' table or 'role' column.
+        // Query to get card, user role, and enterprise info
         const query = `
-            SELECT cards.*, users.plan, users.created_at 
+            SELECT cards.*, users.plan, users.role, users.created_at, users.enterprise_id, enterprises.name as company_name
             FROM cards 
             LEFT JOIN users ON cards.user_id = users.id 
+            LEFT JOIN enterprises ON users.enterprise_id = enterprises.id
             WHERE cards.user_id = ?
         `;
         const data = await env.DB.prepare(query).bind(userId).first();
@@ -47,6 +47,6 @@ export async function onRequest(context) {
             return new Response(JSON.stringify({ success: false, error: e.message }), { status: 500 });
         }
     }
-    
+
     return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
 }

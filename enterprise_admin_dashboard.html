@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -20,18 +21,23 @@
         }
     </script>
     <style>
-        body { background-color: #050505; color: white; }
+        body {
+            background-color: #050505;
+            color: white;
+        }
 
         /* Preloader Styles */
         #preloader.fade-out {
             opacity: 0;
             pointer-events: none;
         }
+
         .hidden-element {
             display: none !important;
         }
     </style>
 </head>
+
 <body class="p-8 max-w-7xl mx-auto">
 
     <div id="preloader"
@@ -52,8 +58,10 @@
             <span id="admin-name">Delegated Admin</span> <span class="text-brand-red">Console</span>
         </h1>
         <div class="flex gap-4">
-            <button onclick="loadDashboardData()" class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">Refresh</button>
-            <a href="dashboard.html" class="text-sm bg-brand-red px-4 py-2 rounded font-bold">Log Out</a>
+            <button onclick="loadDashboardData()"
+                class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">Refresh</button>
+            <a href="profile.html" class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded font-bold">Back to
+                Profile</a>
         </div>
     </div>
 
@@ -65,6 +73,10 @@
         <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
             <h3 class="text-gray-500 text-xs font-bold uppercase">Staff Under Management</h3>
             <p id="managed-staff-count" class="text-4xl font-black mt-2 text-brand-red">...</p>
+        </div>
+        <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
+            <h3 class="text-gray-500 text-xs font-bold uppercase">Available Sub Licenses</h3>
+            <p id="available-sub-licenses" class="text-4xl font-black mt-2 text-yellow-500">...</p>
         </div>
         <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
             <h3 class="text-gray-500 text-xs font-bold uppercase">Team Card Views</h3>
@@ -81,7 +93,8 @@
     <div class="bg-brand-dark rounded-xl border border-gray-800 overflow-hidden">
         <div class="p-4 bg-black flex justify-between items-center border-b border-gray-800">
             <h3 class="text-white font-bold text-lg">Staff List</h3>
-            <button onclick="openCreateUserModal()" class="bg-brand-red text-white px-3 py-1.5 rounded text-sm font-bold hover:bg-red-700 transition">
+            <button onclick="openCreateUserModal()"
+                class="bg-brand-red text-white px-3 py-1.5 rounded text-sm font-bold hover:bg-red-700 transition">
                 + INVITE NEW STAFF USER
             </button>
         </div>
@@ -91,37 +104,113 @@
                     <tr>
                         <th class="p-4">ID</th>
                         <th class="p-4">Email / Name</th>
-                        <th class="p-4">Link (Slug)</th> 
+                        <th class="p-4">Link (Slug)</th>
                         <th class="p-4">Last Activity</th>
                         <th class="p-4 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="staff-user-list">
-                    <tr><td class="p-4" colspan="5">Loading staff users...</td></tr>
+                    <tr>
+                        <td class="p-4" colspan="5">Loading staff users...</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div id="manage-user-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden-element flex items-center justify-center z-50">
+    <div id="create-staff-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden-element flex items-center justify-center z-50">
+        <div class="bg-[#111] w-full max-w-sm p-6 rounded-2xl border border-gray-800 shadow-2xl relative">
+            <h2 class="text-xl font-bold mb-6">Invite New Staff</h2>
+
+            <form onsubmit="event.preventDefault(); createStaffUser();" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Full Name</label>
+                    <input type="text" id="new-staff-name" required
+                        class="w-full bg-brand-dark border border-gray-800 rounded px-3 py-2 text-white focus:border-brand-red focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Email Address</label>
+                    <input type="email" id="new-staff-email" required
+                        class="w-full bg-brand-dark border border-gray-800 rounded px-3 py-2 text-white focus:border-brand-red focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Phone Number</label>
+                    <input type="tel" id="new-staff-phone"
+                        class="w-full bg-brand-dark border border-gray-800 rounded px-3 py-2 text-white focus:border-brand-red focus:outline-none"
+                        placeholder="+1 (555) 000-0000">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Assign Sub Licenses</label>
+                    <input type="number" id="new-staff-licenses" min="0" value="0"
+                        class="w-full bg-brand-dark border border-gray-800 rounded px-3 py-2 text-white focus:border-brand-red focus:outline-none">
+                    <p class="text-[10px] text-gray-500 mt-1">Quota for this user to create their own sub-accounts.</p>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="btn-create-staff"
+                        class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">
+                        INVITE STAFF
+                    </button>
+                    <p id="create-staff-error" class="text-red-500 text-xs mt-2 hidden"></p>
+                </div>
+            </form>
+            <button onclick="closeCreateStaffModal()"
+                class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+        </div>
+    </div>
+
+    <div id="success-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden-element flex items-center justify-center z-50">
+        <div class="bg-[#111] w-full max-w-sm p-6 rounded-2xl border border-gray-800 shadow-2xl relative text-center">
+            <div class="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="bi bi-check-lg text-2xl text-green-500"></i>
+            </div>
+            <h2 class="text-xl font-bold mb-2">Staff Created!</h2>
+            <p class="text-gray-400 text-sm mb-6">The account has been created successfully.</p>
+
+            <div class="bg-brand-dark border border-gray-800 rounded p-4 mb-6">
+                <p class="text-xs uppercase text-gray-500 font-bold mb-2">Temporary Password</p>
+                <div class="flex items-center justify-between gap-2">
+                    <code id="success-password" class="text-brand-red font-mono text-lg font-bold">...</code>
+                    <button id="btn-copy-pwd" onclick="copyPassword()"
+                        class="text-xs bg-white/10 hover:bg-white/20 px-2 py-1 rounded text-white transition">
+                        COPY
+                    </button>
+                </div>
+            </div>
+
+            <button onclick="closeSuccessModal()"
+                class="w-full bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-200 transition">
+                DONE
+            </button>
+        </div>
+    </div>
+
+    <div id="manage-user-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden-element flex items-center justify-center z-50">
         <div class="bg-[#111] w-full max-w-sm p-6 rounded-2xl border border-gray-800 shadow-2xl relative">
             <h2 class="text-xl font-bold mb-1">Manage Staff User</h2>
             <p id="user-modal-email" class="text-xs text-gray-500 mb-6">staff@email.com</p>
-            
+
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-400 mb-2">User Status</label>
-                    <select id="user-status-select" class="w-full bg-black border border-gray-700 rounded p-2 text-sm focus:border-brand-red focus:outline-none">
+                    <select id="user-status-select"
+                        class="w-full bg-black border border-gray-700 rounded p-2 text-sm focus:border-brand-red focus:outline-none">
                         <option value="active">Active</option>
                         <option value="inactive">Suspend Account</option>
                         <option value="reassign">Reassign Card</option>
                     </select>
                 </div>
 
-                <button onclick="saveUserChanges()" class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">SAVE CHANGES</button>
-                
+                <button onclick="saveUserChanges()"
+                    class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">SAVE
+                    CHANGES</button>
+
                 <div class="border-t border-gray-800 pt-4 mt-4">
-                    <button onclick="deleteStaffUser()" class="w-full text-red-500 text-xs font-bold hover:text-red-400">DELETE STAFF USER</button>
+                    <button onclick="deleteStaffUser()"
+                        class="w-full text-red-500 text-xs font-bold hover:text-red-400">DELETE STAFF USER</button>
                 </div>
             </div>
             <button onclick="closeUserModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
@@ -129,23 +218,6 @@
     </div>
 
     <script>
-        // *** SIMULATED DATA (Replace with API fetch calls) ***
-        let adminId = 201; 
-        let currentStaffUserId = null;
-
-        let simulatedStats = {
-            managed_staff_count: 18,
-            team_views: 4500,
-            team_leads: 85
-        };
-
-        let simulatedStaff = [
-            { id: 301, name: 'Staff User One', email: 'user1@acmecorp.com', slug: 'staff1-acme', last_activity: '2 days ago' },
-            { id: 305, name: 'Staff User Two', email: 'user5@acmecorp.com', slug: 'staff2-acme', last_activity: '4 hours ago' },
-            { id: 310, name: 'Staff User Three', email: 'user10@acmecorp.com', slug: 'staff3-acme', last_activity: '1 week ago' },
-        ];
-
-
         // *** CORE DASHBOARD LOGIC ***
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -155,61 +227,164 @@
                 preloader.classList.add('fade-out');
                 setTimeout(() => { preloader.style.display = 'none'; }, 700);
             }, 500);
-            
-            // In a real app, these values would be loaded from the user's session token 
-            // after authenticating them as an Enterprise Admin.
-            document.getElementById('admin-name').innerText = 'John Admin';
-            document.getElementById('company-name').innerText = 'Acme Corp';
-            
+
             loadDashboardData();
         });
 
-
         async function loadDashboardData() {
             try {
-                // *** 1. LOAD ADMIN STATS (for their assigned team) ***
-                // New API endpoint needed: /api/enterprise/admin-stats?adminId=201
-                // const stats = await fetch(`/api/enterprise/admin-stats?adminId=${adminId}`).then(res => res.json()); 
-                const stats = simulatedStats; 
-                
-                document.getElementById('managed-staff-count').innerText = stats.managed_staff_count;
-                document.getElementById('team-views').innerText = stats.team_views.toLocaleString();
-                document.getElementById('team-leads').innerText = stats.team_leads.toLocaleString();
+                const res = await fetch('/api/enterprise/dashboard');
+                if (!res.ok) {
+                    if (res.status === 401 || res.status === 403) window.location.href = 'login.html';
+                    throw new Error("Failed to fetch data");
+                }
+                const data = await res.json();
 
-                // *** 2. LOAD STAFF USERS ***
-                // New API endpoint needed: /api/enterprise/admin-users?adminId=201
-                // const staff = await fetch(`/api/enterprise/admin-users?adminId=${adminId}`).then(res => res.json()); 
-                const staff = simulatedStaff;
-                
-                const staffHtml = staff.map(user => `
-                    <tr class="border-b border-gray-800 hover:bg-white/5 transition">
-                        <td class="p-4 font-mono text-xs">#${user.id}</td>
-                        <td class="p-4 text-white font-bold">${user.name}<br><span class="text-xs text-gray-500">${user.email}</span></td>
-                        <td class="p-4">
-                            <a href="/${user.slug}" target="_blank" class="text-blue-400 hover:underline flex items-center gap-1"><i class="bi bi-box-arrow-up-right"></i> /${user.slug}</a>
-                        </td>
-                        <td class="p-4">${user.last_activity}</td>
-                        <td class="p-4 text-right">
-                            <button onclick="openManageUserModal(${user.id}, '${user.email}')" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
-                                MANAGE
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-                document.getElementById('staff-user-list').innerHTML = staffHtml;
+                // 1. Set Header Info
+                if (data.viewer && data.viewer.name) {
+                    document.getElementById('admin-name').innerText = data.viewer.name;
+                }
+                document.getElementById('company-name').innerText = data.company.name;
 
-            } catch(e) {
+                // 2. Set Stats (Using "Managed" count specifically)
+                document.getElementById('managed-staff-count').innerText = data.stats.managed_staff_count;
+                // Assuming data.company.sub_license_count is available (overall enterprise pool)
+                document.getElementById('available-sub-licenses').innerText = data.company.sub_license_count || 0;
+
+                document.getElementById('team-views').innerText = data.stats.total_views.toLocaleString();
+                document.getElementById('team-leads').innerText = data.stats.total_leads.toLocaleString();
+
+                // 3. Set Staff List
+                // Filter to show only staff assigned to this admin (using viewer logic or pre-filtered)
+                // The API returns 'staff' which is ALL staff (currently). 
+                // We should filter client-side if we want to be strict, or rely on API to filter later.
+                // Let's filter client-side by assigned_admin_id if available, or just show all if generic view desired.
+                // The API response specifically added 'assigned_admin_id'.
+                // If data.viewer.id matches assigned_admin_id, show them.
+
+                const myStaff = data.staff.filter(u => u.assigned_admin_id === data.viewer.id);
+
+                if (myStaff.length === 0) {
+                    document.getElementById('staff-user-list').innerHTML = '<tr><td class="p-4" colspan="5">No staff assigned to you.</td></tr>';
+                } else {
+                    const staffHtml = myStaff.map(user => `
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition">
+                            <td class="p-4 font-mono text-xs">#${user.id}</td>
+                            <td class="p-4 text-white font-bold">
+                                <div>${user.name || 'No Name'}</div>
+                                <div class="text-xs text-gray-500 flex items-center gap-2">
+                                    ${user.email}
+                                    <button onclick="copyText('${user.password}')" title="Copy Password" class="text-gray-600 hover:text-white transition">
+                                        <i class="bi bi-key-fill"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                ${user.slug ? `<a href="/${user.slug}" target="_blank" class="text-blue-400 hover:underline flex items-center gap-1"><i class="bi bi-box-arrow-up-right"></i> /${user.slug}</a>` : '<span class="text-gray-600">No Card</span>'}
+                            </td>
+                            <td class="p-4">N/A</td>
+                            <td class="p-4 text-right">
+                                <button onclick="openManageUserModal(${user.id}, '${user.email}')" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
+                                    MANAGE
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('staff-user-list').innerHTML = staffHtml;
+                }
+
+            } catch (e) {
                 console.error("Failed to load Admin dashboard data:", e);
-                alert("Failed to load dashboard data. Check API.");
+                // alert("Failed to load dashboard data. Check API.");
             }
         }
 
 
+        let currentStaffUserId = null;
+
         // *** STAFF MANAGEMENT MODAL LOGIC ***
         function openCreateUserModal() {
-            alert("Functionality to invite a new staff user. The user will be automatically linked to this Admin's team.");
+            document.getElementById('create-staff-modal').classList.remove('hidden-element');
         }
 
+        function closeCreateStaffModal() {
+            document.getElementById('create-staff-modal').classList.add('hidden-element');
+            document.getElementById('new-staff-name').value = '';
+            document.getElementById('new-staff-email').value = '';
+            document.getElementById('new-staff-phone').value = '';
+            document.getElementById('new-staff-licenses').value = '0';
+            document.getElementById('create-staff-error').innerText = '';
+            document.getElementById('create-staff-error').classList.add('hidden');
+        }
+
+        async function createStaffUser() {
+            const btn = document.getElementById('btn-create-staff');
+            const errorMsg = document.getElementById('create-staff-error');
+
+            const name = document.getElementById('new-staff-name').value;
+            const email = document.getElementById('new-staff-email').value;
+            const phone = document.getElementById('new-staff-phone').value;
+            const sub_licenses = document.getElementById('new-staff-licenses').value;
+
+            btn.disabled = true;
+            btn.innerText = "Creating...";
+            errorMsg.classList.add('hidden');
+
+            try {
+                const res = await fetch('/api/enterprise/create-staff', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, sub_licenses })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    closeCreateStaffModal();
+                    loadDashboardData();
+                    showSuccessModal(data.temp_password);
+                } else {
+                    throw new Error(data.error || "Failed to create staff user");
+                }
+            } catch (e) {
+                errorMsg.innerText = e.message;
+                errorMsg.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "INVITE STAFF";
+            }
+        }
+
+        function showSuccessModal(password) {
+            const modal = document.getElementById('success-modal');
+            const pwdField = document.getElementById('success-password');
+            const pwdText = password || 'Check Email';
+            pwdField.innerText = pwdText;
+            pwdField.dataset.value = pwdText;
+            modal.classList.remove('hidden-element');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden-element');
+        }
+
+        function copyPassword() {
+            const pwd = document.getElementById('success-password').dataset.value;
+            navigator.clipboard.writeText(pwd).then(() => {
+                const btn = document.getElementById('btn-copy-pwd');
+                const originalText = btn.innerText;
+                btn.innerText = "COPIED!";
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        }
+
+        function copyText(text) {
+            if (!text) return alert("No password found.");
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Password copied to clipboard!");
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
         function openManageUserModal(id, email) {
             currentStaffUserId = id;
             document.getElementById('user-modal-email').innerText = email;
@@ -221,9 +396,9 @@
             document.getElementById('manage-user-modal').classList.add('hidden-element');
             currentStaffUserId = null;
         }
-        
+
         async function saveUserChanges() {
-            if(!currentStaffUserId) return;
+            if (!currentStaffUserId) return;
             const newStatus = document.getElementById('user-status-select').value;
             alert(`Simulating save changes for Staff User #${currentStaffUserId}. New Status: ${newStatus}. (Requires new API endpoint: /api/enterprise/update-staff-user)`);
             closeUserModal();
@@ -231,7 +406,7 @@
         }
 
         async function deleteStaffUser() {
-            if(!confirm("Are you sure? This will remove the staff user's access and delete their card.")) return;
+            if (!confirm("Are you sure? This will remove the staff user's access and delete their card.")) return;
             alert(`Simulating permanent deletion of Staff User #${currentStaffUserId}. (Requires new API endpoint: /api/enterprise/update-staff-user)`);
             closeUserModal();
             loadDashboardData();
@@ -239,4 +414,5 @@
     </script>
 
 </body>
+
 </html>

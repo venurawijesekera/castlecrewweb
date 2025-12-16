@@ -29,10 +29,17 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        
+
         /* Custom classes for Enterprise management */
-        .hidden-enterprise { display: none !important; }
-        .input-disabled { cursor: not-allowed; opacity: 0.6; background-color: #1a1a1a !important; }
+        .hidden-enterprise {
+            display: none !important;
+        }
+
+        .input-disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+            background-color: #1a1a1a !important;
+        }
     </style>
 </head>
 
@@ -51,6 +58,13 @@
                 <a href="profile.html"
                     class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
                         class="bi bi-person-circle"></i> Profile</a>
+
+                <!-- Products Link (Hidden Default) -->
+                <a href="profile.html?view=products" id="nav-products"
+                    class="hidden items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-box-seam-fill"></i> Products
+                </a>
+
                 <a href="leads.html"
                     class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
                         class="bi bi-people-fill"></i> Connections</a>
@@ -92,10 +106,12 @@
                 <h1 class="text-3xl font-black uppercase mb-2">Account <span class="text-brand-red">Settings</span></h1>
                 <p class="text-gray-400 text-sm">Manage your personal information and security.</p>
             </div>
-            
-            <div id="enterprise-alert" class="hidden-enterprise bg-blue-900/30 border-l-4 border-blue-500 text-blue-100 p-4 mt-8 rounded-lg">
+
+            <div id="enterprise-alert"
+                class="hidden-enterprise bg-blue-900/30 border-l-4 border-blue-500 text-blue-100 p-4 mt-8 rounded-lg">
                 <p class="font-bold">Enterprise Restriction Notice:</p>
-                <p class="text-sm">Your contact information, billing, shipping, and account deletion are centrally managed by your company's Admin.</p>
+                <p class="text-sm">Your contact information, billing, shipping, and account deletion are centrally
+                    managed by your company's Admin.</p>
             </div>
 
             <div class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
@@ -204,12 +220,17 @@
                         PASSWORD</button>
                 </div>
             </div>
-            
-            <div id="danger-zone-section" class="bg-brand-dark border border-red-800 rounded-2xl p-6 md:p-8 mt-8 hidden-enterprise">
-                <h3 class="text-lg font-bold mb-6 text-red-500 flex items-center gap-2"><i class="bi bi-exclamation-diamond-fill"></i> Danger Zone
+
+            <div id="danger-zone-section"
+                class="bg-brand-dark border border-red-800 rounded-2xl p-6 md:p-8 mt-8 hidden-enterprise">
+                <h3 class="text-lg font-bold mb-6 text-red-500 flex items-center gap-2"><i
+                        class="bi bi-exclamation-diamond-fill"></i> Danger Zone
                 </h3>
-                <p class="text-sm text-gray-400 mb-4">Permanently delete your account and all associated data, including your card profile and leads.</p>
-                <button onclick="deleteAccount()" class="bg-red-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-700 transition text-sm">Delete My Account</button>
+                <p class="text-sm text-gray-400 mb-4">Permanently delete your account and all associated data, including
+                    your card profile and leads.</p>
+                <button onclick="deleteAccount()"
+                    class="bg-red-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-700 transition text-sm">Delete
+                    My Account</button>
             </div>
         </div>
     </main>
@@ -273,7 +294,7 @@
 
                 userData = await settingsRes.json();
                 const cardData = await cardRes.json();
-                
+
                 const userPlan = cardData.plan || 'starter';
                 const enterpriseId = cardData.enterprise_id;
                 const companyName = cardData.company_name;
@@ -282,7 +303,7 @@
                 document.getElementById('set-name').value = userData.full_name || "";
                 document.getElementById('set-email').value = userData.email || "";
                 document.getElementById('set-phone').value = userData.phone || "";
-                
+
                 // Address parsing logic (as per original code)
                 let bill = {};
                 try { bill = JSON.parse(userData.address || '{}'); } catch (e) { bill = { street: userData.address || "" }; }
@@ -301,7 +322,14 @@
                 if (enterpriseId) {
                     // Show alert banner
                     document.getElementById('enterprise-alert').classList.remove('hidden-enterprise');
-                    
+
+                    // Show Products Link
+                    const prodLink = document.getElementById('nav-products');
+                    if (prodLink) {
+                        prodLink.classList.remove('hidden');
+                        prodLink.classList.add('flex');
+                    }
+
                     // Update sidebar/menu display
                     document.getElementById('user-plan').innerText = "Enterprise Staff Role";
                     document.getElementById('company-display').innerText = companyName || "Enterprise Account";
@@ -313,26 +341,26 @@
                         input.setAttribute('disabled', 'true');
                         input.classList.add('input-disabled');
                     });
-                    
+
                     // Hide all billing, shipping, save buttons, and danger zone
                     document.getElementById('shipping-section').classList.add('hidden-enterprise');
                     document.getElementById('danger-zone-section').classList.add('hidden-enterprise');
-                    
+
                     // Hide individual billing fields 
                     document.getElementById('billing-title').innerText = "Contact Info (Locked)";
                     ['billing-address-section', 'bill-street-div', 'bill-city-div', 'bill-zip-div', 'bill-country-div'].forEach(id => {
                         const div = document.getElementById(id);
-                        if(div) div.classList.add('hidden-enterprise');
+                        if (div) div.classList.add('hidden-enterprise');
                     });
-                    
+
                 } else {
                     // Individual User: Display plan normally
                     document.getElementById('user-plan').innerText = userPlan + " Plan";
                     document.getElementById('billing-title').innerText = "Billing";
                 }
 
-            } catch (e) { 
-                console.error(e); 
+            } catch (e) {
+                console.error(e);
             }
         }
 
@@ -370,7 +398,7 @@
                 address: JSON.stringify(billingData), // Used by api/settings.js
                 shipping_info: shippingData // Used by api/settings.js
             };
-            
+
             // Also update the full_name on the card itself (using api/card.js)
             const cardUpdatePayload = { ...userData, full_name: payload.full_name };
 
@@ -382,7 +410,7 @@
                     headers: { 'Content-Type': 'application/json', 'Authorization': token },
                     body: JSON.stringify(payload)
                 });
-                
+
                 // 2. Update card (full_name)
                 const cardRes = await fetch('/api/card', {
                     method: 'POST',
@@ -403,8 +431,8 @@
         function copyAddress() {
             // Enterprise Staff check
             if (document.getElementById('shipping-section').classList.contains('hidden-enterprise')) {
-                 alert("Address management is restricted by your company.");
-                 return;
+                alert("Address management is restricted by your company.");
+                return;
             }
             document.getElementById('ship-street').value = document.getElementById('bill-street').value;
             document.getElementById('ship-city').value = document.getElementById('bill-city').value;
@@ -432,11 +460,11 @@
                     body: JSON.stringify({ current_password: cur, new_password: nw })
                 });
                 const data = await res.json();
-                if (res.ok) { 
-                    alert("Password Changed! Please log in again."); 
-                    logout(); 
-                } else { 
-                    alert(data.error); 
+                if (res.ok) {
+                    alert("Password Changed! Please log in again.");
+                    logout();
+                } else {
+                    alert(data.error);
                 }
             } catch (e) { alert("Error changing password."); }
             pwdBtn.innerText = originalText;
@@ -445,8 +473,8 @@
         function deleteAccount() {
             // Enterprise Staff check
             if (document.getElementById('danger-zone-section').classList.contains('hidden-enterprise')) {
-                 alert("Account deletion is managed by your company's Super Admin.");
-                 return;
+                alert("Account deletion is managed by your company's Super Admin.");
+                return;
             }
             if (confirm("WARNING: This action is permanent and cannot be undone. Are you absolutely sure you want to delete your account?")) {
                 // NOTE: Requires a dedicated API endpoint for user deletion.
@@ -456,7 +484,7 @@
         }
 
         function logout() { localStorage.removeItem('castle_token'); window.location.href = 'index.html'; }
-        
+
         loadSettings();
     </script>
 </body>

@@ -25,7 +25,7 @@
             background-color: #050505;
             color: white;
         }
-        
+
         /* Preloader Styles (NEW) */
         #preloader.fade-out {
             opacity: 0;
@@ -34,7 +34,9 @@
 
         /* Glow animation for preloader logo (NEW) */
         @keyframes pulse-glow {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 0.5;
                 transform: scale(1);
             }
@@ -81,6 +83,13 @@
                     class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
                     <i class="bi bi-person-circle"></i> Profile
                 </a>
+
+                <!-- Products Link (Hidden Default) -->
+                <a href="profile.html?view=products" id="nav-products"
+                    class="hidden items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-box-seam-fill"></i> Products
+                </a>
+
                 <a href="leads.html"
                     class="flex items-center gap-3 px-4 py-3 bg-brand-red/10 text-brand-red rounded-lg text-sm font-bold">
                     <i class="bi bi-people-fill"></i> Connections
@@ -294,9 +303,20 @@
                 }, 700);
             }, 800);
         });
-        
+
         // Load on start
         loadLeads();
+
+        // Check for Products Access
+        fetch('/api/user/products').then(r => {
+            if (r.ok) {
+                const link = document.getElementById('nav-products');
+                if (link) {
+                    link.classList.remove('hidden');
+                    link.classList.add('flex');
+                }
+            }
+        }).catch(e => { /* Ignore auth errors, just don't show link */ });
     </script>
 </body>
 

@@ -34,7 +34,9 @@
 
         /* Glow animation for preloader logo */
         @keyframes pulse-glow {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 0.5;
                 transform: scale(1);
             }
@@ -80,6 +82,13 @@
                     class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
                     <i class="bi bi-person-circle"></i> Profile
                 </a>
+
+                <!-- Products Link (Hidden Default) -->
+                <a href="profile.html?view=products" id="nav-products"
+                    class="hidden items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-box-seam-fill"></i> Products
+                </a>
+
                 <a href="leads.html"
                     class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
                     <i class="bi bi-people-fill"></i> Connections
@@ -122,9 +131,11 @@
         </div>
 
         <div class="p-6 md:p-12 pb-32 md:pb-12 max-w-7xl mx-auto h-full md:overflow-y-auto">
-            
-            <div id="enterprise-alert" class="hidden bg-blue-900/30 border-l-4 border-blue-500 text-blue-100 p-4 mb-6 rounded-lg">
-                You are currently using the <span id="managed-company-name" class="font-bold"></span> corporate plan. Certain features may be centrally controlled by your delegated Admin.
+
+            <div id="enterprise-alert"
+                class="hidden bg-blue-900/30 border-l-4 border-blue-500 text-blue-100 p-4 mb-6 rounded-lg">
+                You are currently using the <span id="managed-company-name" class="font-bold"></span> corporate plan.
+                Certain features may be centrally controlled by your delegated Admin.
             </div>
 
             <div class="mb-10">
@@ -262,18 +273,18 @@
 
             try {
                 const res = await fetch('/api/card', { headers: { 'Authorization': token } });
-                
+
                 // Check for unauthorized access, especially important after admin impersonation
                 if (res.status === 401) {
                     logout();
                     return;
                 }
-                
+
                 const data = await res.json();
-                
+
                 // --- NEW ENTERPRISE REDIRECTION LOGIC ---
                 // Assumes /api/card now returns: data.role, data.enterprise_id, data.company_name
-                const userRole = data.role; 
+                const userRole = data.role;
                 const enterpriseId = data.enterprise_id;
 
                 if (enterpriseId) {
@@ -289,9 +300,9 @@
 
                 document.getElementById('user-name').innerText = data.full_name || "New User";
                 userPlan = data.plan || 'starter';
-                
+
                 let planDisplay = userPlan;
-                
+
                 // UI Adjustment for Enterprise Staff User (role='staff')
                 if (enterpriseId) {
                     planDisplay = "Enterprise Staff";
@@ -299,10 +310,17 @@
                     document.getElementById('company-display').classList.remove('hidden');
                     document.getElementById('enterprise-alert').classList.remove('hidden');
                     document.getElementById('managed-company-name').innerText = data.company_name || "your company";
+
+                    // Show Products Link
+                    const prodLink = document.getElementById('nav-products');
+                    if (prodLink) {
+                        prodLink.classList.remove('hidden');
+                        prodLink.classList.add('flex');
+                    }
                 }
                 document.getElementById('user-plan').innerText = planDisplay + " Role";
-                
-                
+
+
                 // Lock Premium Templates if user is Starter AND not an Enterprise Staff Member
                 // Enterprise staff are assumed to have premium access via their company plan.
                 const isPremiumLocked = (userPlan === 'starter' && !enterpriseId);
@@ -340,19 +358,19 @@
             } catch (e) {
                 console.error(e);
                 // Fallback protection against bad tokens
-                 if (e.message.includes('401')) {
-                     logout();
-                 }
+                if (e.message.includes('401')) {
+                    logout();
+                }
             }
         }
 
         async function selectTemplate(templateName) {
             // Check if user is trying to select a premium template without rights
             const btn = document.getElementById(`btn-${templateName}`);
-            if (btn.dataset.premium === "true" && userPlan === 'starter' && !data.enterprise_id) { 
+            if (btn.dataset.premium === "true" && userPlan === 'starter' && !data.enterprise_id) {
                 return; // Guard is already handled in initDashboard, but this is a double check.
             }
-            
+
             const token = localStorage.getItem('castle_token');
             const oldText = btn.innerText;
             btn.innerText = "Applying...";
@@ -360,14 +378,14 @@
             try {
                 // Fetch current card data to preserve existing social links, etc.
                 const current = await fetch('/api/card', { headers: { 'Authorization': token } }).then(r => r.json());
-                
+
                 // Safely parse JSON arrays/objects
                 let socialsObj = {};
                 let phonesArr = [];
                 let emailsArr = [];
-                try { socialsObj = JSON.parse(current.socials || '{}'); } catch (e) {}
-                try { phonesArr = JSON.parse(current.phones || '[]'); } catch (e) {}
-                try { emailsArr = JSON.parse(current.emails || '[]'); } catch (e) {}
+                try { socialsObj = JSON.parse(current.socials || '{}'); } catch (e) { }
+                try { phonesArr = JSON.parse(current.phones || '[]'); } catch (e) { }
+                try { emailsArr = JSON.parse(current.emails || '[]'); } catch (e) { }
 
                 const payload = {
                     ...current,
@@ -388,7 +406,7 @@
                 });
 
                 if (res.ok) window.location.href = 'editor.html';
-                
+
             } catch (e) {
                 alert("Error saving template");
             }
@@ -410,7 +428,7 @@
                 }, 700);
             }, 800);
         });
-        
+
         initDashboard();
     </script>
 </body>

@@ -30,6 +30,7 @@ export async function onRequest(context) {
 
         if (card.template_id === "realestate") templateFile = "/theme-realestate.html";
         if (card.template_id === "creative") templateFile = "/theme-creative.html";
+        if (card.template_id === "car") templateFile = "/theme-car.html";
 
         // 5. SERVE THE FILE (REWRITE)
         const url = new URL(request.url);

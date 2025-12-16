@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,25 +9,28 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { 
-                        brand: { 
-                            red: '#f00000', 
-                            black: '#0a0a0a', 
-                            dark: '#121212' 
-                        } 
+                    colors: {
+                        brand: {
+                            red: '#f00000',
+                            black: '#0a0a0a',
+                            dark: '#121212'
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #050505; color: white; }
+        body {
+            background-color: #050505;
+            color: white;
+        }
 
         /* Preloader Styles */
         #preloader.fade-out {
@@ -36,14 +40,25 @@
 
         /* Glow animation for preloader logo */
         @keyframes pulse-glow {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.1); }
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
         }
+
         .animate-pulse-glow {
             animation: pulse-glow 2s infinite ease-in-out;
         }
     </style>
 </head>
+
 <body class="p-8 max-w-7xl mx-auto">
 
     <div id="preloader"
@@ -62,7 +77,8 @@
     <div class="flex justify-between items-center mb-10">
         <h1 class="text-3xl font-black uppercase">Admin <span class="text-brand-red">Dashboard</span></h1>
         <div class="flex gap-4">
-            <button onclick="loadAdminData()" class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">Refresh</button>
+            <button onclick="loadAdminData()"
+                class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">Refresh</button>
             <a href="dashboard.html" class="text-sm bg-brand-red px-4 py-2 rounded font-bold">Back to App</a>
         </div>
     </div>
@@ -91,7 +107,8 @@
     <div id="enterprise-management-panel" class="bg-brand-dark rounded-xl border border-gray-800 overflow-hidden mb-12">
         <div class="p-4 bg-black flex justify-between items-center border-b border-gray-800">
             <h3 class="text-white font-bold text-lg">Super Admin Accounts</h3>
-            <button onclick="openCreateEnterpriseModal()" class="bg-blue-500 text-white px-3 py-1.5 rounded text-sm font-bold hover:bg-blue-600 transition">
+            <button onclick="openCreateEnterpriseModal()"
+                class="bg-blue-500 text-white px-3 py-1.5 rounded text-sm font-bold hover:bg-blue-600 transition">
                 + CREATE NEW ENTERPRISE
             </button>
         </div>
@@ -107,7 +124,9 @@
                     </tr>
                 </thead>
                 <tbody id="enterprise-list">
-                    <tr><td class="p-4" colspan="5">Loading enterprise accounts...</td></tr>
+                    <tr>
+                        <td class="p-4" colspan="5">Loading enterprise accounts...</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -122,41 +141,101 @@
                     <tr>
                         <th class="p-4">ID</th>
                         <th class="p-4">Email</th>
-                        <th class="p-4">Castle Link (Slug)</th> 
+                        <th class="p-4">Castle Link (Slug)</th>
                         <th class="p-4">Plan</th>
                         <th class="p-4 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="user-list">
-                    <tr><td class="p-4" colspan="5">Loading users...</td></tr>
+                    <tr>
+                        <td class="p-4" colspan="5">Loading users...</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div id="edit-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50">
+    <div id="edit-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50">
         <div class="bg-[#111] w-full max-w-sm p-6 rounded-2xl border border-gray-800 shadow-2xl relative">
             <h2 class="text-xl font-bold mb-1">Manage User</h2>
             <p id="modal-email" class="text-xs text-gray-500 mb-6">user@email.com</p>
-            
+
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-400 mb-2">Change Plan</label>
-                    <select id="plan-select" class="w-full bg-black border border-gray-700 rounded p-2 text-sm focus:border-brand-red focus:outline-none">
+                    <select id="plan-select"
+                        class="w-full bg-black border border-gray-700 rounded p-2 text-sm focus:border-brand-red focus:outline-none">
                         <option value="starter">Starter (Free)</option>
                         <option value="professional">Professional</option>
                         <option value="executive">Executive</option>
-                        <option value="enterprise">Enterprise</option> </select>
+                        <option value="enterprise">Enterprise</option>
+                    </select>
                 </div>
 
-                <button onclick="saveUserChanges()" class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">SAVE CHANGES</button>
-                
+                <button onclick="saveUserChanges()"
+                    class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">SAVE
+                    CHANGES</button>
+
                 <div class="border-t border-gray-800 pt-4 mt-4">
-                    <button onclick="deleteUser()" class="w-full text-red-500 text-xs font-bold hover:text-red-400">DELETE USER PERMANENTLY</button>
+                    <button onclick="deleteUser()"
+                        class="w-full text-red-500 text-xs font-bold hover:text-red-400">DELETE USER
+                        PERMANENTLY</button>
                 </div>
             </div>
 
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+        </div>
+    </div>
+
+    <!-- Create Enterprise Modal -->
+    <div id="create-enterprise-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50">
+        <div class="bg-[#111] w-full max-w-md p-8 rounded-2xl border border-gray-800 shadow-2xl relative">
+            <h2 class="text-2xl font-black mb-1 text-white">NEW ENTERPRISE</h2>
+            <p class="text-xs text-gray-500 mb-6 uppercase tracking-wider">Create a new organization & super admin</p>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">Company Name</label>
+                    <input type="text" id="ent-name" placeholder="Acme Corp"
+                        class="w-full bg-black border border-gray-700 rounded p-3 text-sm focus:border-blue-500 focus:outline-none text-white">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Super Admin Email</label>
+                        <input type="email" id="ent-email" placeholder="admin@company.com"
+                            class="w-full bg-black border border-gray-700 rounded p-3 text-sm focus:border-blue-500 focus:outline-none text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Total Licenses</label>
+                        <input type="number" id="ent-licenses" value="10"
+                            class="w-full bg-black border border-gray-700 rounded p-3 text-sm focus:border-blue-500 focus:outline-none text-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Password</label>
+                        <input type="password" id="ent-password" placeholder="••••••••"
+                            class="w-full bg-black border border-gray-700 rounded p-3 text-sm focus:border-blue-500 focus:outline-none text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-1">Sub Licenses</label>
+                        <input type="number" id="ent-sub-licenses" value="0"
+                            class="w-full bg-black border border-gray-700 rounded p-3 text-sm focus:border-blue-500 focus:outline-none text-white">
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button onclick="createEnterprise()" id="btn-create-ent"
+                        class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-500 transition shadow-[0_0_20px_rgba(37,99,235,0.3)]">CREATE
+                        UNIVERSE</button>
+                </div>
+            </div>
+
+            <button onclick="closeEntModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
         </div>
     </div>
 
@@ -184,9 +263,9 @@
 
         // Helper function for plan badges
         function getPlanBadge(plan) {
-            if(plan === 'enterprise') return 'bg-blue-500/20 text-blue-500 px-2 py-1 rounded text-xs uppercase font-bold';
-            if(plan === 'executive') return 'bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded text-xs uppercase font-bold';
-            if(plan === 'professional') return 'bg-brand-red/20 text-brand-red px-2 py-1 rounded text-xs uppercase font-bold';
+            if (plan === 'enterprise') return 'bg-blue-500/20 text-blue-500 px-2 py-1 rounded text-xs uppercase font-bold';
+            if (plan === 'executive') return 'bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded text-xs uppercase font-bold';
+            if (plan === 'professional') return 'bg-brand-red/20 text-brand-red px-2 py-1 rounded text-xs uppercase font-bold';
             return 'bg-gray-800 text-gray-400 px-2 py-1 rounded text-xs uppercase font-bold';
         }
 
@@ -196,29 +275,29 @@
                 // *** 1. INDIVIDUAL USERS TABLE & STATS ***
                 // Fetches data from your existing /api/admin/users endpoint (users.js)
                 const usersRes = await fetch('/api/admin/users');
-                
+
                 if (!usersRes.ok) {
                     throw new Error(`Failed to fetch users: ${usersRes.status}`);
                 }
-                
+
                 const users = await usersRes.json(); // Array of user objects
 
                 if (!users || !users.length) {
-                     document.getElementById('user-list').innerHTML = '<tr><td class="p-4" colspan="5">No individual users found.</td></tr>';
+                    document.getElementById('user-list').innerHTML = '<tr><td class="p-4" colspan="5">No individual users found.</td></tr>';
                 }
 
                 document.getElementById('total-users').innerText = users.length || 0;
                 const paidCount = users.filter(u => u.plan === 'professional' || u.plan === 'executive').length;
                 document.getElementById('paid-users').innerText = paidCount;
-                
+
                 const userHtml = users.map(user => `
                     <tr class="border-b border-gray-800 hover:bg-white/5 transition">
                         <td class="p-4 font-mono text-xs">#${user.id}</td>
                         <td class="p-4 text-white font-bold">${user.email}</td>
                         <td class="p-4">
-                            ${user.slug 
-                                ? `<a href="/${user.slug}" target="_blank" class="text-blue-400 hover:underline flex items-center gap-1"><i class="bi bi-box-arrow-up-right"></i> /${user.slug}</a>` 
-                                : '<span class="text-gray-600">Not set</span>'}
+                            ${user.slug
+                        ? `<a href="/${user.slug}" target="_blank" class="text-blue-400 hover:underline flex items-center gap-1"><i class="bi bi-box-arrow-up-right"></i> /${user.slug}</a>`
+                        : '<span class="text-gray-600">Not set</span>'}
                         </td>
                         <td class="p-4">
                             <span class="${getPlanBadge(user.plan)}">${user.plan || 'starter'}</span>
@@ -235,34 +314,40 @@
                 `).join('');
 
                 document.getElementById('user-list').innerHTML = userHtml;
-                
+
                 // *** 2. ENTERPRISE ACCOUNTS TABLE & STATS ***
-                // Using simulated data until a new API (e.g., /api/admin/enterprises) is ready
-                const enterprises = enterpriseAccounts; 
-                
-                document.getElementById('enterprise-count').innerText = enterprises.length;
-                
-                const enterpriseHtml = enterprises.map(ent => `
-                    <tr class="border-b border-gray-800 hover:bg-white/5 transition">
-                        <td class="p-4 font-mono text-xs">#${ent.id}</td>
-                        <td class="p-4 text-white font-bold">${ent.companyName}</td>
-                        <td class="p-4">${ent.superAdminEmail}</td>
-                        <td class="p-4 text-center">${ent.totalStaff}</td>
-                        <td class="p-4 text-right flex justify-end gap-2">
-                            <button onclick="loginAsEnterprise(${ent.id})" title="Login as Enterprise Super Admin" class="bg-blue-500 text-white w-8 h-8 rounded flex items-center justify-center hover:bg-blue-600 transition">
-                                <i class="bi bi-buildings-fill"></i>
-                            </button>
-                            <button onclick="openManageEnterpriseModal(${ent.id})" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
-                                MANAGE
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
+                const entRes = await fetch('/api/admin/enterprises');
+                const enterprises = await entRes.json();
 
-                document.getElementById('enterprise-list').innerHTML = enterpriseHtml;
+                document.getElementById('enterprise-count').innerText = enterprises.length || 0;
+
+                if (!enterprises || !enterprises.length) {
+                    document.getElementById('enterprise-list').innerHTML = '<tr><td class="p-4" colspan="5">No enterprise accounts found.</td></tr>';
+                } else {
+                    const enterpriseHtml = enterprises.map(ent => `
+                        <tr class="border-b border-gray-800 hover:bg-white/5 transition">
+                            <td class="p-4 font-mono text-xs">#${ent.id}</td>
+                            <td class="p-4 text-white font-bold">${ent.company_name}</td>
+                            <td class="p-4">${ent.super_admin_email || 'N/A'}</td>
+                            <td class="p-4 text-center">
+                                <span class="text-white">${ent.staff_count}</span>
+                                <span class="text-gray-600 text-xs"> / ${ent.license_count}</span>
+                            </td>
+                            <td class="p-4 text-right flex justify-end gap-2">
+                                <button onclick="loginAsEnterprise(${ent.id})" title="Login as Enterprise Super Admin" class="bg-blue-500 text-white w-8 h-8 rounded flex items-center justify-center hover:bg-blue-600 transition">
+                                    <i class="bi bi-buildings-fill"></i>
+                                </button>
+                                <button onclick="openManageEnterpriseModal(${ent.id})" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
+                                    MANAGE
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('enterprise-list').innerHTML = enterpriseHtml;
+                }
 
 
-            } catch(e) {
+            } catch (e) {
                 console.error("Failed to load admin data:", e);
                 // Ensure users see loading failure message
                 document.getElementById('user-list').innerHTML = '<tr><td class="p-4 text-red-500" colspan="5">Failed to load individual users. Please check your deployment/API connectivity.</td></tr>';
@@ -271,8 +356,65 @@
         }
 
         // *** ENTERPRISE PLACEHOLDER FUNCTIONS ***
+        // *** ENTERPRISE FUNCTIONS ***
         function openCreateEnterpriseModal() {
-            alert("Functionality to create a new Enterprise Super Admin will be implemented here.");
+            document.getElementById('create-enterprise-modal').classList.remove('hidden');
+        }
+
+        function closeEntModal() {
+            document.getElementById('create-enterprise-modal').classList.add('hidden');
+        }
+
+        async function createEnterprise() {
+            const name = document.getElementById('ent-name').value;
+            const email = document.getElementById('ent-email').value;
+            const licenses = document.getElementById('ent-licenses').value;
+            const subLicenses = document.getElementById('ent-sub-licenses').value;
+            const password = document.getElementById('ent-password').value;
+
+            if (!name || !email || !password) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            const btn = document.getElementById('btn-create-ent');
+            const originalText = btn.innerText;
+            btn.innerText = "CREATING...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/admin/create-enterprise', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        company_name: name,
+                        super_admin_email: email,
+                        super_admin_password: password,
+                        total_licenses: licenses,
+                        sub_licenses: subLicenses
+                    })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert("Enterprise Created Successfully!");
+                    closeEntModal();
+                    loadAdminData();
+                    // Clear form
+                    document.getElementById('ent-name').value = '';
+                    document.getElementById('ent-email').value = '';
+                    document.getElementById('ent-password').value = '';
+                    document.getElementById('ent-sub-licenses').value = '0';
+                } else {
+                    alert("Error: " + (data.error || "Failed to create enterprise"));
+                }
+            } catch (e) {
+                alert("System Error: " + e.message);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
         }
 
         function openManageEnterpriseModal(id) {
@@ -280,16 +422,16 @@
         }
 
         async function loginAsEnterprise(id) {
-            if(!confirm("Are you sure you want to log in as Enterprise Super Admin #" + id + "? You will be signed out of Main Admin.")) return;
+            if (!confirm("Are you sure you want to log in as Enterprise Super Admin #" + id + "? You will be signed out of Main Admin.")) return;
             // NOTE: This will require a new API endpoint, e.g., /api/admin/login-as-enterprise
             console.log("Simulating login as Enterprise Super Admin ID:", id);
             // window.location.href = 'enterprise_super_admin_dashboard.html'; 
         }
-        
+
         // *** INDIVIDUAL USER FUNCTIONS (Uses existing backend files) ***
         async function loginAsUser(id) {
-            if(!confirm("Are you sure you want to log in as user #" + id + "? You will be signed out of Admin.")) return;
-            
+            if (!confirm("Are you sure you want to log in as user #" + id + "? You will be signed out of Admin.")) return;
+
             // NOTE: Uses existing backend file: api/admin/login-as.js
             try {
                 const res = await fetch('/api/admin/login-as', {
@@ -306,7 +448,7 @@
                 } else {
                     alert("Failed to generate token");
                 }
-            } catch(e) {
+            } catch (e) {
                 alert("Error: " + e.message);
             }
         }
@@ -324,7 +466,7 @@
         }
 
         async function saveUserChanges() {
-            if(!currentUserId) return;
+            if (!currentUserId) return;
             const newPlan = document.getElementById('plan-select').value;
             const btn = document.querySelector('#edit-modal button.bg-brand-red');
             const originalText = btn.innerText;
@@ -338,20 +480,20 @@
                     body: JSON.stringify({ user_id: currentUserId, plan: newPlan })
                 });
 
-                if(res.ok) {
+                if (res.ok) {
                     alert("Plan Updated Successfully!");
                     closeModal();
-                    loadAdminData(); 
+                    loadAdminData();
                 } else {
                     alert("Failed to update.");
                 }
-            } catch(e) { alert("Error"); }
+            } catch (e) { alert("Error"); }
             btn.innerText = originalText;
         }
 
         async function deleteUser() {
-            if(!confirm("Are you sure? This will delete the user and their card forever.")) return;
-            
+            if (!confirm("Are you sure? This will delete the user and their card forever.")) return;
+
             // NOTE: Uses existing backend file: api/admin/update-user.js
             try {
                 const res = await fetch('/api/admin/update-user', {
@@ -360,16 +502,17 @@
                     body: JSON.stringify({ user_id: currentUserId, action: 'delete' })
                 });
 
-                if(res.ok) {
+                if (res.ok) {
                     alert("User Deleted.");
                     closeModal();
                     loadAdminData();
                 } else {
                     alert("Failed to delete.");
                 }
-            } catch(e) { alert("Error"); }
+            } catch (e) { alert("Error"); }
         }
     </script>
 
 </body>
+
 </html>

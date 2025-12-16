@@ -1,10 +1,23 @@
+import { getUserIdFromToken } from '../../utils/auth';
+
 export async function onRequest(context) {
-    const { env } = context;
+    const { request, env } = context;
+
+    // 1. Authentication Check (Will now work due to fixed login.js/auth.js)
+    const currentUserId = await getUserIdFromToken(request, env);
+    if (!currentUserId) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
 
     try {
-        // Fetch users + their chosen slug from the cards table
+        // 2. Query including NEW Enterprise Columns
         const query = `
-            SELECT users.id, users.email, users.plan, users.created_at, cards.slug 
+            SELECT 
+                users.id, 
+                users.email, 
+                users.plan, 
+                users.created_at, 
+                cards.slug,
+                users.role,           
+                users.enterprise_id   
             FROM users 
             LEFT JOIN cards ON users.id = cards.user_id 
             ORDER BY users.id DESC
