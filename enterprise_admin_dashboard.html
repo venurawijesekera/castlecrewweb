@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Admin - Castle Cards</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { red: '#f00000', black: '#0a0a0a', dark: '#121212' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050505; color: white; }
+
+        /* Preloader Styles */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .hidden-element {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="p-8 max-w-7xl mx-auto">
+
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                ADMIN DASHBOARD
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-between items-center mb-10">
+        <h1 class="text-3xl font-black uppercase">
+            <span id="admin-name">Delegated Admin</span> <span class="text-brand-red">Console</span>
+        </h1>
+        <div class="flex gap-4">
+            <button onclick="loadDashboardData()" class="text-sm bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded">Refresh</button>
+            <a href="dashboard.html" class="text-sm bg-brand-red px-4 py-2 rounded font-bold">Log Out</a>
+        </div>
+    </div>
+
+    <div class="text-lg text-gray-500 mb-8">
+        Managing staff for <span id="company-name" class="text-white font-semibold">Acme Corp</span>.
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
+            <h3 class="text-gray-500 text-xs font-bold uppercase">Staff Under Management</h3>
+            <p id="managed-staff-count" class="text-4xl font-black mt-2 text-brand-red">...</p>
+        </div>
+        <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
+            <h3 class="text-gray-500 text-xs font-bold uppercase">Team Card Views</h3>
+            <p id="team-views" class="text-4xl font-black mt-2 text-blue-500">...</p>
+        </div>
+        <div class="bg-brand-dark p-6 rounded-xl border border-gray-800">
+            <h3 class="text-gray-500 text-xs font-bold uppercase">Team Leads Generated</h3>
+            <p id="team-leads" class="text-4xl font-black mt-2 text-green-500">...</p>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-black uppercase mb-6 mt-12">Managed <span class="text-blue-500">Staff Users</span></h2>
+
+    <div class="bg-brand-dark rounded-xl border border-gray-800 overflow-hidden">
+        <div class="p-4 bg-black flex justify-between items-center border-b border-gray-800">
+            <h3 class="text-white font-bold text-lg">Staff List</h3>
+            <button onclick="openCreateUserModal()" class="bg-brand-red text-white px-3 py-1.5 rounded text-sm font-bold hover:bg-red-700 transition">
+                + INVITE NEW STAFF USER
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-gray-400">
+                <thead class="bg-black text-white uppercase text-xs font-bold">
+                    <tr>
+                        <th class="p-4">ID</th>
+                        <th class="p-4">Email / Name</th>
+                        <th class="p-4">Link (Slug)</th> 
+                        <th class="p-4">Last Activity</th>
+                        <th class="p-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="staff-user-list">
+                    <tr><td class="p-4" colspan="5">Loading staff users...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="manage-user-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden-element flex items-center justify-center z-50">
+        <div class="bg-[#111] w-full max-w-sm p-6 rounded-2xl border border-gray-800 shadow-2xl relative">
+            <h2 class="text-xl font-bold mb-1">Manage Staff User</h2>
+            <p id="user-modal-email" class="text-xs text-gray-500 mb-6">staff@email.com</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-2">User Status</label>
+                    <select id="user-status-select" class="w-full bg-black border border-gray-700 rounded p-2 text-sm focus:border-brand-red focus:outline-none">
+                        <option value="active">Active</option>
+                        <option value="inactive">Suspend Account</option>
+                        <option value="reassign">Reassign Card</option>
+                    </select>
+                </div>
+
+                <button onclick="saveUserChanges()" class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">SAVE CHANGES</button>
+                
+                <div class="border-t border-gray-800 pt-4 mt-4">
+                    <button onclick="deleteStaffUser()" class="w-full text-red-500 text-xs font-bold hover:text-red-400">DELETE STAFF USER</button>
+                </div>
+            </div>
+            <button onclick="closeUserModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+        </div>
+    </div>
+
+    <script>
+        // *** SIMULATED DATA (Replace with API fetch calls) ***
+        let adminId = 201; 
+        let currentStaffUserId = null;
+
+        let simulatedStats = {
+            managed_staff_count: 18,
+            team_views: 4500,
+            team_leads: 85
+        };
+
+        let simulatedStaff = [
+            { id: 301, name: 'Staff User One', email: 'user1@acmecorp.com', slug: 'staff1-acme', last_activity: '2 days ago' },
+            { id: 305, name: 'Staff User Two', email: 'user5@acmecorp.com', slug: 'staff2-acme', last_activity: '4 hours ago' },
+            { id: 310, name: 'Staff User Three', email: 'user10@acmecorp.com', slug: 'staff3-acme', last_activity: '1 week ago' },
+        ];
+
+
+        // *** CORE DASHBOARD LOGIC ***
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Remove preloader
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                setTimeout(() => { preloader.style.display = 'none'; }, 700);
+            }, 500);
+            
+            // In a real app, these values would be loaded from the user's session token 
+            // after authenticating them as an Enterprise Admin.
+            document.getElementById('admin-name').innerText = 'John Admin';
+            document.getElementById('company-name').innerText = 'Acme Corp';
+            
+            loadDashboardData();
+        });
+
+
+        async function loadDashboardData() {
+            try {
+                // *** 1. LOAD ADMIN STATS (for their assigned team) ***
+                // New API endpoint needed: /api/enterprise/admin-stats?adminId=201
+                // const stats = await fetch(`/api/enterprise/admin-stats?adminId=${adminId}`).then(res => res.json()); 
+                const stats = simulatedStats; 
+                
+                document.getElementById('managed-staff-count').innerText = stats.managed_staff_count;
+                document.getElementById('team-views').innerText = stats.team_views.toLocaleString();
+                document.getElementById('team-leads').innerText = stats.team_leads.toLocaleString();
+
+                // *** 2. LOAD STAFF USERS ***
+                // New API endpoint needed: /api/enterprise/admin-users?adminId=201
+                // const staff = await fetch(`/api/enterprise/admin-users?adminId=${adminId}`).then(res => res.json()); 
+                const staff = simulatedStaff;
+                
+                const staffHtml = staff.map(user => `
+                    <tr class="border-b border-gray-800 hover:bg-white/5 transition">
+                        <td class="p-4 font-mono text-xs">#${user.id}</td>
+                        <td class="p-4 text-white font-bold">${user.name}<br><span class="text-xs text-gray-500">${user.email}</span></td>
+                        <td class="p-4">
+                            <a href="/${user.slug}" target="_blank" class="text-blue-400 hover:underline flex items-center gap-1"><i class="bi bi-box-arrow-up-right"></i> /${user.slug}</a>
+                        </td>
+                        <td class="p-4">${user.last_activity}</td>
+                        <td class="p-4 text-right">
+                            <button onclick="openManageUserModal(${user.id}, '${user.email}')" class="bg-brand-red/10 text-brand-red px-3 py-1.5 rounded text-xs font-bold hover:bg-brand-red/20 transition">
+                                MANAGE
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                document.getElementById('staff-user-list').innerHTML = staffHtml;
+
+            } catch(e) {
+                console.error("Failed to load Admin dashboard data:", e);
+                alert("Failed to load dashboard data. Check API.");
+            }
+        }
+
+
+        // *** STAFF MANAGEMENT MODAL LOGIC ***
+        function openCreateUserModal() {
+            alert("Functionality to invite a new staff user. The user will be automatically linked to this Admin's team.");
+        }
+
+        function openManageUserModal(id, email) {
+            currentStaffUserId = id;
+            document.getElementById('user-modal-email').innerText = email;
+            document.getElementById('manage-user-modal').classList.remove('hidden-element');
+            // In a real app, fetch current status and populate #user-status-select
+        }
+
+        function closeUserModal() {
+            document.getElementById('manage-user-modal').classList.add('hidden-element');
+            currentStaffUserId = null;
+        }
+        
+        async function saveUserChanges() {
+            if(!currentStaffUserId) return;
+            const newStatus = document.getElementById('user-status-select').value;
+            alert(`Simulating save changes for Staff User #${currentStaffUserId}. New Status: ${newStatus}. (Requires new API endpoint: /api/enterprise/update-staff-user)`);
+            closeUserModal();
+            loadDashboardData();
+        }
+
+        async function deleteStaffUser() {
+            if(!confirm("Are you sure? This will remove the staff user's access and delete their card.")) return;
+            alert(`Simulating permanent deletion of Staff User #${currentStaffUserId}. (Requires new API endpoint: /api/enterprise/update-staff-user)`);
+            closeUserModal();
+            loadDashboardData();
+        }
+    </script>
+
+</body>
+</html>

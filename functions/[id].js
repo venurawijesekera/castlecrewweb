@@ -7,7 +7,8 @@ export async function onRequest(context) {
     const systemPages = [
         'login', 'register', 'dashboard', 'editor', 'admin', 'profile',
         'settings', 'leads', 'analytics', 'cards', 'templates', // <-- ADDED 'templates' HERE
-        'pricing', 'order', 'index', 'card', 'assets', 'api', 'theme-realestate', 'theme-creative'
+        'pricing', 'order', 'index', 'card', 'assets', 'api', 'theme-realestate', 'theme-creative',
+        'sculptme', 'enterprise_super_admin_dashboard', 'enterprise_admin_dashboard'
     ];
 
     // 2. IGNORE SYSTEM FILES & EXTENSIONS

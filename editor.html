@@ -30,6 +30,13 @@
         select option { background-color: #0a0a0a; color: white; }
         .color-btn.selected { ring: 2px solid white; transform: scale(1.1); }
         
+        /* New styles for Enterprise restriction */
+        .input-locked {
+            cursor: not-allowed;
+            opacity: 0.6;
+            background-color: #1a1a1a !important;
+        }
+
         /* Preloader Styles (NEW) */
         #preloader.fade-out {
             opacity: 0;
@@ -89,6 +96,11 @@
 
         <div class="p-4 md:p-6 space-y-6 pb-32 md:flex-1 md:overflow-y-auto md:pb-6" id="editor-form">
             
+            <div id="enterprise-editor-alert" class="hidden bg-blue-900/30 border-l-4 border-blue-500 text-blue-100 p-4 rounded-xl">
+                <p class="font-bold">Managed Profile:</p>
+                <p class="text-sm">Your Castle Link, Job Title, and Company Name are controlled by your Enterprise Admin.</p>
+            </div>
+
             <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
                 <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
                     <i class="bi bi-palette-fill"></i> Design & Color
@@ -142,7 +154,7 @@
                     </div>
                     <div>
                         <input type="file" id="upload-avatar" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-                        <button onclick="document.getElementById('upload-avatar').click()" class="text-xs bg-white text-black font-bold px-3 py-1.5 rounded mb-1 hover:bg-gray-200 transition">
+                        <button onclick="document.getElementById('upload-avatar').click()" id="btn-change-photo" class="text-xs bg-white text-black font-bold px-3 py-1.5 rounded mb-1 hover:bg-gray-200 transition">
                             <i class="bi bi-camera"></i> Change Photo
                         </button>
                         <p class="text-[10px] text-gray-500">Max 5MB. Auto-compressed.</p>
@@ -223,6 +235,7 @@
         const countryOptions = countries.map(c => `<option value="${c.code}">${c.name} (${c.code})</option>`).join('');
 
         let phones = [], emails = [], originalSlug = "", debounceTimer, avatarBase64 = "";
+        let isEnterpriseStaff = false; // NEW GLOBAL FLAG
 
         async function loadData() {
             document.getElementById('wa-country').innerHTML = countryOptions;
@@ -234,28 +247,48 @@
                 const data = await res.json();
 
                 if (data.id) {
-                    // --- DYNAMIC TEMPLATE SELECTOR ---
-                    const select = document.getElementById('input-template');
-                    select.innerHTML = ""; // Clear existing
                     const plan = data.plan || 'starter';
-                    
-                    // Always show Signature
-                    select.add(new Option('Castle Signature', 'signature'));
-                    
-                    // Show Premium only if Plan is NOT Starter
-                    if (plan !== 'starter') {
-                        select.add(new Option('Eco Real Estate', 'realestate'));
-                        select.add(new Option('The Creative', 'creative'));
+                    const enterpriseId = data.enterprise_id;
+                    isEnterpriseStaff = !!enterpriseId; // Set global flag
+
+                    // --- ENTERPRISE RESTRICTION LOGIC ---
+                    if (isEnterpriseStaff) {
+                        document.getElementById('enterprise-editor-alert').classList.remove('hidden');
+                        
+                        // Fields to lock for Enterprise Staff
+                        const lockedFields = ['input-slug', 'input-job', 'input-company'];
+                        lockedFields.forEach(id => {
+                            const input = document.getElementById(id);
+                            input.setAttribute('disabled', 'true');
+                            input.classList.add('input-locked');
+                        });
+                        // Also lock slug validation check
+                        document.getElementById('input-slug').oninput = null;
+
+                        // Ensure Enterprise Staff get premium templates regardless of 'plan' field
+                        // (We assume 'enterprise' plans include premium templates)
+                        document.getElementById('input-template').innerHTML = ""; // Clear existing
+                        document.getElementById('input-template').add(new Option('Castle Signature', 'signature'));
+                        document.getElementById('input-template').add(new Option('Eco Real Estate', 'realestate'));
+                        document.getElementById('input-template').add(new Option('The Creative', 'creative'));
+                    } else {
+                        // INDIVIDUAL USER: Dynamic Template Selector based on plan (Original Logic)
+                        const select = document.getElementById('input-template');
+                        select.innerHTML = ""; // Clear existing
+                        select.add(new Option('Castle Signature', 'signature'));
+                        if (plan !== 'starter') {
+                            select.add(new Option('Eco Real Estate', 'realestate'));
+                            select.add(new Option('The Creative', 'creative'));
+                        }
                     }
-                    
-                    // Ensure the current selection is valid (Fallback to signature if their plan expired)
+                    // --- END ENTERPRISE RESTRICTION LOGIC ---
+
+                    // --- POPULATE FIELDS (Runs for all users) ---
                     const currentT = data.template_id || 'signature';
-                    // Check if currentT is actually in the dropdown we just built
+                    let select = document.getElementById('input-template');
                     let exists = false;
                     for(let i=0; i<select.options.length; i++) { if(select.options[i].value === currentT) exists = true; }
-                    
                     select.value = exists ? currentT : 'signature';
-                    // --------------------------------
 
                     document.getElementById('input-slug').value = data.slug || "";
                     originalSlug = data.slug || "";
@@ -410,7 +443,26 @@
         function updateEmail(i, val) { emails[i].value = val; updatePreview(); }
         function toggleEmail(i) { emails[i].show = !emails[i].show; renderEmails(); updatePreview(); }
         function deleteEmail(i) { emails.splice(i, 1); renderEmails(); updatePreview(); }
-        function validateSlug(input) { input.value = input.value.toLowerCase().replace(/[^a-z0-9-]/g, ''); clearTimeout(debounceTimer); const status = document.getElementById('slug-status'); status.innerHTML = '<i class="bi bi-hourglass-split animate-spin"></i>'; status.className = "absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"; debounceTimer = setTimeout(async () => { const slug = input.value; if(!slug || slug === originalSlug) { status.innerText = ""; return; } const res = await fetch(`/api/check-slug?slug=${slug}`); const d = await res.json(); status.innerHTML = d.available ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-x-circle-fill"></i>'; status.className = d.available ? "absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500" : "absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-red"; }, 500); }
+        function validateSlug(input) { 
+            // Enterprise check - if disabled, do nothing.
+            if (isEnterpriseStaff) return;
+            
+            input.value = input.value.toLowerCase().replace(/[^a-z0-9-]/g, ''); 
+            clearTimeout(debounceTimer); 
+            const status = document.getElementById('slug-status'); 
+            status.innerHTML = '<i class="bi bi-hourglass-split animate-spin"></i>'; 
+            status.className = "absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"; 
+            
+            debounceTimer = setTimeout(async () => { 
+                const slug = input.value; 
+                if(!slug || slug === originalSlug) { status.innerText = ""; return; } 
+                // NOTE: Uses existing backend file: api/check-slug.js
+                const res = await fetch(`/api/check-slug?slug=${slug}`); 
+                const d = await res.json(); 
+                status.innerHTML = d.available ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-x-circle-fill"></i>'; 
+                status.className = d.available ? "absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500" : "absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-red"; 
+            }, 500); 
+        }
 
         async function saveData() {
             const btn = document.querySelector('button.bg-brand-red'); btn.innerHTML = '<i class="bi bi-arrow-repeat animate-spin"></i> SAVING...'; btn.disabled = true;
@@ -423,29 +475,52 @@
                 const waCode = getVal('wa-country');
                 const waNum = getVal('social-whatsapp').replace(/\s/g, ''); 
                 const waFull = waNum ? (waCode + waNum) : "";
+                
+                // Get the current user data to ensure locked fields are NOT overwritten with disabled values
+                const currentData = await fetch('/api/card', { headers: { 'Authorization': token } }).then(res => res.json());
 
-                const payload = {
-                    slug: getVal('input-slug'),
-                    template_id: getVal('input-template'),
-                    full_name: getVal('input-name'),
-                    job_title: getVal('input-job'),
-                    company: getVal('input-company'),
-                    bio: getVal('input-bio'),
-                    website: getVal('input-website'),
-                    email: emails.find(e => e.show)?.value || "",
-                    phone: formattedPhones.find(p => p.show)?.value || "",
-                    phones: formattedPhones,
-                    emails: emails,
-                    avatar_url: avatarBase64,
-                    design: { theme: getVal('input-theme') || 'dark', accent: getVal('input-accent') || '#f00000' },
-                    socials: { whatsapp: waFull, instagram: getVal('social-instagram'), facebook: getVal('social-facebook'), linkedin: getVal('social-linkedin'), twitter: getVal('social-twitter') }
+                // Start with the current data
+                let payload = {
+                    ...currentData,
+                    slug: getVal('input-slug'), // This will be the current slug if locked
+                    job_title: getVal('input-job'), // This will be the current job if locked
+                    company: getVal('input-company'), // This will be the current company if locked
                 };
+                
+                // If fields were locked by Enterprise, use the existing values from the server fetch
+                if (isEnterpriseStaff) {
+                    payload.slug = currentData.slug;
+                    payload.job_title = currentData.job_title;
+                    payload.company = currentData.company;
+                }
 
+                // Overwrite with editable fields
+                payload.template_id = getVal('input-template');
+                payload.full_name = getVal('input-name');
+                payload.bio = getVal('input-bio');
+                payload.website = getVal('input-website');
+                payload.email = emails.find(e => e.show)?.value || "";
+                payload.phone = formattedPhones.find(p => p.show)?.value || "";
+                payload.phones = formattedPhones;
+                payload.emails = emails;
+                payload.avatar_url = avatarBase64;
+                payload.design = { theme: getVal('input-theme') || 'dark', accent: getVal('input-accent') || '#f00000' };
+                payload.socials = { whatsapp: waFull, instagram: getVal('social-instagram'), facebook: getVal('social-facebook'), linkedin: getVal('social-linkedin'), twitter: getVal('social-twitter') };
+                
+                // NOTE: Uses existing backend file: api/card.js
                 const res = await fetch('/api/card', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token }, body: JSON.stringify(payload) });
                 const result = await res.json();
-                if (res.ok) { alert("Saved!"); originalSlug = payload.slug; document.getElementById('btn-view-live').href = `/${payload.slug}`; } 
-                else { throw new Error(result.error); }
-            } catch (err) { alert("Save Failed: " + err.message); } 
+                
+                if (res.ok) { 
+                    alert("Saved!"); 
+                    originalSlug = payload.slug; 
+                    document.getElementById('btn-view-live').href = `/${payload.slug}`; 
+                } 
+                else { 
+                    // Handle server-side slug validation failure or other errors
+                    throw new Error(result.error); 
+                }
+            } catch (err) { alert("Publish Failed: " + err.message); } 
             finally { btn.innerHTML = '<i class="bi bi-cloud-upload"></i> PUBLISH'; btn.disabled = false; }
         }
 

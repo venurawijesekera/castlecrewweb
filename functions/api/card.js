@@ -1,16 +1,15 @@
+import { getUserIdFromToken } from '../utils/auth';
+
 export async function onRequest(context) {
     const { request, env } = context;
 
-    const token = request.headers.get("Authorization");
-    if (!token) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-
-    const session = await env.DB.prepare("SELECT user_id FROM sessions WHERE id = ?").bind(token).first();
-    if (!session) return new Response(JSON.stringify({ error: "Invalid Session" }), { status: 401 });
+    // Use the central utility for auth
+    const userId = await getUserIdFromToken(request, env);
+    if (!userId) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     
-    const userId = session.user_id;
-
     if (request.method === "GET") {
-        // UPDATED QUERY: Added 'users.created_at'
+        // SAFE QUERY: Uses the original simple JOIN to get card and plan data,
+        // without relying on the yet-to-be-created 'enterprises' table or 'role' column.
         const query = `
             SELECT cards.*, users.plan, users.created_at 
             FROM cards 
@@ -48,4 +47,6 @@ export async function onRequest(context) {
             return new Response(JSON.stringify({ success: false, error: e.message }), { status: 500 });
         }
     }
+    
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
 }

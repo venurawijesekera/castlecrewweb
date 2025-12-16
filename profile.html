@@ -130,12 +130,13 @@
                     <div id="plan-badge"
                         class="inline-block bg-gray-800 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
                         Loading...</div>
-
                     <div id="member-since" class="mt-2 text-xs text-gray-500">Member since ...</div>
+                    <div id="company-tag" class="hidden mt-2 text-xs text-blue-400 font-bold"></div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
                 <a href="leads.html"
                     class="bg-brand-dark border border-gray-800 p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-brand-red transition group">
                     <div
@@ -176,8 +177,8 @@
                         class="text-[10px] font-bold text-gray-400 group-hover:text-white uppercase tracking-wider">Settings</span>
                 </a>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
                 <div class="bg-brand-dark border border-gray-800 rounded-2xl p-8 relative overflow-hidden group">
                     <div class="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition">
                         <i class="bi bi-nfc text-6xl text-brand-red/20"></i>
@@ -276,6 +277,7 @@
             if (!token) return window.location.href = 'login.html';
 
             try {
+                // Fetch card data (plan, enterprise context)
                 const res = await fetch('/api/card', { headers: { 'Authorization': token } });
                 const data = await res.json();
 
@@ -284,25 +286,17 @@
                     return;
                 }
 
-                // UPDATED: Set Member Date
+                const plan = data.plan || 'starter';
+                const enterpriseId = data.enterprise_id;
+                const companyName = data.company_name;
+
+                // 1. Set Member Date
                 if (data.created_at) {
                     const date = new Date(data.created_at);
                     document.getElementById('member-since').innerText = `Member since ${date.getFullYear()}`;
                 }
 
-                const plan = data.plan || 'starter';
-                if (plan === 'starter') {
-                    document.getElementById('plan-badge').innerText = "STARTER PLAN";
-                    document.getElementById('plan-desc').innerText = "Basic features active. Upgrade to unlock all themes.";
-                    document.getElementById('plan-features').innerHTML = `<li class="flex gap-2"><i class="bi bi-check text-green-500"></i> Castle Signature Theme</li><li class="flex gap-2"><i class="bi bi-x text-red-500"></i> Premium Themes Locked</li>`;
-                } else {
-                    document.getElementById('plan-badge').innerText = plan.toUpperCase() + " MEMBER";
-                    document.getElementById('plan-badge').classList.add('bg-brand-red');
-                    document.getElementById('plan-desc').innerText = "You have full access to all features.";
-                    document.getElementById('plan-features').innerHTML = `<li class="flex gap-2"><i class="bi bi-check text-white"></i> All Themes Unlocked</li>`;
-                    document.getElementById('btn-upgrade').style.display = 'none';
-                }
-
+                // 2. Set Active Card Details
                 document.getElementById('profile-link').href = `/${data.slug}`;
                 document.getElementById('profile-link').innerText = `castlecrew.cc/${data.slug}`;
 
@@ -310,6 +304,47 @@
                 if (data.template_id === 'realestate') themeName = "Eco Real Estate";
                 if (data.template_id === 'creative') themeName = "The Creative";
                 document.getElementById('profile-theme').innerText = themeName;
+
+                // 3. Conditional UI for Plan/Subscription
+                const planBadge = document.getElementById('plan-badge');
+                const planDesc = document.getElementById('plan-desc');
+                const planFeatures = document.getElementById('plan-features');
+                const btnUpgrade = document.getElementById('btn-upgrade');
+                const companyTag = document.getElementById('company-tag');
+
+                if (enterpriseId) {
+                    // Enterprise Staff UI
+                    planBadge.innerText = "ENTERPRISE STAFF";
+                    planBadge.classList.add('bg-blue-600');
+                    planBadge.classList.remove('bg-gray-800');
+                    
+                    planDesc.innerText = `Managed under the ${companyName || 'Enterprise'} license. Full features unlocked.`;
+                    planFeatures.innerHTML = `<li class="flex gap-2 text-white"><i class="bi bi-check text-green-500"></i> Corporate License Active</li><li class="flex gap-2 text-white"><i class="bi bi-check text-green-500"></i> All Themes Unlocked</li>`;
+                    btnUpgrade.style.display = 'none'; // Hide upgrade button
+
+                    companyTag.innerText = `Managed by ${companyName}`;
+                    companyTag.classList.remove('hidden');
+                    
+                } else if (plan === 'starter') {
+                    // Individual Starter UI
+                    planBadge.innerText = "STARTER PLAN";
+                    planBadge.classList.remove('bg-brand-red');
+                    planBadge.classList.add('bg-gray-800');
+
+                    planDesc.innerText = "Basic features active. Upgrade to unlock all themes.";
+                    planFeatures.innerHTML = `<li class="flex gap-2"><i class="bi bi-check text-green-500"></i> Castle Signature Theme</li><li class="flex gap-2 text-red-500"><i class="bi bi-x"></i> Premium Themes Locked</li>`;
+                    btnUpgrade.style.display = 'block';
+
+                } else {
+                    // Individual Pro/Exec UI
+                    planBadge.innerText = plan.toUpperCase() + " MEMBER";
+                    planBadge.classList.add('bg-brand-red');
+                    planBadge.classList.remove('bg-gray-800');
+
+                    planDesc.innerText = "You have full access to all features.";
+                    planFeatures.innerHTML = `<li class="flex gap-2 text-white"><i class="bi bi-check text-green-500"></i> All Themes Unlocked</li>`;
+                    btnUpgrade.style.display = 'none';
+                }
 
             } catch (e) { console.error(e); }
         }

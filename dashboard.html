@@ -103,6 +103,7 @@
             <div>
                 <p class="text-sm font-bold" id="user-name">Loading...</p>
                 <p class="text-[10px] text-gray-500 uppercase" id="user-plan">...</p>
+                <p class="text-[10px] text-blue-400 uppercase hidden" id="company-display">...</p>
             </div>
         </div>
     </aside>
@@ -121,6 +122,11 @@
         </div>
 
         <div class="p-6 md:p-12 pb-32 md:pb-12 max-w-7xl mx-auto h-full md:overflow-y-auto">
+            
+            <div id="enterprise-alert" class="hidden bg-blue-900/30 border-l-4 border-blue-500 text-blue-100 p-4 mb-6 rounded-lg">
+                You are currently using the <span id="managed-company-name" class="font-bold"></span> corporate plan. Certain features may be centrally controlled by your delegated Admin.
+            </div>
+
             <div class="mb-10">
                 <h1 class="text-3xl md:text-4xl font-black uppercase mb-2">Choose Your <span
                         class="text-brand-red">Look</span></h1>
@@ -256,13 +262,52 @@
 
             try {
                 const res = await fetch('/api/card', { headers: { 'Authorization': token } });
+                
+                // Check for unauthorized access, especially important after admin impersonation
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+                
                 const data = await res.json();
+                
+                // --- NEW ENTERPRISE REDIRECTION LOGIC ---
+                // Assumes /api/card now returns: data.role, data.enterprise_id, data.company_name
+                const userRole = data.role; 
+                const enterpriseId = data.enterprise_id;
+
+                if (enterpriseId) {
+                    if (userRole === 'super_admin') {
+                        return window.location.href = 'enterprise_super_admin_dashboard.html';
+                    }
+                    if (userRole === 'admin') {
+                        return window.location.href = 'enterprise_admin_dashboard.html';
+                    }
+                }
+                // --- END REDIRECTION LOGIC ---
+
 
                 document.getElementById('user-name').innerText = data.full_name || "New User";
                 userPlan = data.plan || 'starter';
-                document.getElementById('user-plan').innerText = userPlan + " Plan";
+                
+                let planDisplay = userPlan;
+                
+                // UI Adjustment for Enterprise Staff User (role='staff')
+                if (enterpriseId) {
+                    planDisplay = "Enterprise Staff";
+                    document.getElementById('company-display').innerText = data.company_name || "Enterprise Account";
+                    document.getElementById('company-display').classList.remove('hidden');
+                    document.getElementById('enterprise-alert').classList.remove('hidden');
+                    document.getElementById('managed-company-name').innerText = data.company_name || "your company";
+                }
+                document.getElementById('user-plan').innerText = planDisplay + " Role";
+                
+                
+                // Lock Premium Templates if user is Starter AND not an Enterprise Staff Member
+                // Enterprise staff are assumed to have premium access via their company plan.
+                const isPremiumLocked = (userPlan === 'starter' && !enterpriseId);
 
-                if (userPlan === 'starter') {
+                if (isPremiumLocked) {
                     document.querySelectorAll('.btn-select[data-premium="true"]').forEach(btn => {
                         btn.innerText = "🔒 Upgrade";
                         btn.className = "flex-1 py-3 bg-gray-800 text-gray-500 rounded-lg text-sm font-bold cursor-not-allowed border border-gray-700";
@@ -276,6 +321,17 @@
                 const currentTemplate = data.template_id || 'signature';
                 const activeBtn = document.getElementById(`btn-${currentTemplate}`);
                 if (activeBtn) {
+                    // Reset all buttons to default state first
+                    document.querySelectorAll('.btn-select').forEach(btn => {
+                        // Only reset non-premium buttons or buttons that aren't locked
+                        if (btn.dataset.premium !== "true" || !isPremiumLocked) {
+                            btn.innerText = "Select";
+                            btn.className = "btn-select flex-1 py-3 bg-brand-red text-white rounded-lg text-sm font-bold hover:bg-red-700 transition";
+                            btn.onclick = (e) => selectTemplate(btn.id.replace('btn-', ''));
+                        }
+                    });
+
+                    // Set the currently active button
                     activeBtn.innerText = "Edit Template";
                     activeBtn.className = "flex-1 py-3 bg-white text-black border border-gray-200 rounded-lg text-sm font-bold hover:bg-gray-100 transition shadow-lg w-full";
                     activeBtn.onclick = () => window.location.href = 'editor.html';
@@ -283,30 +339,35 @@
 
             } catch (e) {
                 console.error(e);
+                // Fallback protection against bad tokens
+                 if (e.message.includes('401')) {
+                     logout();
+                 }
             }
         }
 
         async function selectTemplate(templateName) {
-            if (templateName !== 'signature' && userPlan === 'starter') return;
+            // Check if user is trying to select a premium template without rights
+            const btn = document.getElementById(`btn-${templateName}`);
+            if (btn.dataset.premium === "true" && userPlan === 'starter' && !data.enterprise_id) { 
+                return; // Guard is already handled in initDashboard, but this is a double check.
+            }
+            
             const token = localStorage.getItem('castle_token');
-            const btn = event.target;
             const oldText = btn.innerText;
             btn.innerText = "Applying...";
 
             try {
+                // Fetch current card data to preserve existing social links, etc.
                 const current = await fetch('/api/card', { headers: { 'Authorization': token } }).then(r => r.json());
+                
+                // Safely parse JSON arrays/objects
                 let socialsObj = {};
                 let phonesArr = [];
                 let emailsArr = [];
-                try {
-                    socialsObj = JSON.parse(current.socials || '{}');
-                } catch (e) {}
-                try {
-                    phonesArr = JSON.parse(current.phones || '[]');
-                } catch (e) {}
-                try {
-                    emailsArr = JSON.parse(current.emails || '[]');
-                } catch (e) {}
+                try { socialsObj = JSON.parse(current.socials || '{}'); } catch (e) {}
+                try { phonesArr = JSON.parse(current.phones || '[]'); } catch (e) {}
+                try { emailsArr = JSON.parse(current.emails || '[]'); } catch (e) {}
 
                 const payload = {
                     ...current,
@@ -316,6 +377,7 @@
                     template_id: templateName
                 };
 
+                // Send update request to /api/card (POST)
                 const res = await fetch('/api/card', {
                     method: 'POST',
                     headers: {
@@ -326,6 +388,7 @@
                 });
 
                 if (res.ok) window.location.href = 'editor.html';
+                
             } catch (e) {
                 alert("Error saving template");
             }
@@ -337,13 +400,11 @@
             window.location.href = 'index.html';
         }
 
-        // Preloader Logic (NEW)
+        // Preloader Logic 
         document.addEventListener('DOMContentLoaded', () => {
             const preloader = document.getElementById('preloader');
-            // Slight delay to ensure the animations are seen
             setTimeout(() => {
                 preloader.classList.add('fade-out');
-                // Remove from DOM after transition to clean up
                 setTimeout(() => {
                     preloader.style.display = 'none';
                 }, 700);

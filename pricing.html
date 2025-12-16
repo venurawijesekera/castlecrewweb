@@ -55,14 +55,12 @@
         }
 
         /* Utility class to hide sections */
-        /* IMPORTANT: Ensuring the class is applied via JS correctly controls visibility */
         .hidden-section {
             display: none !important; 
         }
 
-        /* Default state of Enterprise container is hidden in HTML/CSS, restored by JS when needed */
+        /* Default state of Personal container is visible */
         #personal-plans-container {
-             /* Explicitly set the correct display type for the grid */
              display: grid;
         }
     </style>
@@ -94,7 +92,7 @@
         </a>
     </nav>
 
-    <section class="py-20 px-6 text-center max-w-4xl mx-auto">
+    <section id="header-section" class="py-20 px-6 text-center max-w-4xl mx-auto">
         <h1 class="text-4xl md:text-6xl font-black uppercase mb-6">Choose Your <span
                 class="text-brand-red">Weapon</span></h1>
         <p class="text-gray-400 text-lg mb-10">Select the card material that suits your style. Use our free basic
@@ -391,6 +389,9 @@
             const personalToggle = document.getElementById('personal-toggle');
             const enterpriseToggle = document.getElementById('enterprise-toggle');
 
+            // Find the element to scroll to (the pricing toggle buttons)
+            const scrollTarget = document.getElementById('pricing-toggle');
+
             if (view === 'enterprise') {
                 // HIDE Personal grid, SHOW Enterprise content
                 personalContainer.classList.add('hidden-section');
@@ -413,6 +414,10 @@
                 enterpriseToggle.classList.remove('bg-brand-red', 'text-white', 'shadow-lg');
                 enterpriseToggle.classList.add('text-gray-400', 'hover:text-white');
             }
+
+            // Scroll to the top of the pricing toggle element (less distance than the whole section)
+            // Use 'start' block to move it to the top edge of the viewport
+            scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
         // Initial setup on load (default to Personal)
@@ -436,14 +441,10 @@
             // Set up click handlers for the toggles
             document.getElementById('personal-toggle').addEventListener('click', () => {
                 switchPricingView('personal');
-                // Optional: Scroll to the pricing section if it's far down
-                document.querySelector('.pb-24').scrollIntoView({ behavior: 'smooth' });
             });
 
             document.getElementById('enterprise-toggle').addEventListener('click', () => {
                 switchPricingView('enterprise');
-                // Scroll to the new container
-                document.querySelector('.pb-24').scrollIntoView({ behavior: 'smooth' }); // Scroll to the section containing the pricing info
             });
         });
     </script>

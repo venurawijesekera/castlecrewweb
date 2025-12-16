@@ -16,15 +16,14 @@ export async function onRequestPost(context) {
             return new Response(JSON.stringify({ error: "Email already taken" }), { status: 409 });
         }
 
-        // 3. Create User (Updated to save full_name immediately)
-        const result = await env.DB.prepare("INSERT INTO users (email, password, full_name) VALUES (?, ?, ?) RETURNING id")
+        // 3. Create User - FIX: Explicitly set plan='starter' and role='staff' (Requires columns to exist for new users)
+        const result = await env.DB.prepare("INSERT INTO users (email, password, full_name, plan, role) VALUES (?, ?, ?, 'starter', 'staff') RETURNING id")
             .bind(email, password, full_name)
             .first();
 
         const newUserId = result.id;
 
         // 4. Create a Default Card
-        // Generate a unique slug from name (e.g. "John Doe" -> "john-doe-452")
         const slugBase = full_name.toLowerCase().replace(/[^a-z0-9]/g, '-');
         const randomSuffix = Math.floor(Math.random() * 10000);
         const slug = `${slugBase}-${randomSuffix}`;

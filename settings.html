@@ -29,46 +29,14 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-
-        /* Preloader Styles (NEW) */
-        #preloader.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Glow animation for preloader logo (NEW) */
-        @keyframes pulse-glow {
-            0%, 100% {
-                opacity: 0.5;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.8;
-                transform: scale(1.1);
-            }
-        }
-
-        .animate-pulse-glow {
-            animation: pulse-glow 2s infinite ease-in-out;
-        }
+        
+        /* Custom classes for Enterprise management */
+        .hidden-enterprise { display: none !important; }
+        .input-disabled { cursor: not-allowed; opacity: 0.6; background-color: #1a1a1a !important; }
     </style>
 </head>
 
 <body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
-
-    <div id="preloader"
-        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
-        <div class="flex flex-col items-center gap-6">
-            <div class="relative w-16 h-16 flex items-center justify-center">
-                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
-                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
-            </div>
-            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
-                SETTINGS
-            </div>
-        </div>
-    </div>
 
     <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6 z-20">
         <div>
@@ -97,10 +65,12 @@
                         class="bi bi-gear-fill"></i> Settings</a>
             </nav>
         </div>
-        <div class="pt-6 border-t border-gray-800">
-            <button onclick="logout()"
-                class="flex items-center gap-2 text-gray-500 hover:text-white text-xs font-bold uppercase"><i
-                    class="bi bi-box-arrow-left"></i> Sign Out</button>
+        <div class="flex items-center gap-3 pt-6 border-t border-gray-800">
+            <div>
+                <p class="text-sm font-bold" id="user-name">Loading...</p>
+                <p class="text-[10px] text-gray-500 uppercase" id="user-plan">...</p>
+                <p class="text-[10px] text-blue-400 uppercase hidden" id="company-display">...</p>
+            </div>
         </div>
     </aside>
 
@@ -122,10 +92,16 @@
                 <h1 class="text-3xl font-black uppercase mb-2">Account <span class="text-brand-red">Settings</span></h1>
                 <p class="text-gray-400 text-sm">Manage your personal information and security.</p>
             </div>
+            
+            <div id="enterprise-alert" class="hidden-enterprise bg-blue-900/30 border-l-4 border-blue-500 text-blue-100 p-4 mt-8 rounded-lg">
+                <p class="font-bold">Enterprise Restriction Notice:</p>
+                <p class="text-sm">Your contact information, billing, shipping, and account deletion are centrally managed by your company's Admin.</p>
+            </div>
 
             <div class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
                 <h3 class="text-lg font-bold mb-6 flex items-center gap-2"><i class="bi bi-person-vcard"></i> Personal &
-                    Billing</h3>
+                    <span id="billing-title">Billing</span>
+                </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
                         <label class="block text-xs font-bold text-gray-500 mb-2">Full Name</label>
@@ -142,26 +118,27 @@
                         <input type="tel" id="set-phone"
                             class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
                     </div>
-                    <div class="md:col-span-2 border-t border-gray-800 my-2 pt-4">
+
+                    <div id="billing-address-section" class="md:col-span-2 border-t border-gray-800 my-2 pt-4">
                         <label class="block text-xs font-bold text-brand-red uppercase mb-4 tracking-widest">Billing
                             Address</label>
                     </div>
-                    <div class="md:col-span-2">
+                    <div id="bill-street-div" class="md:col-span-2">
                         <label class="block text-xs font-bold text-gray-500 mb-2">Street Address</label>
                         <input type="text" id="bill-street" placeholder="123 Main St"
                             class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
                     </div>
-                    <div>
+                    <div id="bill-city-div">
                         <label class="block text-xs font-bold text-gray-500 mb-2">City</label>
                         <input type="text" id="bill-city"
                             class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
                     </div>
-                    <div>
+                    <div id="bill-zip-div">
                         <label class="block text-xs font-bold text-gray-500 mb-2">Postal Code</label>
                         <input type="text" id="bill-zip"
                             class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
                     </div>
-                    <div class="md:col-span-2">
+                    <div id="bill-country-div" class="md:col-span-2">
                         <label class="block text-xs font-bold text-gray-500 mb-2">Country</label>
                         <input type="text" id="bill-country"
                             class="w-full bg-black border border-gray-700 rounded-lg px-4 py-3 text-sm focus:border-brand-red focus:outline-none transition text-white">
@@ -169,11 +146,11 @@
                 </div>
             </div>
 
-            <div class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
+            <div id="shipping-section" class="bg-brand-dark border border-gray-800 rounded-2xl p-6 md:p-8 mt-8">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold flex items-center gap-2"><i class="bi bi-truck"></i> Shipping Address
                     </h3>
-                    <button onclick="copyAddress()"
+                    <button onclick="copyAddress()" id="copy-address-btn"
                         class="text-xs bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded text-gray-300 transition flex items-center gap-2"><i
                             class="bi bi-copy"></i> Copy from Billing</button>
                 </div>
@@ -200,7 +177,7 @@
                     </div>
                 </div>
                 <div class="mt-6 text-right">
-                    <button onclick="saveSettings()"
+                    <button onclick="saveSettings()" id="save-settings-btn"
                         class="bg-white text-black font-bold px-6 py-3 rounded-lg text-sm hover:bg-gray-200 transition">SAVE
                         DETAILS</button>
                 </div>
@@ -226,6 +203,13 @@
                         class="bg-brand-red text-white font-bold px-6 py-3 rounded-lg text-sm hover:bg-red-700 transition">UPDATE
                         PASSWORD</button>
                 </div>
+            </div>
+            
+            <div id="danger-zone-section" class="bg-brand-dark border border-red-800 rounded-2xl p-6 md:p-8 mt-8 hidden-enterprise">
+                <h3 class="text-lg font-bold mb-6 text-red-500 flex items-center gap-2"><i class="bi bi-exclamation-diamond-fill"></i> Danger Zone
+                </h3>
+                <p class="text-sm text-gray-400 mb-4">Permanently delete your account and all associated data, including your card profile and leads.</p>
+                <button onclick="deleteAccount()" class="bg-red-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-700 transition text-sm">Delete My Account</button>
             </div>
         </div>
     </main>
@@ -266,15 +250,12 @@
     </div>
 
     <script>
+        let userData = {}; // Stores user details from API
+
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                menu.classList.add('flex');
-            } else {
-                menu.classList.add('hidden');
-                menu.classList.remove('flex');
-            }
+            if (menu.classList.contains('hidden')) { menu.classList.remove('hidden'); menu.classList.add('flex'); }
+            else { menu.classList.add('hidden'); menu.classList.remove('flex'); }
         }
 
         async function loadSettings() {
@@ -282,34 +263,91 @@
             if (!token) return window.location.href = 'login.html';
 
             try {
-                const res = await fetch('/api/settings', { headers: { 'Authorization': token } });
-                const data = await res.json();
+                // 1. Fetch user settings (contact, address)
+                const settingsRes = await fetch('/api/settings', { headers: { 'Authorization': token } });
+                // 2. Fetch card data (plan, enterprise context)
+                const cardRes = await fetch('/api/card', { headers: { 'Authorization': token } });
 
-                if (data.id) {
-                    document.getElementById('set-name').value = data.full_name || "";
-                    document.getElementById('set-email').value = data.email || "";
-                    document.getElementById('set-phone').value = data.phone || "";
+                if (settingsRes.status === 401 || cardRes.status === 401) { logout(); return; }
+                if (!settingsRes.ok) throw new Error('Failed to fetch user settings.');
 
-                    let bill = {};
-                    try { bill = JSON.parse(data.address || '{}'); } catch (e) { bill = { street: data.address || "" }; }
-                    document.getElementById('bill-street').value = bill.street || "";
-                    document.getElementById('bill-city').value = bill.city || "";
-                    document.getElementById('bill-zip').value = bill.zip || "";
-                    document.getElementById('bill-country').value = bill.country || "";
+                userData = await settingsRes.json();
+                const cardData = await cardRes.json();
+                
+                const userPlan = cardData.plan || 'starter';
+                const enterpriseId = cardData.enterprise_id;
+                const companyName = cardData.company_name;
 
-                    const ship = JSON.parse(data.shipping_info || '{}');
-                    document.getElementById('ship-street').value = ship.street || "";
-                    document.getElementById('ship-city').value = ship.city || "";
-                    document.getElementById('ship-zip').value = ship.zip || "";
-                    document.getElementById('ship-country').value = ship.country || "";
+                // 3. Populate UI Fields
+                document.getElementById('set-name').value = userData.full_name || "";
+                document.getElementById('set-email').value = userData.email || "";
+                document.getElementById('set-phone').value = userData.phone || "";
+                
+                // Address parsing logic (as per original code)
+                let bill = {};
+                try { bill = JSON.parse(userData.address || '{}'); } catch (e) { bill = { street: userData.address || "" }; }
+                document.getElementById('bill-street').value = bill.street || "";
+                document.getElementById('bill-city').value = bill.city || "";
+                document.getElementById('bill-zip').value = bill.zip || "";
+                document.getElementById('bill-country').value = bill.country || "";
+
+                const ship = JSON.parse(userData.shipping_info || '{}');
+                document.getElementById('ship-street').value = ship.street || "";
+                document.getElementById('ship-city').value = ship.city || "";
+                document.getElementById('ship-zip').value = ship.zip || "";
+                document.getElementById('ship-country').value = ship.country || "";
+
+                // 4. Conditional UI (Enterprise restriction)
+                if (enterpriseId) {
+                    // Show alert banner
+                    document.getElementById('enterprise-alert').classList.remove('hidden-enterprise');
+                    
+                    // Update sidebar/menu display
+                    document.getElementById('user-plan').innerText = "Enterprise Staff Role";
+                    document.getElementById('company-display').innerText = companyName || "Enterprise Account";
+                    document.getElementById('company-display').classList.remove('hidden');
+
+                    // Disable/lock personal fields (Full Name, Email, Phone)
+                    ['set-name', 'set-email', 'set-phone'].forEach(id => {
+                        const input = document.getElementById(id);
+                        input.setAttribute('disabled', 'true');
+                        input.classList.add('input-disabled');
+                    });
+                    
+                    // Hide all billing, shipping, save buttons, and danger zone
+                    document.getElementById('shipping-section').classList.add('hidden-enterprise');
+                    document.getElementById('danger-zone-section').classList.add('hidden-enterprise');
+                    
+                    // Hide individual billing fields 
+                    document.getElementById('billing-title').innerText = "Contact Info (Locked)";
+                    ['billing-address-section', 'bill-street-div', 'bill-city-div', 'bill-zip-div', 'bill-country-div'].forEach(id => {
+                        const div = document.getElementById(id);
+                        if(div) div.classList.add('hidden-enterprise');
+                    });
+                    
+                } else {
+                    // Individual User: Display plan normally
+                    document.getElementById('user-plan').innerText = userPlan + " Plan";
+                    document.getElementById('billing-title').innerText = "Billing";
                 }
-            } catch (e) { console.error(e); }
+
+            } catch (e) { 
+                console.error(e); 
+            }
         }
 
         async function saveSettings() {
             const token = localStorage.getItem('castle_token');
             const btn = event.target;
+            const originalText = btn.innerText;
             btn.innerText = "SAVING...";
+
+            // Enterprise Staff check: If shipping section is hidden, assume fields are locked and bail out
+            if (document.getElementById('shipping-section').classList.contains('hidden-enterprise')) {
+                alert("As an Enterprise Staff user, personal details and addresses are managed by your company.");
+                btn.innerText = originalText;
+                return;
+            }
 
             const billingData = {
                 street: document.getElementById('bill-street').value,
@@ -318,32 +356,56 @@
                 country: document.getElementById('bill-country').value
             };
 
+            const shippingData = {
+                street: document.getElementById('ship-street').value,
+                city: document.getElementById('ship-city').value,
+                zip: document.getElementById('ship-zip').value,
+                country: document.getElementById('ship-country').value
+            };
+
             const payload = {
                 full_name: document.getElementById('set-name').value,
                 email: document.getElementById('set-email').value,
                 phone: document.getElementById('set-phone').value,
-                address: JSON.stringify(billingData),
-                shipping_info: {
-                    street: document.getElementById('ship-street').value,
-                    city: document.getElementById('ship-city').value,
-                    zip: document.getElementById('ship-zip').value,
-                    country: document.getElementById('ship-country').value
-                }
+                address: JSON.stringify(billingData), // Used by api/settings.js
+                shipping_info: shippingData // Used by api/settings.js
             };
+            
+            // Also update the full_name on the card itself (using api/card.js)
+            const cardUpdatePayload = { ...userData, full_name: payload.full_name };
+
 
             try {
-                const res = await fetch('/api/settings', {
+                // 1. Update user settings (full_name, phone, addresses)
+                const settingsRes = await fetch('/api/settings', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': token },
                     body: JSON.stringify(payload)
                 });
-                if (res.ok) alert("Settings Saved Successfully!");
-                else alert("Failed to save settings.");
+                
+                // 2. Update card (full_name)
+                const cardRes = await fetch('/api/card', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                    body: JSON.stringify(cardUpdatePayload)
+                });
+
+                if (settingsRes.ok && cardRes.ok) {
+                    alert("Settings Saved Successfully!");
+                } else {
+                    const error = await settingsRes.json().catch(() => ({ error: 'Unknown save failure.' }));
+                    alert(`Failed to save settings: ${error.error}`);
+                }
             } catch (e) { alert("Error saving."); }
-            btn.innerText = "SAVE DETAILS";
+            btn.innerText = originalText;
         }
 
         function copyAddress() {
+            // Enterprise Staff check
+            if (document.getElementById('shipping-section').classList.contains('hidden-enterprise')) {
+                 alert("Address management is restricted by your company.");
+                 return;
+            }
             document.getElementById('ship-street').value = document.getElementById('bill-street').value;
             document.getElementById('ship-city').value = document.getElementById('bill-city').value;
             document.getElementById('ship-zip').value = document.getElementById('bill-zip').value;
@@ -355,43 +417,46 @@
             const nw = document.getElementById('pwd-new').value;
             const cnf = document.getElementById('pwd-confirm').value;
             if (!cur || !nw) return alert("Please fill in passwords");
-            if (nw !== cnf) return alert("Passwords do not match");
+            if (nw !== cnf) return alert("New passwords do not match");
 
             const token = localStorage.getItem('castle_token');
+            const pwdBtn = event.target;
+            const originalText = pwdBtn.innerText;
+            pwdBtn.innerText = "UPDATING...";
+
             try {
+                // NOTE: Uses existing backend file: api/change-password.js
                 const res = await fetch('/api/change-password', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': token },
                     body: JSON.stringify({ current_password: cur, new_password: nw })
                 });
                 const data = await res.json();
-                if (res.ok) {
-                    alert("Password Changed!");
-                    // Clear fields
-                    document.getElementById('pwd-current').value = '';
-                    document.getElementById('pwd-new').value = '';
-                    document.getElementById('pwd-confirm').value = '';
-                    // Force re-login
-                    logout();
-                } else { alert(data.error); }
-            } catch (e) { alert("Error"); }
+                if (res.ok) { 
+                    alert("Password Changed! Please log in again."); 
+                    logout(); 
+                } else { 
+                    alert(data.error); 
+                }
+            } catch (e) { alert("Error changing password."); }
+            pwdBtn.innerText = originalText;
+        }
+
+        function deleteAccount() {
+            // Enterprise Staff check
+            if (document.getElementById('danger-zone-section').classList.contains('hidden-enterprise')) {
+                 alert("Account deletion is managed by your company's Super Admin.");
+                 return;
+            }
+            if (confirm("WARNING: This action is permanent and cannot be undone. Are you absolutely sure you want to delete your account?")) {
+                // NOTE: Requires a dedicated API endpoint for user deletion.
+                alert("Simulating account deletion...");
+                // After successful API deletion, call: logout();
+            }
         }
 
         function logout() { localStorage.removeItem('castle_token'); window.location.href = 'index.html'; }
-
-        // Preloader Logic (NEW)
-        document.addEventListener('DOMContentLoaded', () => {
-            const preloader = document.getElementById('preloader');
-            // Slight delay to ensure the animations are seen
-            setTimeout(() => {
-                preloader.classList.add('fade-out');
-                // Remove from DOM after transition to clean up
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                }, 700);
-            }, 800);
-        });
-
+        
         loadSettings();
     </script>
 </body>

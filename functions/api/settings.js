@@ -1,15 +1,12 @@
+import { getUserIdFromToken } from '../utils/auth';
+
 export async function onRequest(context) {
     const { request, env } = context;
 
-    // Auth Check
-    const token = request.headers.get("Authorization");
-    if (!token) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-
-    const session = await env.DB.prepare("SELECT user_id FROM sessions WHERE id = ?").bind(token).first();
-    if (!session) return new Response(JSON.stringify({ error: "Invalid Session" }), { status: 401 });
+    // Use the central utility for auth
+    const userId = await getUserIdFromToken(request, env);
+    if (!userId) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     
-    const userId = session.user_id;
-
     // --- GET SETTINGS ---
     if (request.method === "GET") {
         // Fetch user details (excluding password)
