@@ -8,8 +8,15 @@ export async function GET(req: NextRequest) {
         const db = getDB();
 
         // 1. Authentication
-        const cookie = req.cookies.get("castle_token"); // Changed from session_token to castle_token per new auth
-        const sessionToken = cookie?.value;
+        // 1. Authentication
+        let sessionToken = req.cookies.get("castle_token")?.value;
+
+        if (!sessionToken) {
+            const authHeader = req.headers.get("Authorization");
+            if (authHeader) {
+                sessionToken = authHeader.replace("Bearer ", "");
+            }
+        }
 
         if (!sessionToken) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

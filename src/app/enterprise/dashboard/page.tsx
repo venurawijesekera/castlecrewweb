@@ -12,7 +12,17 @@ export default function EnterpriseDashboard() {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const res = await fetch('/api/enterprise/dashboard');
+                const token = localStorage.getItem("castle_token");
+                if (!token) {
+                    router.push('/login');
+                    return;
+                }
+
+                const res = await fetch('/api/enterprise/dashboard', {
+                    headers: {
+                        'Authorization': token
+                    }
+                });
                 if (!res.ok) {
                     if (res.status === 401) router.push('/login');
                     return;
