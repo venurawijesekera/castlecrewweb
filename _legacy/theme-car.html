@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Car Finance Offer</title>
+    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    boxShadow: { 'card': '0 20px 40px -10px rgba(0,0,0,0.1)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .car-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Preloader -->
+    <div id="preloader"
+        class="fixed inset-0 bg-white flex items-center justify-center z-50 transition-opacity duration-500">
+        <div class="animate-pulse flex flex-col items-center">
+            <div class="w-12 h-12 bg-gray-200 rounded-full mb-4"></div>
+            <div class="h-4 w-32 bg-gray-200 rounded"></div>
+        </div>
+    </div>
+
+    <!-- Floating Social Dock (Fixed Bottom) -->
+    <div id="p-social-dock" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-4 z-50">
+        <!-- Icons injected by JS -->
+    </div>
+
+    <!-- Main Container -->
+    <div id="card-container" class="opacity-0 transition-opacity duration-700 w-full max-w-sm mb-24">
+        <div class="bg-white rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden relative">
+
+            <!-- Hero Image Part -->
+            <div class="relative h-72 bg-gray-100">
+                <div class="swiper mySwiper w-full h-full">
+                    <div class="swiper-wrapper" id="p-gallery-wrapper">
+                        <div class="swiper-slide"><img id="p-image" src="assets/img/logo.png"
+                                class="w-full h-full object-cover"></div>
+                    </div>
+                    <div class="swiper-pagination !bottom-2"></div>
+                </div>
+            </div>
+            <!-- Enterprise Logo -->
+            <img id="p-enterprise-logo" class="absolute top-4 right-4 w-14 h-14 object-contain z-20 hidden">
+
+
+            <!-- Details Part -->
+            <div class="p-6 relative">
+
+
+
+                <div class="mb-6">
+                    <h1 id="p-title" class="text-2xl font-black text-gray-900 leading-tight mb-1">Loading...</h1>
+                    <p id="p-subtitle" class="text-gray-500 font-medium">...</p>
+                    <p id="p-price" class="text-xl font-bold text-[#f00000] mt-1 hidden">...</p>
+                </div>
+
+                <!-- Floating Paint Dot (New) -->
+                <div id="p-paint-dot"
+                    class="w-10 h-10 rounded-full shadow-lg border-2 border-white absolute top-6 right-6 hidden"></div>
+
+                <div class="mb-8">
+                    <p id="p-desc" class="text-gray-400 text-sm leading-relaxed">...</p>
+                </div>
+
+                <!-- Specs Grid -->
+                <div id="specs-grid" class="flex flex-wrap justify-center gap-2 mb-6 text-center hidden">
+                    <div class="bg-gray-50 rounded-lg p-2 w-[30%]">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Year</p>
+                        <p id="p-year" class="text-xs font-bold text-gray-900">-</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-2 w-[30%]">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Mileage</p>
+                        <p id="p-mileage" class="text-xs font-bold text-gray-900">-</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-2 w-[30%]" id="box-condition">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Condition</p>
+                        <p id="p-condition" class="text-xs font-bold text-gray-900">-</p>
+                    </div>
+
+                    <!-- New Specs -->
+                    <div class="bg-gray-50 rounded-lg p-2 w-[30%] hidden" id="box-trans">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Trans.</p>
+                        <p id="p-trans" class="text-xs font-bold text-gray-900">-</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-2 w-[30%] hidden" id="box-body">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Body</p>
+                        <p id="p-body" class="text-xs font-bold text-gray-900">-</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-2 w-[30%] hidden" id="box-fuel">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Fuel</p>
+                        <p id="p-fuel" class="text-xs font-bold text-gray-900">-</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-2 w-[30%] hidden" id="box-engine">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Engine</p>
+                        <p id="p-engine" class="text-xs font-bold text-gray-900">-</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-2 w-[30%] hidden" id="box-trim">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Trim</p>
+                        <p id="p-trim" class="text-xs font-bold text-gray-900">-</p>
+                    </div>
+                </div>
+
+                <!-- Location Link -->
+                <div id="p-location-container" class="mb-6 text-center hidden">
+                    <a id="p-location-link" href="#" target="_blank"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-50 rounded-full text-xs font-bold text-gray-700 hover:bg-gray-100 transition">
+                        <i class="bi bi-geo-alt-fill text-brand-red"></i> <span id="p-location-name"></span>
+                    </a>
+                </div>
+
+                <!-- Contact/Broker Footer -->
+                <div class="mt-8 pt-6 border-t border-gray-100 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 overflow-hidden">
+                        <!-- This could be the broker's avatar -->
+                        <img id="broker-avatar" src="assets/img/logo.png" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Financing Agent</p>
+                        <p id="broker-name" class="text-xs font-bold text-gray-900">...</p>
+                    </div>
+                    <div class="ml-auto flex gap-2">
+                        <a id="btn-call" href="#"
+                            class="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-black hover:text-white transition"><i
+                                class="bi bi-telephone-fill"></i></a>
+                        <a id="btn-email" href="#"
+                            class="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition"><i
+                                class="bi bi-envelope-fill"></i></a>
+                        <a id="btn-wa" href="#" target="_blank"
+                            class="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-[#25D366] hover:text-white transition"><i
+                                class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Gatekeeper Modal for Product Cards (Added) -->
+    <div id="gate-modal" class="fixed inset-0 z-[60] flex items-center justify-center px-4 hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-md"></div>
+        <div
+            class="bg-[#111] w-full max-w-sm rounded-2xl border border-gray-800 p-6 relative z-10 shadow-2xl animate-fade-in-up text-white">
+            <button onclick="toggleGate(false)" class="absolute top-4 right-4 text-gray-500 hover:text-white"><i
+                    class="bi bi-x-lg"></i></button>
+
+            <div class="text-center mb-6">
+                <div class="inline-block p-3 rounded-full bg-brand-red/10 text-brand-red mb-3">
+                    <i class="bi bi-person-lines-fill text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-black uppercase mb-1">Welcome!</h2>
+                <p class="text-gray-400 text-xs">Please share your details to view this offer.</p>
+            </div>
+
+            <form onsubmit="submitGate(event)" class="space-y-4">
+                <div class="relative"><i
+                        class="bi bi-person absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                        type="text" id="gate-name" required placeholder="Your Name"
+                        class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                </div>
+                <div class="relative"><i
+                        class="bi bi-telephone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                        type="tel" id="gate-phone" required placeholder="Phone Number"
+                        class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                </div>
+                <div class="relative"><i class="bi bi-chat-text absolute left-3 top-3 text-gray-500"></i><textarea
+                        id="gate-msg" rows="2" placeholder="Short Message (Optional)"
+                        class="w-full bg-black border border-gray-800 rounded-lg px-4 py-3 pl-9 text-sm focus:border-brand-red focus:outline-none text-white"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-brand-red text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">CONTINUE</button>
+            </form>
+            <button onclick="toggleGate(false)"
+                class="w-full text-center text-xs text-gray-600 mt-4 hover:text-white transition">Skip for
+                now</button>
+        </div>
+    </div>
+
+    <!-- Lead Modal -->
+    <div id="exchange-modal"
+        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center px-0 sm:px-4 hidden">
+        <div onclick="toggleModal(false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity">
+        </div>
+        <div
+            class="bg-white w-full sm:max-w-sm sm:rounded-3xl rounded-t-3xl p-6 relative z-10 shadow-2xl animate-fade-in-up">
+            <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6 sm:hidden"></div>
+
+            <h2 class="text-xl font-black text-gray-900 mb-1">Get Finance Quote</h2>
+            <p class="text-gray-400 text-xs mb-6">Leave your details for a personalized offer.</p>
+
+            <form onsubmit="submitLead(event)" class="space-y-3">
+                <input type="text" id="lead-name" required placeholder="Your Name"
+                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm focus:border-black focus:outline-none transition">
+                <input type="tel" id="lead-phone" required placeholder="Phone Number"
+                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm focus:border-black focus:outline-none transition">
+                <button type="submit"
+                    class="w-full bg-black text-white font-bold py-4 rounded-xl hover:bg-gray-900 transition shadow-lg active:scale-95">Request
+                    Call Back</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        let currentSlug = "";
+
+        // --- TRACKING FUNCTION ---
+        async function trackEvent(type) {
+            if (!currentSlug) return;
+            let model = "";
+            try {
+                if (navigator.userAgentData) {
+                    const hints = await navigator.userAgentData.getHighEntropyValues(['model']);
+                    if (hints.model) model = hints.model;
+                }
+            } catch (e) { }
+
+            fetch('/api/analytics/track', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug: currentSlug, type: type, model: model })
+            }).catch(e => console.log('Analytics error:', e));
+        }
+
+        window.addEventListener('load', async () => {
+            let slug = window.location.pathname.replace(/^\/+|\/+$/g, '');
+            if (!slug || slug === 'theme-car') {
+                const urlParams = new URLSearchParams(window.location.search);
+                slug = urlParams.get('id');
+            }
+            if (!slug) return;
+            currentSlug = slug;
+
+            // TRACK VISIT
+            trackEvent('visit');
+
+            try {
+                // Fetch Data
+                const response = await fetch(`/api/public/${slug}`);
+                const data = await response.json();
+
+                if (data.error) throw new Error(data.error);
+
+                // Populate Fields
+                // MAPPING: Full Name -> Title (Car Model), Job -> Subtitle (Trim), Company -> Price/Mo
+                // FIX: Prioritize full_name and bio as they are the active fields updated by the editor
+                document.getElementById('p-title').innerText = data.full_name || data.title || "Untitled Product";
+
+                // Get Design Specs first to use Brand
+                let design = {};
+                try { design = JSON.parse(data.design || '{}'); } catch (e) { }
+                const specs = design.specs || {};
+
+                document.getElementById('p-subtitle').innerText = specs.brand || data.job_title || "Special Edition";
+                document.getElementById('p-desc').innerText = data.bio || data.description || "No description available.";
+
+                // Price
+                if (data.company) {
+                    document.getElementById('p-price').innerText = data.company;
+                    document.getElementById('p-price').classList.remove('hidden');
+                } else {
+                    document.getElementById('p-price').classList.add('hidden');
+                }
+
+
+                // Paint Color Dot
+                if (specs.paint) {
+                    const dot = document.getElementById('p-paint-dot');
+                    dot.style.backgroundColor = specs.paint;
+                    dot.classList.remove('hidden');
+                }
+                // (Badge element removed)
+
+                // Populate Specs Grid
+                const hasSpecs = specs.year || specs.mileage || specs.condition || specs.trim || specs.transmission || specs.body || specs.fuel || specs.engine;
+
+                if (hasSpecs) {
+                    document.getElementById('specs-grid').classList.remove('hidden');
+
+                    const setSpec = (id, boxId, val) => {
+                        const el = document.getElementById(id);
+                        const box = document.getElementById(boxId);
+                        if (val) {
+                            el.innerText = val;
+                            if (box) box.classList.remove('hidden');
+                            else if (el.parentElement) el.parentElement.classList.remove('hidden'); // Fallback
+                        } else {
+                            if (box) box.classList.add('hidden');
+                        }
+                    };
+
+                    // Standard (Box ID was implied or needs adding? I added box-condition above, assume others exist? No, only new ones have IDs. Old ones relied on static display?)
+                    // The old code assumed they exist. I will verify IDs. 
+                    // To be safe I'll just set innerText for old ones and only toggle new ones.
+
+                    document.getElementById('p-year').innerText = specs.year || "-";
+                    document.getElementById('p-mileage').innerText = specs.mileage || "-";
+                    document.getElementById('p-condition').innerText = specs.condition || "-";
+
+                    // Actually, if year is missing, we might want to hide it too? 
+                    // Existing behavior showed "-" default. I'll maintain that for Year/Mileage/Condition.
+
+                    setSpec('p-trans', 'box-trans', specs.transmission);
+                    setSpec('p-body', 'box-body', specs.body);
+                    setSpec('p-fuel', 'box-fuel', specs.fuel);
+                    setSpec('p-engine', 'box-engine', specs.engine);
+                    setSpec('p-trim', 'box-trim', specs.trim);
+                }
+
+                // Location Info
+                if (specs.locationName) {
+                    document.getElementById('p-location-container').classList.remove('hidden');
+                    document.getElementById('p-location-name').innerText = specs.locationName;
+                    document.getElementById('p-location-link').href = specs.locationUrl || '#';
+                }
+
+                // Enterprise Logo
+                if (data.enterprise_logo) {
+                    const elogo = document.getElementById('p-enterprise-logo');
+                    elogo.src = data.enterprise_logo;
+                    elogo.classList.remove('hidden');
+                }
+
+
+                // Agent Info
+                if (specs.agent) {
+                    document.getElementById('broker-avatar').src = specs.agent.image || "assets/img/logo.png";
+                    document.getElementById('broker-name').innerText = specs.agent.name || "Verified Agent";
+                } else {
+                    document.getElementById('broker-name').innerText = "Verified Agent";
+                }
+
+                // Images
+                // Images / Gallery
+                let images = [];
+                try {
+                    // Fix: Handle string or object, and ensure array
+                    let rawGallery = data.gallery;
+                    if (typeof rawGallery === 'string') rawGallery = JSON.parse(rawGallery);
+                    if (Array.isArray(rawGallery)) {
+                        images = rawGallery.filter(img => img);
+                    }
+                } catch (e) {
+                    console.error("Gallery Parse Error", e);
+                }
+
+                if (images.length === 0 && data.avatar_url) images.push(data.avatar_url);
+
+                if (images.length > 0) {
+                    // Export for global access
+                    window.galleryImages = images;
+                    const wrapper = document.getElementById('p-gallery-wrapper');
+                    wrapper.innerHTML = images.map((src, i) => `<div class="swiper-slide"><img src="${src}" class="w-full h-full object-cover cursor-pointer" onclick="openLightbox(${i})"></div>`).join('');
+
+                    new Swiper(".mySwiper", {
+                        pagination: { el: ".swiper-pagination", dynamicBullets: true },
+                        loop: images.length > 1,
+                        autoplay: { delay: 3500, disableOnInteraction: false },
+                    });
+
+                    // Set broker avatar to first image as fallback/default
+                    // (Legacy avatar overwrite removed)
+                }
+
+                // (Legacy broker name overwrite removed)
+
+                // Contacts
+                const phones = JSON.parse(data.phones || '[]');
+                if (data.phone) phones.push({ value: data.phone });
+                if (phones.length > 0) document.getElementById('btn-call').href = `tel:${phones[0].value}`;
+
+                // Email Logic
+                const emails = JSON.parse(data.emails || '[]');
+                const mainEmail = data.email || (emails.length > 0 ? emails[0].value : "");
+                if (mainEmail) {
+                    document.getElementById('btn-email').href = `mailto:${mainEmail}`;
+                    document.getElementById('btn-email').classList.remove('hidden');
+                } else {
+                    document.getElementById('btn-email').classList.add('hidden');
+                }
+
+                const socials = JSON.parse(data.socials || '{}');
+                if (socials.whatsapp) {
+                    document.getElementById('btn-wa').href = `https://wa.me/${socials.whatsapp.replace(/\D/g, '')}`;
+                } else {
+                    document.getElementById('btn-wa').classList.add('hidden');
+                }
+                // Social Dock Logic
+                const dock = document.getElementById('p-social-dock');
+                dock.innerHTML = '';
+                const socialLinks = [
+                    { key: 'facebook', icon: 'bi-facebook', url: socials.facebook },
+                    { key: 'instagram', icon: 'bi-instagram', url: socials.instagram },
+                    { key: 'linkedin', icon: 'bi-linkedin', url: socials.linkedin },
+                    { key: 'twitter', icon: 'bi-twitter-x', url: socials.twitter },
+                ];
+
+                socialLinks.forEach(s => {
+                    if (s.url) {
+                        const a = document.createElement('a');
+                        a.href = s.url.startsWith('http') ? s.url : `https://${s.url}`;
+                        a.target = "_blank";
+
+                        // Define brand colors
+                        let hoverClass = "";
+                        if (s.key === 'facebook') hoverClass = "hover:bg-[#1877F2] hover:text-white";
+                        else if (s.key === 'instagram') hoverClass = "hover:bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] hover:text-white";
+                        else if (s.key === 'linkedin') hoverClass = "hover:bg-[#0077b5] hover:text-white";
+                        else if (s.key === 'twitter') hoverClass = "hover:bg-black hover:text-white";
+
+                        a.className = `w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center shadow-lg transition-all duration-300 ${hoverClass}`;
+                        a.innerHTML = `<i class="bi ${s.icon} text-lg"></i>`;
+                        dock.appendChild(a);
+                    }
+                });
+
+                // Lead Form
+                const leadForm = document.getElementById('lead-form');
+                if (leadForm) leadForm.classList.add('hidden');
+
+
+                // Show Card
+                document.getElementById('preloader').classList.add('opacity-0', 'pointer-events-none');
+                document.getElementById('card-container').classList.remove('opacity-0');
+
+                // GATEKEEPER LOGIC
+                let gateDesign = {};
+                try { gateDesign = JSON.parse(data.design || '{}'); } catch (e) { }
+                const gateMode = gateDesign.gate_mode || (data.parent_id ? 'optional' : 'off');
+
+                if (gateMode !== 'off') {
+                    const gateKey = 'castle_gate_' + currentSlug;
+                    if (!localStorage.getItem(gateKey)) {
+                        setTimeout(() => {
+                            toggleGate(true);
+                            const closeBtn = document.querySelector('#gate-modal button.absolute');
+                            const modalBtns = document.querySelectorAll('#gate-modal button');
+                            const skipBtn = modalBtns[modalBtns.length - 1];
+
+                            if (gateMode === 'mandatory') {
+                                if (closeBtn) closeBtn.style.display = 'none';
+                                if (skipBtn && !skipBtn.type) skipBtn.style.display = 'none';
+                            } else {
+                                if (closeBtn) closeBtn.style.display = 'block';
+                                if (skipBtn && !skipBtn.type) skipBtn.style.display = 'block';
+                            }
+                        }, 800);
+                    }
+                }
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('p-title').innerText = "Not Found";
+                document.getElementById('preloader').style.display = 'none';
+                document.getElementById('card-container').classList.remove('opacity-0');
+            }
+        });
+
+        function toggleModal(show) {
+            const m = document.getElementById('exchange-modal');
+            if (show) { m.classList.remove('hidden'); }
+            else { m.classList.add('hidden'); }
+        }
+
+        function toggleGate(show) { document.getElementById('gate-modal').classList.toggle('hidden', !show); }
+
+        async function submitGate(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.innerText = "SENDING...";
+            btn.disabled = true;
+
+            const payload = {
+                slug: currentSlug,
+                phone: document.getElementById('gate-phone').value,
+                name: document.getElementById('gate-name').value,
+                message: (document.getElementById('gate-msg').value || "") + " (via Gatekeeper)"
+            };
+
+            try {
+                const res = await fetch('/api/exchange', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    localStorage.setItem('castle_gate_' + currentSlug, 'true');
+                    toggleGate(false);
+                } else {
+                    let errData = {};
+                    try { errData = await res.json(); } catch (e) { }
+                    alert("Submission Failed: " + (errData.error || "Unknown Error. Check console."));
+                }
+            } catch (err) {
+                console.error(err);
+                toggleGate(false);
+            }
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+
+        async function submitLead(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const oldLink = btn.innerText;
+            btn.innerText = "Sending...";
+
+            const payload = {
+                slug: currentSlug,
+                name: document.getElementById('lead-name').value,
+                phone: document.getElementById('lead-phone').value,
+                message: "Interested in this car offer."
+            };
+
+            await fetch('/api/exchange', { method: 'POST', body: JSON.stringify(payload) });
+            alert("Request Sent!");
+            toggleModal(false);
+            btn.innerText = oldLink;
+        }
+
+        // Lightbox Logic
+        window.galleryImages = [];
+        window.currentLightboxIndex = 0;
+
+        window.updateLightboxImage = () => {
+            if (!window.galleryImages.length) return;
+            const src = window.galleryImages[window.currentLightboxIndex];
+            document.getElementById('lightbox-img').src = src;
+        }
+
+        window.openLightbox = (index) => {
+            window.currentLightboxIndex = index;
+            updateLightboxImage();
+            document.getElementById('lightbox').classList.remove('hidden');
+        }
+        window.closeLightbox = () => {
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+        window.nextImage = (e) => {
+            e.stopPropagation();
+            window.currentLightboxIndex = (window.currentLightboxIndex + 1) % window.galleryImages.length;
+            updateLightboxImage();
+        }
+        window.prevImage = (e) => {
+            e.stopPropagation();
+            window.currentLightboxIndex = (window.currentLightboxIndex - 1 + window.galleryImages.length) % window.galleryImages.length;
+            updateLightboxImage();
+        }
+    </script>
+
+    <!-- Lightbox Overlay -->
+    <div id="lightbox"
+        class="fixed inset-0 z-[100] bg-black/95 hidden flex items-center justify-center p-4 animate-fade-in"
+        onclick="if(event.target === this) closeLightbox()">
+        <button onclick="closeLightbox()"
+            class="absolute top-6 right-6 text-white/50 hover:text-white transition text-4xl z-20">&times;</button>
+
+        <!-- Prev Button -->
+        <button onclick="prevImage(event)"
+            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-brand-red transition text-6xl font-bold p-4 z-20 select-none">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <!-- Next Button -->
+        <button onclick="nextImage(event)"
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-brand-red transition text-6xl font-bold p-4 z-20 select-none">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+
+        <img id="lightbox-img" src="" class="max-w-full max-h-full rounded-lg shadow-2xl object-contain relative z-10">
+    </div>
+</body>
+
+</div>
+</div>
+<!-- End Main Container -->
+
+</html>

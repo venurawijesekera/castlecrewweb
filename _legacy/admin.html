@@ -1,0 +1,2144 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Administration - Castle Crew</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            red: '#f00000',
+                            black: '#0a0a0a',
+                            dark: '#121212'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f9fafb;
+            color: #111827;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        /* Preloader Styles */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        .stat-card:hover .icon-box {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* Sidebar Styles */
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-item:hover {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+
+        .sidebar-item.active {
+            background-color: #000;
+            color: #fff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-item i {
+            font-size: 18px;
+        }
+
+        .account-card .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .grid-view-header {
+            background: linear-gradient(to right, #ffffff, #f9fafb);
+            padding: 40px;
+            border-radius: 32px;
+            margin-bottom: 40px;
+            border: 1px solid #f3f4f6;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 flex min-h-screen">
+    <!-- Modal: Modify Enterprise Licenses -->
+    <div id="modify-license-modal"
+        class="fixed inset-0 bg-brand-black/60 backdrop-blur-md hidden flex items-center justify-center z-[100000]"
+        style="opacity: 0; pointer-events: none; transition: opacity 0.3s ease;">
+        <div
+            class="bg-white w-full max-w-sm p-10 rounded-[2.5rem] shadow-2xl relative border border-gray-100 modal-content transition-all duration-300 transform scale-95 opacity-0">
+            <div class="flex flex-col items-center text-center mb-8">
+                <div
+                    class="w-16 h-16 rounded-[1.5rem] bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mb-4 shadow-xl shadow-blue-500/10">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+                <h2 class="text-2xl font-black text-gray-900 uppercase tracking-tight">Modify Licenses</h2>
+                <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">Adjust
+                    Organization Capacity</p>
+            </div>
+
+            <div class="space-y-8">
+                <div>
+                    <label
+                        class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 px-1 text-center">Profile
+                        Licenses (Staff Slots)</label>
+                    <div class="flex items-center gap-3">
+                        <button onclick="stepValue('mod-licenses', -1)"
+                            class="w-12 h-12 shrink-0 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition flex items-center justify-center border border-gray-100 active:scale-90">
+                            <i class="bi bi-dash-lg"></i>
+                        </button>
+                        <input type="text" inputmode="numeric" id="mod-licenses"
+                            class="flex-1 min-w-0 bg-gray-50 border border-gray-100 rounded-xl px-2 py-4 text-center text-lg font-black focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition">
+                        <button onclick="stepValue('mod-licenses', 1)"
+                            class="w-12 h-12 shrink-0 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition flex items-center justify-center border border-gray-100 active:scale-90">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label
+                        class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 px-1 text-center">Sub-Licenses
+                        (Product Cards)</label>
+                    <div class="flex items-center gap-3">
+                        <button onclick="stepValue('mod-sub-licenses', -1)"
+                            class="w-12 h-12 shrink-0 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition flex items-center justify-center border border-gray-100 active:scale-90">
+                            <i class="bi bi-dash-lg"></i>
+                        </button>
+                        <input type="text" inputmode="numeric" id="mod-sub-licenses"
+                            class="flex-1 min-w-0 bg-gray-50 border border-gray-100 rounded-xl px-2 py-4 text-center text-lg font-black focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition">
+                        <button onclick="stepValue('mod-sub-licenses', 1)"
+                            class="w-12 h-12 shrink-0 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition flex items-center justify-center border border-gray-100 active:scale-90">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10">
+                <button onclick="saveLicenseChanges()" id="btn-save-license"
+                    class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl hover:bg-blue-700 transition shadow-xl shadow-blue-600/20 text-[10px] uppercase tracking-[0.2em] transform active:scale-95 duration-200">
+                    Apply Root Changes
+                </button>
+            </div>
+
+            <button onclick="closeLicenseModal()"
+                class="absolute top-8 right-8 text-gray-300 hover:text-gray-900 transition">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-white flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-20 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-gray-900 animate-pulse uppercase">
+                System Admin
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-72 bg-white border-r border-gray-100 flex flex-col sticky top-0 h-screen shrink-0 z-50">
+        <div class="p-8 pb-4">
+            <div class="flex items-center gap-3 mb-10">
+                <img src="assets/img/logo.png" alt="CastleCrew" class="h-8 w-auto">
+                <span class="font-black text-xl tracking-tighter text-gray-900">Castle<span
+                        class="text-brand-red">Crew</span></span>
+            </div>
+
+            <div class="space-y-1">
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 px-2">Main Menu</p>
+                <div onclick="setFilter('all', this)" class="sidebar-item active">
+                    <i class="bi bi-grid-fill"></i> Dashboard
+                </div>
+                <div onclick="setFilter('starter', this)" class="sidebar-item">
+                    <i class="bi bi-lightning-charge"></i> Starter
+                </div>
+                <div onclick="setFilter('professional', this)" class="sidebar-item">
+                    <i class="bi bi-award-fill"></i> Professional
+                </div>
+                <div onclick="setFilter('executive', this)" class="sidebar-item">
+                    <i class="bi bi-rocket-takeoff-fill"></i> Executive
+                </div>
+                <div onclick="setFilter('enterprise', this)" class="sidebar-item">
+                    <i class="bi bi-buildings-fill"></i> Enterprise
+                </div>
+            </div>
+
+            <div class="mt-12 space-y-1">
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 px-2">Quick Actions</p>
+                <div onclick="openCreateEnterpriseModal()" class="sidebar-item text-blue-600 hover:bg-blue-50">
+                    <i class="bi bi-plus-square"></i> New Organization
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-auto p-6 border-t border-gray-50 bg-gray-50/30">
+            <div class="flex items-center gap-3 px-2">
+                <div
+                    class="w-10 h-10 rounded-full bg-brand-red flex items-center justify-center text-white font-black text-sm shadow-lg shadow-brand-red/20">
+                    SA
+                </div>
+                <div>
+                    <p class="text-xs font-black text-gray-900">System Admin</p>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Root Control</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0">
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
+            <div class="px-8 py-4 flex justify-between items-center">
+                <div>
+                    <h1 class="text-sm font-black uppercase tracking-widest text-gray-400">System Control Center</h1>
+                    <p id="active-view-label" class="text-xs font-bold text-gray-900">All Accounts Overview</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="loadAdminData()"
+                        class="p-2.5 rounded-xl bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition flex items-center gap-2 text-xs font-bold uppercase tracking-wide">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                    </button>
+                    <a href="dashboard.html"
+                        class="px-4 py-2.5 rounded-xl bg-brand-red text-white font-bold text-xs uppercase tracking-wide hover:bg-red-600 transition shadow-lg shadow-brand-red/20 flex items-center gap-2">
+                        <i class="bi bi-box-arrow-left"></i> Back to App
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="px-8 py-10">
+
+            <!-- View Containers -->
+            <div id="dashboard-view">
+                <!-- Welcome Section -->
+                <div class="mb-10">
+                    <h2 class="text-3xl font-black text-gray-900 mb-2">Welcome back! ??</h2>
+                    <p class="text-gray-500 max-w-lg">Full control over users, enterprise organizations, and system
+                        settings.</p>
+                </div>
+
+                <!-- Stats Grid (Previous Content Here) -->
+                <div id="main-stats-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+
+                    <!-- Total Users -->
+                    <div
+                        class="stat-card bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="icon-box w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shadow-sm">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <span
+                                class="text-[10px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-1 rounded-lg">Platform
+                                Wid</span>
+                        </div>
+                        <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Total Users</h3>
+                        <p id="total-users" class="text-3xl font-black text-gray-900">...</p>
+                    </div>
+
+                    <!-- Pro Members -->
+                    <div
+                        class="stat-card bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="icon-box w-10 h-10 rounded-xl bg-red-50 text-brand-red flex items-center justify-center text-xl shadow-sm">
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <span
+                                class="text-[10px] font-black uppercase text-brand-red bg-red-50 px-2 py-1 rounded-lg">Premium</span>
+                        </div>
+                        <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Pro/Exec Members</h3>
+                        <p id="paid-users" class="text-3xl font-black text-gray-900">...</p>
+                    </div>
+
+                    <!-- Enterprises -->
+                    <div
+                        class="stat-card bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="icon-box w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shadow-sm">
+                                <i class="bi bi-buildings-fill"></i>
+                            </div>
+                            <span
+                                class="text-[10px] font-black uppercase text-purple-500 bg-purple-50 px-2 py-1 rounded-lg">Managed</span>
+                        </div>
+                        <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Enterprises</h3>
+                        <p id="enterprise-count" class="text-3xl font-black text-gray-900">...</p>
+                    </div>
+
+                    <!-- System Status -->
+                    <div
+                        class="stat-card bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="icon-box w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-xl shadow-sm">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <span
+                                class="text-[10px] font-black uppercase text-green-500 bg-green-50 px-2 py-1 rounded-lg">Operational</span>
+                        </div>
+                        <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">System Status</h3>
+                        <p class="text-3xl font-black text-green-600">Active</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Column: User Plan Sections -->
+                    <div class="lg:col-span-2 space-y-8" id="user-sections-container">
+                        <!-- Dynamic plan sections (Starter, Professional, Executive) will be injected here -->
+                        <div
+                            class="flex flex-col items-center gap-4 p-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                            <div
+                                class="w-12 h-12 rounded-full border-4 border-brand-red border-t-transparent animate-spin">
+                            </div>
+                            <p class="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Synchronizing Core
+                                Data...</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Sidebar / Recent Activity -->
+                    <div class="space-y-6">
+                        <!-- System Info Card -->
+                        <div class="bg-brand-black rounded-2xl p-6 text-white shadow-xl relative overflow-hidden group">
+                            <div
+                                class="absolute top-0 right-0 w-32 h-32 bg-brand-red opacity-10 blur-3xl rounded-full -mr-16 -mt-16 group-hover:opacity-20 transition-opacity">
+                            </div>
+                            <h4 class="font-black text-xs uppercase tracking-widest text-gray-400 mb-6">Engine Info</h4>
+
+                            <div class="space-y-4 relative z-10">
+                                <div class="flex justify-between items-center text-sm border-b border-white/10 pb-3">
+                                    <span class="text-gray-400 font-medium">Software Version</span>
+                                    <span class="font-black tracking-widest">V 2.1.0-AC</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm border-b border-white/10 pb-3">
+                                    <span class="text-gray-400 font-medium">Core Engine</span>
+                                    <span class="text-green-500 font-black">STABLE</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-400 font-medium">API Gateway</span>
+                                    <span class="text-blue-400 font-black">SECURE</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 pt-8 border-t border-white/10">
+                                <button onclick="alert('Checking for updates... All systems clear.')"
+                                    class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[10px] font-black uppercase tracking-widest transition border border-white/5">
+                                    Update Engine core
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Admin Action Card -->
+                        <div class="bg-blue-600 rounded-2xl p-6 text-white shadow-xl shadow-blue-500/20">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl mb-4">
+                                <i class="bi bi-shield-lock-fill"></i>
+                            </div>
+                            <h4 class="text-lg font-black uppercase mb-1">Security Zone</h4>
+                            <p class="text-blue-100 text-xs font-medium mb-6">You are accessing the core infrastructure
+                                of
+                                the Castle Cards network.</p>
+                            <button onclick="alert('Logs are strictly encrypted.')"
+                                class="w-full py-2.5 rounded-lg bg-white text-blue-600 text-[10px] font-black uppercase tracking-widest hover:bg-blue-50 transition">
+                                View System Logs
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Section: Enterprise Management (Moved to Bottom) -->
+                <div id="enterprise-section"
+                    class="mt-12 bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="p-8 border-b border-gray-50 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-black text-xl text-gray-900 uppercase tracking-tight">Enterprise Management
+                            </h3>
+                            <p class="text-[10px] text-gray-400 font-black uppercase tracking-[0.2em] mt-1">Managed
+                                Organization Accounts</p>
+                        </div>
+                        <button onclick="openCreateEnterpriseModal()"
+                            class="px-5 py-3 rounded-2xl bg-brand-red text-white text-[10px] font-black uppercase tracking-widest hover:bg-red-600 transition flex items-center gap-2 shadow-xl shadow-brand-red/10">
+                            <i class="bi bi-plus-lg"></i> New Organization
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-gray-50/50">
+                                    <th class="p-5 pl-8 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                        Company</th>
+                                    <th
+                                        class="p-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">
+                                        Licenses</th>
+                                    <th
+                                        class="p-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right pr-8">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="enterprise-list" class="divide-y divide-gray-50">
+                                <tr>
+                                    <td class="p-12 text-center" colspan="3">
+                                        <div class="flex flex-col items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-full border-2 border-brand-red border-t-transparent animate-spin">
+                                            </div>
+                                            <span
+                                                class="text-xs font-black text-gray-400 uppercase tracking-widest">Fetching
+                                                Orgs...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid View (New View) -->
+            <div id="account-grid-view" class="hidden">
+                <div class="grid-view-header flex items-center justify-between">
+                    <div class="flex items-end justify-between w-full">
+                        <div>
+                            <h2 id="grid-view-title"
+                                class="text-3xl font-black text-gray-900 mb-2 uppercase tracking-tighter">Starter Users
+                            </h2>
+                            <p id="grid-view-desc"
+                                class="text-gray-400 font-bold uppercase text-[10px] tracking-[0.2em]">Managed
+                                individual accounts in this tier</p>
+                        </div>
+                        <div id="grid-view-status" class="hidden text-right mb-2">
+                            <!-- Dynamic Status Injected Here -->
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="bg-gray-100 p-1 rounded-xl flex">
+                            <button class="p-2 px-4 rounded-lg bg-white shadow-sm text-gray-900 border border-gray-100">
+                                <i class="bi bi-grid-fill"></i>
+                            </button>
+                            <button onclick="setFilter('all')" class="p-2 px-4 text-gray-400">
+                                <i class="bi bi-list-task"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="accounts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Cards will be injected here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal: Manage User -->
+        <div id="edit-modal"
+            class="fixed inset-0 bg-brand-black/60 backdrop-blur-md hidden flex items-center justify-center z-50">
+            <div
+                class="bg-white w-full max-w-sm p-8 rounded-3xl shadow-2xl relative border border-gray-100 scale-95 transition-transform duration-300">
+                <div
+                    class="w-16 h-16 rounded-2xl bg-red-100 text-brand-red flex items-center justify-center text-3xl mx-auto mb-6 shadow-sm">
+                    <i class="bi bi-person-gear"></i>
+                </div>
+                <h2 class="text-2xl font-black mb-1 text-gray-900 text-center uppercase tracking-tight">Manage User</h2>
+                <p id="modal-email"
+                    class="text-[10px] text-gray-400 font-black mb-8 text-center uppercase tracking-widest">
+                    user@email.com</p>
+
+                <div class="space-y-6">
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Subscription
+                            Plan</label>
+                        <select id="plan-select"
+                            class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red focus:outline-none transition">
+                            <option value="starter">Starter (Free)</option>
+                            <option value="professional">Professional</option>
+                            <option value="executive">Executive</option>
+                            <option value="enterprise">Enterprise</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-2 space-y-3">
+                        <button onclick="saveUserChanges()"
+                            class="w-full bg-brand-red text-white text-[10px] font-black py-4 rounded-xl hover:bg-red-600 transition shadow-lg shadow-brand-red/20 uppercase tracking-widest">
+                            Save System Changes
+                        </button>
+                        <button onclick="closeModal()"
+                            class="w-full bg-gray-50 text-gray-500 text-[10px] font-black py-4 rounded-xl hover:bg-gray-100 transition uppercase tracking-widest">
+                            Cancel Action
+                        </button>
+                    </div>
+
+                    <div class="border-t border-gray-50 pt-6 mt-4">
+                        <button onclick="deleteUser()"
+                            class="w-full text-red-500 text-[9px] font-black hover:text-red-700 transition uppercase tracking-[0.2em]">
+                            <i class="bi bi-trash3-fill mr-1"></i> Terminate Account
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="closeModal()"
+                    class="absolute top-6 right-6 text-gray-300 hover:text-gray-900 transition">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal: Create Enterprise -->
+        <div id="create-enterprise-modal"
+            class="fixed inset-0 bg-brand-black/60 backdrop-blur-md hidden flex items-center justify-center z-50">
+            <div class="bg-white w-full max-w-md p-10 rounded-[2.5rem] shadow-2xl relative border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl">
+                        <i class="bi bi-plus-square-fill"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-black text-gray-900 uppercase tracking-tight">New Enterprise</h2>
+                        <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Initialize
+                            Infrastructure
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="col-span-2">
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Organization
+                            Identity</label>
+                        <input type="text" id="ent-name" placeholder="Acme International"
+                            class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Super
+                            Admin Account Name</label>
+                        <input type="text" id="ent-admin-name" placeholder="Full Name"
+                            class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition">
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Admin
+                            Email</label>
+                        <input type="email" id="ent-email" placeholder="ceo@acme.com"
+                            class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Profile
+                            Licenses</label>
+                        <input type="number" id="ent-licenses" value="10"
+                            class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition">
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Security
+                            Key (Password)</label>
+                        <input type="password" id="ent-password" placeholder="••••••••"
+                            class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 px-1">Sub
+                            Licenses (Products)</label>
+                        <input type="number" id="ent-sub-licenses" value="0"
+                            class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:outline-none transition">
+                    </div>
+                </div>
+
+                <div class="mt-10">
+                    <button onclick="createEnterprise()" id="btn-create-ent"
+                        class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl hover:bg-blue-700 transition shadow-xl shadow-blue-600/20 text-[10px] uppercase tracking-[0.2em]">
+                        Provision Organization
+                    </button>
+                </div>
+
+                <button onclick="closeEntModal()"
+                    class="absolute top-10 right-10 text-gray-300 hover:text-gray-900 transition">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+
+            <style>
+                .account-card {
+                    position: relative;
+                    background-color: #ffffff;
+                    /* Light Theme Background */
+                    border-radius: 1.5rem;
+                    padding: 1.5rem;
+                    color: #1a202c;
+                    /* Dark text for light theme */
+                    border: 1px solid #f3f4f6;
+                    /* Subtle border */
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 1rem;
+                    overflow: hidden;
+                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                .account-card:hover {
+                    transform: translateY(-8px);
+                    border-color: var(--tier-color, #f00000);
+                    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+                }
+
+                .account-card::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(to bottom right, var(--tier-color, #f00000), transparent);
+                    opacity: 0;
+                    transition: opacity 300ms ease-in-out;
+                    z-index: 0;
+                    mask-image: linear-gradient(to bottom, #fff, transparent);
+                    -webkit-mask-image: linear-gradient(to bottom, #fff, transparent);
+                }
+
+                .account-card:hover::before {
+                    opacity: 0.03;
+                    /* Very subtle glow */
+                }
+
+                .card-badge {
+                    position: absolute;
+                    top: 1rem;
+                    left: 1rem;
+                    background-color: #f00000;
+                    color: #ffffff;
+                    font-size: 9px;
+                    font-weight: 900;
+                    text-transform: uppercase;
+                    letter-spacing: -0.025em;
+                    padding: 0.25rem 0.5rem;
+                    border-radius: 0.5rem;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                }
+
+                .card-dots {
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                    color: #6b7280;
+                    transition: color 200ms ease;
+                }
+
+                .card-dots:hover {
+                    color: #ffffff;
+                }
+
+                .avatar-ring {
+                    width: 5rem;
+                    height: 5rem;
+                    border-radius: 9999px;
+                    border-width: 2px;
+                    border-color: var(--tier-color, #f00000);
+                    background: #ffffff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.25rem;
+                    position: relative;
+                    z-index: 10;
+                    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.05);
+                }
+
+                .avatar-box {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 9999px;
+                    background-color: #f9fafb;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #6b7280;
+                    font-weight: 900;
+                    font-size: 1.5rem;
+                    overflow: hidden;
+                    border: 1px solid #f3f4f6;
+                }
+
+                .view-profile-btn {
+                    margin-top: 1rem;
+                    width: 100%;
+                    padding: 0.75rem 1.25rem;
+                    border-radius: 0.75rem;
+                    background-color: #f9fafb;
+                    color: #1a202c;
+                    font-size: 10px;
+                    font-weight: 900;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    transition: all 300ms ease;
+                    border: 1px solid #f3f4f6;
+                    position: relative;
+                    z-index: 10;
+                }
+
+                .view-profile-btn:hover {
+                    background-color: var(--tier-color, #f00000);
+                    color: #ffffff;
+                    border-color: var(--tier-color, #f00000);
+                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                }
+            </style>
+
+            <script>
+                // Start Script Logic
+                let currentUserId = null;
+                let activePlanFilter = 'all';
+                let cachedUsers = [];
+                let cachedEnterprises = [];
+                let currentEnterpriseId = null;
+
+                // Global Guard: Ensure user is logged in before even viewing the dashboard
+                if (!localStorage.getItem('castle_token')) {
+                    window.location.href = 'login.html';
+                }
+
+                // Secure Admin Fetch Wrapper
+                async function adminFetch(url, options = {}) {
+                    const masterKey = sessionStorage.getItem('castle_master_key');
+                    if (!masterKey) {
+                        showGatekeeper();
+                        throw new Error("Master Key Missing");
+                    }
+
+                    const headers = {
+                        ...options.headers,
+                        'X-Admin-Master-Key': masterKey,
+                        'Authorization': `Bearer ${localStorage.getItem('castle_token')}`
+                    };
+
+                    const res = await fetch(url, { ...options, headers });
+                    if (res.status === 401) {
+                        sessionStorage.setItem('admin_redirect_pending', 'true');
+                        window.location.href = 'login.html';
+                        throw new Error("Session Required");
+                    }
+                    if (res.status === 403) {
+                        sessionStorage.removeItem('castle_master_key');
+                        showGatekeeper();
+                        throw new Error("Forbidden: Invalid Master Key");
+                    }
+                    return res;
+                }
+
+                function showGatekeeper() {
+                    const key = prompt("CRITICAL SYSTEM ACCESS: Enter Master Administrator Key to proceed.");
+                    if (key) {
+                        sessionStorage.setItem('castle_master_key', key);
+                        loadAdminData();
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                }
+
+                // Preloader Logic
+                document.addEventListener('DOMContentLoaded', () => {
+                    const preloader = document.getElementById('preloader');
+                    setTimeout(() => {
+                        preloader.classList.add('fade-out');
+                        setTimeout(() => {
+                            preloader.style.display = 'none';
+                        }, 700);
+                    }, 800);
+
+                    // Check for key before initial load
+                    if (!sessionStorage.getItem('castle_master_key')) {
+                        showGatekeeper();
+                    } else {
+                        loadAdminData();
+                    }
+
+                    setFilter('all', document.querySelector('.sidebar-item.active'));
+                });
+
+                // Helper function for plan badges
+                function getPlanBadge(plan) {
+                    const base = "px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-tighter shadow-sm";
+                    if (plan === 'enterprise') return `${base} bg-blue-100 text-blue-600 border border-blue-200`;
+                    if (plan === 'executive') return `${base} bg-orange-100 text-orange-600 border border-orange-200`;
+                    if (plan === 'professional') return `${base} bg-red-100 text-red-600 border border-red-200`;
+                    return `${base} bg-gray-100 text-gray-500 border border-gray-200`;
+                }
+
+                // Sidebar Filter Logic
+                function setFilter(plan, element) {
+                    activePlanFilter = plan;
+
+                    // Update UI Active State
+                    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+                    if (element) element.classList.add('active');
+
+                    // Reset View State
+                    document.getElementById('grid-view-status').classList.add('hidden');
+                    document.getElementById('grid-view-status').innerHTML = '';
+
+                    if (plan === 'all') {
+                        // Show standard dashboard
+                        document.getElementById('dashboard-view').classList.remove('hidden');
+                        document.getElementById('account-grid-view').classList.add('hidden');
+                        document.getElementById('active-view-label').innerText = 'All Accounts Overview';
+                    } else if (plan === 'enterprise') {
+                        // Show Enterprise Management Grid
+                        currentMessagingEnterpriseId = null;
+                        document.getElementById('dashboard-view').classList.add('hidden');
+                        document.getElementById('account-grid-view').classList.remove('hidden');
+
+                        document.getElementById('active-view-label').innerText = 'Enterprise Management';
+                        document.getElementById('grid-view-title').innerText = 'Enterprise Management';
+                        document.getElementById('grid-view-desc').innerText = 'Managed organization accounts and their staff networks';
+
+                        renderEnterpriseGrid();
+                    } else {
+                        // Switch to User Grid View
+                        document.getElementById('dashboard-view').classList.add('hidden');
+                        document.getElementById('account-grid-view').classList.remove('hidden');
+
+                        const label = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan Users';
+                        document.getElementById('active-view-label').innerText = label;
+                        document.getElementById('grid-view-title').innerText = label;
+                        document.getElementById('grid-view-desc').innerText = 'Managed individual accounts in this tier';
+
+                        renderAccountGrid(plan);
+                    }
+
+                    renderUserTable();
+                }
+
+                function renderEnterpriseGrid() {
+                    const gridEl = document.getElementById('accounts-grid');
+                    gridEl.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8";
+
+                    gridEl.innerHTML = cachedEnterprises.map(ent => `
+                    <div class="account-card group" style="--tier-color: #3b82f6; --tier-secondary: #60a5fa">
+                        <div class="card-badge" style="background-color: #3b82f6">
+                            <i class="bi bi-buildings-fill text-[8px] mr-1"></i> Org ID: #${ent.id}
+                        </div>
+                        <div class="card-dots">
+                            <i class="bi bi-three-dots"></i>
+                        </div>
+                        
+                        <div class="avatar-ring" style="border-color: #3b82f6">
+                            <div class="avatar-box" style="background-color: #eff6ff">
+                                ${ent.logo ?
+                            `<img src="${ent.logo}" class="w-full h-full object-contain">` :
+                            `<span class="text-blue-600">${(ent.company_name || 'C').charAt(0)}</span>`
+                        }
+                            </div>
+                        </div>
+                        
+                        <div class="text-center relative z-10">
+                            <h4 class="text-gray-900 text-sm font-black truncate mb-1">${ent.company_name}</h4>
+                            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest">${ent.super_admin_email || 'No Super Admin'}</p>
+                            <div class="flex items-center justify-center gap-2 mt-3">
+                                <span class="text-[9px] font-black bg-blue-50 text-blue-600 px-2 py-1 rounded-md border border-blue-100">
+                                    ${ent.staff_count} STAFF
+                                </span>
+                                <span class="text-[9px] font-black bg-gray-50 text-gray-400 px-2 py-1 rounded-md border border-gray-100 uppercase">
+                                    ${ent.license_count} MAX
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col gap-2 w-full mt-2 relative z-10">
+                            <button onclick="viewEnterpriseStaff(${ent.id}, '${ent.company_name.replace(/'/g, "\\'")}')" class="view-profile-btn !mt-0">
+                                View Staff Network
+                            </button>
+                            <button onclick="openManageEnterpriseModal(${ent.id})" class="text-[9px] font-black uppercase text-gray-400 hover:text-blue-600 transition py-1">
+                                Organization Settings
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                    if (cachedEnterprises.length === 0) {
+                        gridEl.innerHTML = `<div class="col-span-full p-20 text-center flex flex-col items-center gap-4 opacity-30">
+                        <i class="bi bi-buildings text-6xl"></i>
+                        <p class="text-sm font-black uppercase tracking-widest">No organizations found</p>
+                    </div>`;
+                    }
+                }
+
+                async function viewEnterpriseStaff(entId, entName) {
+                    const ent = cachedEnterprises.find(e => e.id === entId);
+                    const staff = cachedUsers.filter(u => u.enterprise_id === entId);
+
+                    currentEnterpriseId = entId;
+                    document.getElementById('active-view-label').innerText = 'Enterprise > ' + entName;
+                    document.getElementById('grid-view-title').innerText = entName;
+                    document.getElementById('grid-view-desc').innerText = 'Organization Command Center';
+
+                    const statusEl = document.getElementById('grid-view-status');
+                    statusEl.classList.remove('hidden');
+                    statusEl.innerHTML = `
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">License Status</p>
+                    <div class="flex items-center gap-2 justify-end">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="text-[11px] font-black text-gray-900 uppercase tracking-tight">Active Network</span>
+                    </div>
+                `;
+
+                    // 1. Group cards by human user (Universal Deduplication)
+                    const userMap = new Map();
+                    staff.forEach(u => {
+                        if (!userMap.has(u.id)) {
+                            // Initialize with empty products list
+                            userMap.set(u.id, { products: [] });
+                        }
+                        const entry = userMap.get(u.id);
+                        if (!u.parent_id) {
+                            // IDENTITY ROW: This is the actual staff member profile.
+                            // Capture the correct avatar_url, slug, and profile_card_id here.
+                            Object.assign(entry, u);
+                        } else {
+                            // PRODUCT ROW: This is a sub-license.
+                            entry.products.push(u);
+                        }
+                    });
+
+                    const uniqueStaff = Array.from(userMap.values());
+
+                    // 2. Categorize Humans (Profile Holders)
+                    const superAdmins = uniqueStaff.filter(u => u.role === 'super_admin');
+                    const delegatedAdmins = uniqueStaff.filter(u => u.role === 'admin');
+                    const staffMembers = uniqueStaff.filter(u => u.role !== 'super_admin' && u.role !== 'admin');
+
+                    // 3. Extract Products (Active Product Cards)
+                    const activeProducts = staff.filter(u => u.parent_id);
+
+                    // Helper for Admin Table Rows
+                    const renderAdminRows = (users) => users.map(user => `
+                    <tr class="hover:bg-gray-50/50 transition whitespace-nowrap">
+                        <td class="p-5 pl-8">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 font-black text-sm border border-gray-100 overflow-hidden shadow-sm">
+                                    ${user.avatar_url ? `<img src="${user.avatar_url}" class="w-full h-full object-cover">` : (user.email || 'U').charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <p class="text-sm font-black text-gray-900">${user.email.split('@')[0]}</p>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tight">${user.email}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-5 text-center">
+                            ${user.slug ? `<a href="/${user.slug}" target="_blank" class="text-[10px] font-black text-blue-500 hover:text-blue-700 decoration-blue-500/30 underline underline-offset-4">/${user.slug}</a>` : '<span class="text-[10px] font-bold text-gray-300">NO CARD</span>'}
+                        </td>
+                        <td class="p-5 text-center">
+                            <span class="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-tighter ${user.role === 'super_admin' ? 'bg-red-50 text-brand-red border border-red-100' : 'bg-blue-50 text-blue-600 border border-blue-100'}">
+                                ${user.role === 'super_admin' ? 'Super Admin' : 'Admin'}
+                            </span>
+                        </td>
+                        <td class="p-4 text-right pr-8">
+                            <button onclick="openModal(${user.id}, '${user.email}', 'enterprise')" class="p-2 rounded-lg bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                    // Helper for Staff Table Rows
+                    const renderStaffRows = (users) => users.map(user => `
+                    <tr class="hover:bg-gray-50/50 transition whitespace-nowrap border-b border-gray-50 last:border-0">
+                        <td class="p-5 pl-8">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 font-black text-sm border border-gray-100 overflow-hidden shadow-sm">
+                                    ${user.avatar_url ? `<img src="${user.avatar_url}" class="w-full h-full object-cover">` : (user.email || 'U').charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <p class="text-sm font-black text-gray-900">${user.email.split('@')[0]}</p>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tight">${user.email}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-5 text-center">
+                            ${user.slug ?
+                            `<a href="/${user.slug}" target="_blank" class="inline-flex items-center gap-2 text-[10px] font-black text-blue-500 hover:text-blue-700 decoration-blue-500/30 underline underline-offset-4">
+                                    <i class="bi bi-link-45deg text-sm"></i> /${user.slug}
+                                </a>` :
+                            '<span class="text-[10px] font-bold text-gray-300">NO CARD</span>'}
+                        </td>
+                        <td class="p-5 text-center">
+                            <span class="text-[11px] font-bold text-gray-500">${entName} Admin</span>
+                        </td>
+                        <td class="p-5 text-center">
+                            <div class="px-3 py-1 bg-gray-50 border border-gray-100 rounded-full inline-block">
+                                <span class="text-[10px] font-black text-gray-900 italic">
+                                    ${(user.products || []).length}/${user.sub_license_count || 0}
+                                </span>
+                            </div>
+                        </td>
+                        <td class="p-4 text-right pr-8">
+                            <button onclick="openModal(${user.id}, '${user.email}', 'enterprise')" class="p-2 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition">
+                                <i class="bi bi-three-dots"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                    const adminTableHeader = `
+                    <thead>
+                        <tr class="bg-gray-50/50 border-b border-gray-100">
+                            <th class="p-5 pl-8 text-[10px] font-black text-gray-400 uppercase tracking-widest text-left">Identity</th>
+                            <th class="p-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Digital Card</th>
+                            <th class="p-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Role</th>
+                            <th class="p-5 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest pr-8">Action</th>
+                        </tr>
+                    </thead>
+                `;
+
+                    const staffTableHeader = `
+                    <thead>
+                        <tr class="bg-white/50 border-b border-gray-100">
+                            <th class="p-5 pl-8 text-[10px] font-black text-gray-400 uppercase tracking-widest text-left">Staff Member</th>
+                            <th class="p-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Digital Card</th>
+                            <th class="p-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Assigned Admin</th>
+                            <th class="p-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Sub Licenses</th>
+                            <th class="p-5 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest pr-8">Action</th>
+                        </tr>
+                    </thead>
+                `;
+
+                    const gridEl = document.getElementById('accounts-grid');
+                    gridEl.className = "grid grid-cols-1 gap-8";
+
+                    gridEl.innerHTML = `
+                    <div class="mb-2">
+                        <button onclick="setFilter('enterprise')" class="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 hover:text-gray-900 transition font-black tracking-widest">
+                            <i class="bi bi-arrow-left"></i> Back to Organizations
+                        </button>
+                    </div>
+
+                    <!-- Enterprise Stats Bar -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-4 shadow-sm border border-blue-100">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <h4 class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Profile Licenses</h4>
+                            <p class="text-2xl font-black text-gray-900">${superAdmins.length + delegatedAdmins.length + staffMembers.length}/${ent.license_count}</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                             <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-4 shadow-sm border border-purple-100">
+                                <i class="bi bi-qr-code-scan"></i>
+                            </div>
+                            <h4 class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Sub Licenses</h4>
+                            <p class="text-2xl font-black text-gray-900">${activeProducts.length}/${ent.sub_license_count || 0}</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition">
+                             <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl mb-4 shadow-sm border border-orange-100">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <h4 class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Active Staff</h4>
+                            <p class="text-2xl font-black text-gray-900">${superAdmins.length + delegatedAdmins.length + staffMembers.length}</p>
+                        </div>
+                        <div class="bg-gray-900 p-6 rounded-3xl text-white shadow-xl relative overflow-hidden group border border-gray-800">
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-xl">
+                                        <i class="bi bi-shield-lock"></i>
+                                    </div>
+                                    <span class="text-[9px] font-black uppercase text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full border border-green-400/20">Stable</span>
+                                </div>
+                                <h4 class="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Network Status</h4>
+                                <p class="text-2xl font-black">SECURE</p>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Left Column: Hierarchical Staff Management -->
+                        <div class="lg:col-span-2 space-y-12">
+                            
+                            <!-- 1. Super Admin Section -->
+                            ${superAdmins.length > 0 ? `
+                            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-left">
+                                        ${adminTableHeader}
+                                        <tbody class="divide-y divide-gray-50">
+                                            ${renderAdminRows(superAdmins)}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            <!-- 2. Delegated Admins Section -->
+                            ${delegatedAdmins.length > 0 ? `
+                            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden">
+                                <div class="p-8 border-b border-gray-50 flex items-center justify-between">
+                                    <div>
+                                        <h3 class="font-black text-lg text-gray-900 uppercase tracking-tight">Delegated Admins</h3>
+                                        <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">Users with specialized management permissions</p>
+                                    </div>
+                                    <span class="bg-blue-50 text-blue-600 text-[10px] font-black px-3 py-1 rounded-full border border-blue-100">${delegatedAdmins.length} Admins</span>
+                                </div>
+                                <div class="overflow-x-auto max-h-[240px] overflow-y-auto custom-scrollbar">
+                                    <table class="w-full text-left">
+                                        ${adminTableHeader}
+                                        <tbody class="divide-y divide-gray-50">
+                                            ${renderAdminRows(delegatedAdmins)}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            <!-- 3. Staff Members Section -->
+                            ${staffMembers.length > 0 ? `
+                            <div class="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+                                <div class="p-10 border-b border-gray-50 flex items-center justify-between bg-gray-50/30">
+                                    <div>
+                                        <h3 class="font-black text-xl text-gray-900 uppercase tracking-tight">Staff Members</h3>
+                                        <p class="text-[11px] text-gray-400 font-black uppercase tracking-widest mt-1.5 opacity-60">Complete directory of organization accounts.</p>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <span class="bg-gray-100 text-gray-900 text-[10px] font-black px-4 py-1.5 rounded-full border border-gray-200">${staffMembers.length} Members</span>
+                                        <button class="text-[10px] font-black text-blue-500 uppercase tracking-widest hover:text-blue-700 flex items-center gap-2">
+                                            Manage All <i class="bi bi-chevron-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="overflow-x-auto max-h-[240px] overflow-y-auto custom-scrollbar">
+                                    <table class="w-full text-left">
+                                        ${staffTableHeader}
+                                        <tbody class="divide-y divide-gray-50">
+                                            ${renderStaffRows(staffMembers)}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            ` : `
+                            <div class="bg-white rounded-[2.5rem] border border-dashed border-gray-200 p-16 text-center">
+                                <i class="bi bi-people text-4xl text-gray-200 mb-4 block"></i>
+                                <h3 class="font-black text-gray-400 uppercase tracking-widest text-xs">No Staff Members Found</h3>
+                                <p class="text-[10px] text-gray-300 uppercase mt-2">Add members to your organization to see them here.</p>
+                            </div>
+                            `}
+
+                            <!-- 4. Active Products Section (Black Theme) -->
+                            <div class="bg-[#0a0a0b] rounded-[2.5rem] border border-white/5 shadow-2xl shadow-black/50 overflow-hidden">
+                                <div class="p-10 border-b border-white/5 flex items-center justify-between bg-gradient-to-r from-black to-[#111]">
+                                    <div>
+                                        <h3 class="font-black text-xl text-white uppercase tracking-tight flex items-center gap-3">
+                                            Active Products
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]"></span>
+                                        </h3>
+                                        <p class="text-[11px] text-gray-500 font-black uppercase tracking-widest mt-1.5 opacity-60">Product cards and sub-licenses.</p>
+                                    </div>
+                                    <button class="px-4 py-2 rounded-xl bg-white/5 text-[10px] font-black text-white uppercase tracking-widest hover:bg-white/10 transition flex items-center gap-2 border border-white/10">
+                                        View All <i class="bi bi-grid-fill text-xs text-white/40"></i>
+                                    </button>
+                                </div>
+                                <div class="overflow-x-auto max-h-[280px] overflow-y-auto custom-scrollbar">
+                                    <table class="w-full text-left border-separate border-spacing-0">
+                                        <thead class="sticky top-0 z-10 bg-[#0a0a0b] border-b border-white/5">
+                                            <tr>
+                                                <th class="p-6 pl-10 text-[10px] font-black text-gray-500 uppercase tracking-widest text-left">Card Identity</th>
+                                                <th class="p-6 text-[10px] font-black text-gray-500 uppercase tracking-widest text-center">Assigned Staff</th>
+                                                <th class="p-6 text-right text-[10px] font-black text-gray-500 uppercase tracking-widest pr-10">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-white/5">
+                                            ${activeProducts.length > 0 ? activeProducts.map(user => `
+                                                <tr class="hover:bg-white/[0.02] transition whitespace-nowrap group">
+                                                    <td class="p-6 pl-10">
+                                                        <div class="flex items-center gap-4">
+                                                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-white/50 text-lg border border-white/10 group-hover:border-white/20 transition shadow-lg">
+                                                                <i class="bi bi-qr-code"></i>
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-sm font-black text-white tracking-tight">/${user.slug}</p>
+                                                                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">Product Card</p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-6 text-center">
+                                                        <div class="inline-flex items-center gap-3">
+                                                            <div class="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.5)]"></div>
+                                                            <span class="text-[11px] font-black text-gray-300 uppercase tracking-tight">
+                                                                ${(() => {
+                            const owner = uniqueStaff.find(s => s.id === user.id);
+                            return owner ? (owner.email.split('@')[0]) : (user.email ? user.email.split('@')[0] : 'Unassigned');
+                        })()}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-6 text-right pr-10">
+                                                        <button class="p-2.5 rounded-xl bg-white/5 text-gray-500 hover:bg-white hover:text-black transition border border-white/10">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            `).join('') : `
+                                                <tr>
+                                                    <td colspan="3" class="p-20 text-center opacity-30">
+                                                        <i class="bi bi-box-seam text-4xl text-white mb-4 block"></i>
+                                                        <p class="text-[10px] font-black text-white uppercase tracking-widest">No active products found</p>
+                                                    </td>
+                                                </tr>
+                                            `}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            ${staff.length === 0 ? `
+                            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm p-20 text-center flex flex-col items-center gap-4 opacity-30">
+                                <i class="bi bi-person-slash text-6xl"></i>
+                                <p class="text-sm font-black uppercase tracking-widest">No staff members assigned</p>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- Right Column: Contextual Card -->
+                        <div class="space-y-6">
+                            <div class="bg-blue-600 p-8 rounded-[2.5rem] text-white shadow-2xl shadow-blue-500/30 relative overflow-hidden group border border-blue-500">
+                                <div class="relative z-10">
+                                    <div class="mb-10">
+                                        <p class="text-[10px] font-black uppercase text-blue-200 mb-5 tracking-[0.2em]">Network Notifications</p>
+                                        <div class="space-y-3" id="network-notifications-list">
+                                            <div class="flex items-center justify-center py-10 opacity-30">
+                                                <i class="bi bi-arrow-repeat animate-spin text-2xl"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-10 pt-10 border-t border-white/10">
+                                        <h4 class="text-2xl font-black uppercase mb-3 tracking-tight">Enterprise Actions</h4>
+                                        <p class="text-blue-100/70 text-xs font-medium mb-10 leading-relaxed">System-wide control for this organization's infrastructure.</p>
+
+                                        <div class="space-y-4">
+                                            <button onclick="openManageEnterpriseModal(${entId})" class="w-full py-4 rounded-2xl bg-white text-blue-600 text-[11px] font-black uppercase tracking-widest hover:bg-blue-50 transition shadow-xl border border-blue-100">
+                                                Edit Company Details
+                                            </button>
+                                            <button onclick="openEnterpriseMessaging(${entId}, '${entName.replace(/'/g, "\\'")}')" class="w-full py-4 rounded-2xl bg-white/10 text-white text-[11px] font-black uppercase tracking-widest hover:bg-white/20 transition border border-white/20">
+                                                Message Organization
+                                            </button>
+                                            <button onclick="openEnterpriseRequests(${entId}, '${entName.replace(/'/g, "\\'")}')" class="w-full py-4 rounded-2xl bg-white/10 text-white text-[11px] font-black uppercase tracking-widest hover:bg-white/20 transition border border-white/20">
+                                                Requests history
+                                            </button>
+                                            <button onclick="window.openLicenseModal(${entId})" class="w-full py-4 rounded-2xl bg-white/10 text-white text-[11px] font-black uppercase tracking-widest hover:bg-white/20 transition border border-white/20 active:scale-95 shadow-lg flex items-center justify-center cursor-pointer">
+                                                Modify Licenses
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-40 -mt-40 blur-[100px] group-hover:bg-white/20 transition duration-1000 pointer-events-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    loadEnterpriseNotifications(entId);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+
+                async function loadEnterpriseNotifications(entId) {
+                    const listEl = document.getElementById('network-notifications-list');
+                    if (!listEl) return;
+
+                    try {
+                        const res = await adminFetch(`/api/admin/enterprise-notifications?enterprise_id=${entId}`);
+                        const notifications = await res.json();
+
+                        if (!Array.isArray(notifications)) {
+                            throw new Error(notifications.error || "Invalid response format");
+                        }
+
+                        if (notifications.length === 0) {
+                            listEl.innerHTML = `
+                                <div class="p-8 text-center opacity-30">
+                                    <p class="text-[10px] font-black text-white uppercase tracking-widest">No primary alerts</p>
+                                </div>
+                            `;
+                            return;
+                        }
+
+
+                        listEl.innerHTML = notifications.map(notif => {
+                            if (notif.alert_type === 'message') {
+                                return `
+                                <!-- Notification: New Message -->
+                                <button onclick="openEnterpriseMessaging(${entId}, '${(cachedEnterprises.find(e => e.id === entId)?.company_name || 'Enterprise').replace(/'/g, "\\'")}')" class="w-full text-left bg-blue-600/20 border border-blue-500/30 p-5 rounded-[1.5rem] flex items-start gap-4 hover:bg-blue-600/30 transition group cursor-pointer active:scale-95 duration-200 mb-3">
+                                    <div class="w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center text-xl flex-shrink-0 border border-white/20 shadow-lg shadow-blue-500/20 animate-pulse">
+                                        <i class="bi bi-chat-left-text-fill"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <p class="text-[11px] font-black text-white uppercase tracking-tight">New Message</p>
+                                            <span class="text-[9px] font-black text-blue-200 uppercase tracking-tighter">Unread</span>
+                                        </div>
+                                        <p class="text-[10px] text-white font-medium leading-relaxed opacity-90 truncate">"${notif.message || 'Attachment sent'}"</p>
+                                        <p class="text-[9px] text-blue-300 mt-1 font-bold">Click to view & dismiss</p>
+                                    </div>
+                                </button>
+                                `;
+                            } else {
+                                return `
+                                <!-- Notification: License Request -->
+                                <button onclick="openEnterpriseRequests(${entId}, '${(cachedEnterprises.find(e => e.id === entId)?.company_name || 'Enterprise').replace(/'/g, "\\'")}')" class="w-full text-left bg-white/10 border border-white/20 p-5 rounded-[1.5rem] flex items-start gap-4 hover:bg-white/20 transition group cursor-pointer active:scale-95 duration-200 mb-3">
+                                    <div class="w-10 h-10 rounded-xl ${notif.type === 'profile' ? 'bg-orange-500 text-white' : 'bg-purple-500 text-white'} flex items-center justify-center text-xl flex-shrink-0 border border-white/20 shadow-lg">
+                                        <i class="bi ${notif.type === 'profile' ? 'bi-person-badge-fill' : 'bi-qr-code-scan'}"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <p class="text-[11px] font-black text-white uppercase tracking-tight">${notif.type === 'profile' ? 'Profile' : 'Sub'} License Request</p>
+                                            <span class="text-[9px] font-black text-white/30 uppercase tracking-tighter">Pending</span>
+                                        </div>
+                                        <p class="text-[10px] text-white font-medium leading-relaxed opacity-90">Request for <span class="text-blue-200 font-black">${notif.amount}</span> additional ${notif.type} slots.</p>
+                                        ${notif.message ? `<p class="text-[9px] text-blue-100/90 mt-2 italic font-medium bg-black/20 p-2 rounded-lg border border-white/5">"${notif.message}"</p>` : ''}
+                                    </div>
+                                </button>
+                                `;
+                            }
+                        }).join('');
+
+                    } catch (e) {
+                        console.error("Failed to load notifications:", e);
+                        listEl.innerHTML = `<p class="text-[10px] text-red-500 font-bold p-5 bg-red-50 rounded-2xl border border-red-100 flex items-center gap-2"><i class="bi bi-exclamation-triangle-fill"></i> Sync Error: ${e.message}</p>`;
+                    }
+                }
+
+                let currentMessagingEnterpriseId = null;
+
+                function openEnterpriseMessaging(entId, entName) {
+                    currentMessagingEnterpriseId = entId;
+                    const gridEl = document.getElementById('accounts-grid');
+                    gridEl.className = "max-w-6xl mx-auto";
+
+                    gridEl.innerHTML = `
+                    <div class="mb-6">
+                        <button onclick="viewEnterpriseStaff(${entId}, '${entName.replace(/'/g, "\\'")}')" class="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 hover:text-gray-900 transition font-black tracking-widest">
+                            <i class="bi bi-arrow-left"></i> Back to Control Center
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-[2.5rem] border border-gray-100 shadow-2xl overflow-hidden flex flex-col h-[700px]">
+                        <!-- Chat Header -->
+                        <div class="p-8 border-b border-gray-50 flex items-center justify-between bg-white/50 backdrop-blur-md sticky top-0 z-10">
+                            <div class="flex items-center gap-5">
+                                <div class="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-blue-500/30">
+                                    ${entName.charAt(0)}
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight">${entName} Communications</h3>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Secure Admin Link Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button class="p-3 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </button>
+                                <button class="p-3 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Chat History -->
+                        <div id="support-messaging-history" class="flex-1 overflow-y-auto p-10 space-y-8 bg-gray-50/30 custom-scrollbar">
+                           <div class="flex items-center justify-center h-full opacity-20"><i class="bi bi-arrow-repeat animate-spin text-4xl"></i></div>
+                        </div>
+
+                        <!-- Chat Input -->
+                        <div class="p-8 bg-white border-t border-gray-50">
+                            <div class="relative flex items-center gap-4">
+                                <button class="p-4 rounded-2xl bg-gray-50 text-gray-400 hover:text-gray-900 transition border border-gray-100">
+                                    <i class="bi bi-paperclip text-xl"></i>
+                                </button>
+                                <div class="flex-1 relative">
+                                    <input type="text" id="enterprise-chat-input" placeholder="Type a message to ${entName}..." 
+                                        onkeypress="if(event.key === 'Enter') handleEnterpriseSendMessage(${entId})"
+                                        class="w-full py-5 pl-8 pr-16 bg-gray-50 border border-gray-100 rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500/30 transition text-sm font-medium placeholder-gray-400">
+                                    <button onclick="handleEnterpriseSendMessage(${entId})" class="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl shadow-lg shadow-blue-500/40 hover:scale-105 transition active:scale-95">
+                                        <i class="bi bi-send-fill"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-center text-[9px] font-black text-gray-300 uppercase mt-5 tracking-[0.2em] opacity-50">End-to-End Encrypted Administrative Channel</p>
+                        </div>
+                    </div>
+                        `;
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    loadEnterpriseMessages(entId);
+                }
+
+                async function loadEnterpriseMessages(entId) {
+                    const historyContainer = document.getElementById('support-messaging-history');
+                    if (!historyContainer) return;
+
+                    try {
+                        const res = await adminFetch(`/api/enterprise/messages?enterprise_id=${entId}&view_as=support`);
+                        if (!res.ok) throw new Error("Fetch failed");
+                        const messages = await res.json();
+
+                        // If still empty after loading
+                        if (messages.length === 0) {
+                            historyContainer.innerHTML = '<div class="flex items-center justify-center h-full opacity-30 uppercase text-[10px] font-black tracking-widest">No Message History</div>';
+                            return;
+                        }
+
+                        historyContainer.innerHTML = '';
+
+                        messages.forEach(msg => {
+                            const isSystem = msg.sender_role === 'system_admin';
+                            const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                            if (!isSystem) {
+                                historyContainer.innerHTML += `
+                            <div class="flex items-end gap-4 animate-fade-in">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-[10px] font-black flex-shrink-0 border border-gray-200 shadow-sm">ORG</div>
+                                    <div class="max-w-[75%]">
+                                        <div class="bg-white p-5 rounded-2xl rounded-bl-none shadow-sm border border-gray-100">
+                                            <p class="text-sm text-gray-700 leading-relaxed font-medium">${msg.message}</p>
+                                        </div>
+                                        <p class="text-[9px] font-black text-gray-400 uppercase mt-2 ml-1 tracking-tighter">${time} • Organization HQ</p>
+                                    </div>
+                                </div>
+                            `;
+                            } else {
+                                historyContainer.innerHTML += `
+                            <div class="flex items-end gap-4 flex-row-reverse animate-fade-in">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-[10px] font-black flex-shrink-0 shadow-lg shadow-blue-500/20">ROOT</div>
+                                    <div class="max-w-[75%] text-right">
+                                        <div class="bg-blue-600 p-5 rounded-2xl rounded-br-none shadow-xl shadow-blue-500/20 text-white">
+                                            <p class="text-sm leading-relaxed font-medium text-blue-50">${msg.message}</p>
+                                        </div>
+                                        <p class="text-[9px] font-black text-gray-400 uppercase mt-2 mr-1 tracking-tighter">${time} • System Admin (You)</p>
+                                    </div>
+                                </div>
+                            `;
+                            }
+                        });
+
+                        historyContainer.scrollTop = historyContainer.scrollHeight;
+                    } catch (e) {
+                        console.error("Msg Load Error", e);
+                    }
+                }
+
+                async function openEnterpriseRequests(entId, entName) {
+                    const gridEl = document.getElementById('accounts-grid');
+                    gridEl.className = "max-w-6xl mx-auto";
+
+                    gridEl.innerHTML = `
+                    <div class="mb-6">
+                        <button onclick="viewEnterpriseStaff(${entId}, '${entName.replace(/'/g, "\\'")}')" class="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 hover:text-gray-900 transition font-black tracking-widest">
+                            <i class="bi bi-arrow-left"></i> Back to Control Center
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-[2.5rem] border border-gray-100 shadow-2xl overflow-hidden flex flex-col min-h-[500px]">
+                        <div class="p-8 border-b border-gray-50 bg-white/50 backdrop-blur-md">
+                            <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight">${entName} - License Requests</h3>
+                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Full history of system enhancement submissions.</p>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="bg-gray-50/50 border-b border-gray-100">
+                                        <th class="p-6 pl-10 text-[10px] font-black text-gray-400 uppercase tracking-widest">Identity</th>
+                                        <th class="p-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Request Type</th>
+                                        <th class="p-6 text-center text-[10px] font-black text-gray-400 uppercase tracking-widest">Amount</th>
+                                        <th class="p-6 text-center text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</th>
+                                        <th class="p-6 text-right pr-10 text-[10px] font-black text-gray-400 uppercase tracking-widest">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="enterprise-requests-list" class="divide-y divide-gray-50">
+                                    <tr>
+                                        <td colspan="5" class="p-20 text-center opacity-30">
+                                            <i class="bi bi-arrow-repeat animate-spin text-4xl block mb-4"></i>
+                                            <p class="text-[10px] font-black uppercase tracking-widest">Synchronizing Request History...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    `;
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                    try {
+                        const res = await adminFetch(`/api/admin/enterprise-requests?enterprise_id=${entId}`);
+                        if (!res.ok) throw new Error(`API Error: ${res.status}`);
+                        const requests = await res.json();
+                        console.log("Enterprise Requests Loaded:", requests);
+                        const listEl = document.getElementById('enterprise-requests-list');
+
+                        if (!Array.isArray(requests)) {
+                            throw new Error("Invalid response format: Expected an array of requests");
+                        }
+
+                        if (requests.length === 0) {
+                            listEl.innerHTML = `
+                                <tr>
+                                    <td colspan="5" class="p-20 text-center opacity-30">
+                                        <p class="text-[10px] font-black uppercase tracking-widest">No request history found</p>
+                                    </td>
+                                </tr>
+                            `;
+                            return;
+                        }
+
+                        listEl.innerHTML = requests.map(req => {
+                            let statusBadge = '';
+                            if (req.status === 'pending') statusBadge = '<span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[9px] font-black uppercase border border-blue-100 animate-pulse">Pending</span>';
+                            else if (req.status === 'approved') statusBadge = '<span class="px-3 py-1 bg-green-50 text-green-600 rounded-full text-[9px] font-black uppercase border border-green-100">Approved</span>';
+                            else if (req.status === 'rejected') statusBadge = '<span class="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-[9px] font-black uppercase border border-gray-200">Rejected</span>';
+
+                            return `
+                                <tr class="hover:bg-gray-50/30 transition">
+                                    <td class="p-6 pl-10">
+                                        <p class="text-sm font-black text-gray-900">${req.requester_name || 'System Admin'}</p>
+                                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tight">${req.requester_email}</p>
+                                        <p class="text-[9px] text-gray-400 mt-1 italic opacity-60">"${req.message || 'No message'}"</p>
+                                    </td>
+                                    <td class="p-6">
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-gray-600">${req.request_type} License</span>
+                                    </td>
+                                    <td class="p-6 text-center">
+                                        <span class="text-sm font-black text-gray-900">${req.amount}</span>
+                                    </td>
+                                    <td class="p-6 text-center">
+                                        ${statusBadge}
+                                    </td>
+                                    <td class="p-6 text-right pr-10">
+                                        ${req.status === 'pending' ? `
+                                            <div class="flex items-center justify-end gap-2">
+                                                <button onclick="handleLicenseRequest(${req.id}, 'approve', ${entId}, '${entName.replace(/'/g, "\\'")}')" class="px-3 py-2 bg-green-600 text-white text-[9px] font-black uppercase rounded-xl hover:bg-green-700 transition shadow-lg shadow-green-600/20">Approve</button>
+                                                <button onclick="handleLicenseRequest(${req.id}, 'reject', ${entId}, '${entName.replace(/'/g, "\\'")}')" class="px-3 py-2 bg-gray-100 text-gray-500 text-[9px] font-black uppercase rounded-xl hover:bg-gray-200 transition">Reject</button>
+                                            </div>
+                                        ` : `
+                                            <span class="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Handled</span>
+                                        `}
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('');
+                    } catch (e) {
+                        console.error("Failed to load requests", e);
+                        const listEl = document.getElementById('enterprise-requests-list');
+                        if (listEl) {
+                            listEl.innerHTML = `
+                                <tr>
+                                    <td colspan="5" class="p-20 text-center text-red-500 font-black uppercase text-[10px]">
+                                        <i class="bi bi-exclamation-triangle-fill text-2xl block mb-2"></i>
+                                        Sync Error: ${e.message}
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    }
+                }
+
+                async function handleLicenseRequest(reqId, action, entId, entName) {
+                    if (!confirm(`Are you sure you want to ${action} this request?`)) return;
+
+                    try {
+                        const res = await adminFetch('/api/admin/handle-request', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ request_id: reqId, action: action })
+                        });
+
+                        if (res.ok) {
+                            alert(`Request ${action === 'approve' ? 'Approved' : 'Rejected'} Successfully.`);
+                            // Reload both the request list and updated enterprise data
+                            await loadAdminData();
+                            openEnterpriseRequests(entId, entName);
+                        } else {
+                            const d = await res.json();
+                            alert("Sync Failure: " + (d.error || "Unknown Error"));
+                        }
+                    } catch (e) {
+                        alert("Network Error: Failed to transmit decision.");
+                    }
+                }
+
+
+                async function handleEnterpriseSendMessage(entId) {
+                    const input = document.getElementById('enterprise-chat-input');
+                    const message = input.value.trim();
+                    if (!message) return;
+
+                    const originalVal = input.value;
+                    input.value = '';
+                    input.disabled = true;
+
+                    try {
+                        const res = await adminFetch(`/api/enterprise/messages?enterprise_id=${entId}&view_as=support`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message })
+                        });
+
+                        if (res.ok) {
+                            await loadEnterpriseMessages(entId);
+                        } else {
+                            input.value = originalVal;
+                            alert("Sync Failure");
+                        }
+                    } catch (e) {
+                        input.value = originalVal;
+                        alert("Network Error");
+                    } finally {
+                        input.disabled = false;
+                        if (!input.disabled) input.focus();
+                    }
+                }
+
+                // Auto refresh interval for admin messaging
+                setInterval(() => {
+                    if (currentMessagingEnterpriseId) {
+                        loadEnterpriseMessages(currentMessagingEnterpriseId);
+                    }
+                }, 8000);
+
+                function renderAccountGrid(plan) {
+                    const gridEl = document.getElementById('accounts-grid');
+                    gridEl.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8";
+
+                    const users = cachedUsers.filter(u => {
+                        if (plan === 'enterprise') return u.plan === 'enterprise' || u.role === 'admin' || u.role === 'super_admin';
+                        return u.plan === plan;
+                    });
+
+                    const getTierCol = (p) => {
+                        if (p === 'enterprise') return { primary: '#3b82f6', secondary: '#60a5fa', text: 'text-blue-500', bg: 'bg-blue-500/10' };
+                        if (p === 'executive') return { primary: '#f97316', secondary: '#fb923c', text: 'text-orange-500', bg: 'bg-orange-500/10' };
+                        if (p === 'professional') return { primary: '#f00000', secondary: '#ff4d4d', text: 'text-red-500', bg: 'bg-red-500/10' };
+                        return { primary: '#6b7280', secondary: '#9ca3af', text: 'text-gray-500', bg: 'bg-gray-500/10' };
+                    };
+
+                    gridEl.innerHTML = users.map(user => {
+                        const colors = getTierCol(user.plan);
+                        return `
+                            <div class="account-card group" style="--tier-color: ${colors.primary}; --tier-secondary: ${colors.secondary}">
+                        <div class="card-badge" style="background-color: ${colors.primary}">
+                            <i class="bi bi-star-fill text-[8px] mr-1"></i> ${user.plan || 'Starter'}
+                        </div>
+                        <div class="card-dots">
+                            <i class="bi bi-three-dots"></i>
+                        </div>
+                        
+                        <div class="avatar-ring" style="border-color: ${colors.primary}">
+                            <div class="avatar-box">
+                                ${user.avatar_url ?
+                                `<img src="${user.avatar_url}" class="w-full h-full object-cover">` :
+                                (user.email || 'U').charAt(0).toUpperCase()
+                            }
+                            </div>
+                        </div>
+                        
+                        <div class="text-center relative z-10">
+                            <h4 class="text-gray-900 text-sm font-black truncate mb-1">${user.email.split('@')[0]}</h4>
+                            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest">${user.email}</p>
+                            <p class="text-[9px] font-black mt-2 uppercase" style="color: ${colors.primary}">ID: #${user.id}</p>
+                        </div>
+                        
+                        <button onclick="openModal(${user.id}, '${user.email}', '${user.plan || 'starter'}')" 
+                                class="view-profile-btn">
+                            Manage Account
+                        </button>
+                    </div >
+                            `}).join('');
+
+                    if (users.length === 0) {
+                        gridEl.innerHTML = `<div class="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4 p-20 text-center flex flex-col items-center gap-4 opacity-30">
+                        <i class="bi bi-person-slash text-6xl"></i>
+                        <p class="text-sm font-black uppercase tracking-widest">No accounts found in this tier</p>
+                    </div>`;
+                    }
+                }
+
+                function renderUserTable() {
+                    const container = document.getElementById('user-sections-container');
+                    container.innerHTML = '';
+
+                    // Deduplicate users for the main dashboard view (Ensures one row per account)
+                    const uniqueUsersMap = new Map();
+                    cachedUsers.forEach(u => {
+                        // Always prefer the profile card (parent_id is null) for the identity display
+                        if (!uniqueUsersMap.has(u.id) || !u.parent_id) {
+                            uniqueUsersMap.set(u.id, u);
+                        }
+                    });
+                    const displayUsers = Array.from(uniqueUsersMap.values());
+
+                    const plans = [
+                        { id: 'starter', label: 'Starter', icon: 'bi-lightning-charge', desc: 'Free Tier Accounts' },
+                        { id: 'professional', label: 'Professional', icon: 'bi-award-fill', desc: 'Paid Tier Accounts' },
+                        { id: 'executive', label: 'Executive', icon: 'bi-rocket-takeoff-fill', desc: 'High Tier Accounts' },
+                        { id: 'enterprise', label: 'Enterprise', icon: 'bi-buildings-fill', desc: 'Organization Staff' }
+                    ];
+
+                    const displayPlans = activePlanFilter === 'all' ? plans : plans.filter(p => p.id === activePlanFilter);
+
+                    // Toggle Enterprise Organization section visibility
+                    const entSection = document.getElementById('enterprise-section');
+                    if (entSection) {
+                        entSection.classList.toggle('hidden', activePlanFilter !== 'all' && activePlanFilter !== 'enterprise');
+                    }
+
+                    displayPlans.forEach(plan => {
+                        const users = displayUsers.filter(u => {
+                            if (plan.id === 'enterprise') return u.plan === 'enterprise' || u.role === 'admin' || u.role === 'super_admin';
+                            return u.plan === plan.id;
+                        });
+
+                        if (activePlanFilter !== 'all' || users.length > 0) {
+                            const sectionHtml = `
+                            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-8">
+                            <div class="p-6 border-b border-gray-50 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg ${plan.id === 'starter' ? 'bg-gray-100 text-gray-500' : plan.id === 'professional' ? 'bg-red-50 text-brand-red' : plan.id === 'executive' ? 'bg-orange-50 text-orange-600' : 'bg-blue-50 text-blue-600'} flex items-center justify-center text-sm shadow-sm">
+                                        <i class="bi ${plan.icon}"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-black text-lg text-gray-900 uppercase tracking-tight">${plan.label} Users</h3>
+                                        <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-0.5">${plan.desc}</p>
+                                    </div>
+                                </div>
+                                <span class="bg-gray-50 text-gray-400 text-[10px] font-black px-3 py-1 rounded-full border border-gray-100">${users.length} Users</span>
+                            </div>
+                            <div class="overflow-x-auto max-h-[268px] overflow-y-auto custom-scrollbar">
+                                <table class="w-full text-left border-separate border-spacing-0">
+                                    <thead class="bg-gray-50/50 sticky top-0 z-10 backdrop-blur-md">
+                                        <tr>
+                                            <th class="p-4 pl-6 text-[10px] font-black text-gray-400 uppercase tracking-widest border-r border-b border-gray-100 w-16 text-center">ID</th>
+                                            <th class="p-4 pl-6 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Identity & Plan</th>
+                                            <th class="p-4 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest pr-6 border-b border-gray-100">Management</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-50">
+                                        ${users.length > 0 ? users.map(user => `
+                                            <tr class="hover:bg-gray-50/50 transition">
+                                                <td class="p-4 pl-6 border-r border-gray-50 text-[10px] font-black text-gray-400 text-center">#${user.id}</td>
+                                                <td class="p-4 pl-6">
+                                                    <div class="flex items-center gap-4">
+                                                        <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 font-black text-sm border border-gray-100 overflow-hidden">
+                                                            ${user.avatar_url ?
+                                    `<img src="${user.avatar_url}" alt="${user.email}" class="w-full h-full object-cover">` :
+                                    (user.email || 'U').charAt(0).toUpperCase()
+                                }
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm font-black text-gray-900">${user.email}</p>
+                                                            <div class="flex items-center gap-2 mt-1">
+                                                                <span class="${getPlanBadge(user.plan)}">${user.plan || 'starter'}</span>
+                                                                ${user.slug ? `<span class="text-[9px] font-bold text-gray-400">/${user.slug}</span>` : ''}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="p-4 text-right pr-6">
+                                                    <div class="flex items-center justify-end gap-2">
+                                                        <button onclick="loginAsUser(${user.id})" class="p-2 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-900 hover:text-white transition">
+                                                            <i class="bi bi-shield-shaded"></i>
+                                                        </button>
+                                                        <button onclick="openModal(${user.id}, '${user.email}', '${user.plan || 'starter'}')" class="px-4 py-2 rounded-xl bg-gray-50 text-gray-900 text-[10px] font-black uppercase tracking-widest hover:bg-brand-red hover:text-white transition group border border-gray-100">
+                                                            Manage <i class="bi bi-chevron-right ml-1 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `).join('') : `
+                                            <tr>
+                                                <td colspan="3" class="p-12 text-center">
+                                                    <div class="flex flex-col items-center gap-2 opacity-30">
+                                                        <i class="bi bi-people text-3xl"></i>
+                                                        <p class="text-[10px] font-black uppercase tracking-widest">No users in this tier</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div >
+                            `;
+                            container.innerHTML += sectionHtml;
+                        }
+                    });
+                }
+
+                async function loadAdminData() {
+                    try {
+                        const usersRes = await adminFetch('/api/admin/users');
+                        if (!usersRes.ok) throw new Error("API Connection Failed");
+                        const users = await usersRes.json();
+
+                        cachedUsers = users;
+                        renderUserTable();
+
+                        document.getElementById('total-users').innerText = users.length || 0;
+                        const paidCount = users.filter(u => u.plan === 'professional' || u.plan === 'executive').length;
+                        document.getElementById('paid-users').innerText = paidCount;
+
+                        const entRes = await adminFetch('/api/admin/enterprises');
+                        const enterprises = await entRes.json();
+                        cachedEnterprises = enterprises;
+                        document.getElementById('enterprise-count').innerText = enterprises.length || 0;
+
+                        const enterpriseHtml = enterprises.map(ent => `
+                            <tr class="hover:bg-gray-50/50 transition whitespace-nowrap">
+                            <td class="p-4 pl-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg font-black shadow-sm overflow-hidden">
+                                        ${ent.logo ? `<img src="${ent.logo}" alt="${ent.company_name}" class="w-full h-full object-contain">` : (ent.company_name || 'C').charAt(0)}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-black text-gray-900">${ent.company_name}</p>
+                                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${ent.super_admin_email || 'No Super Admin'}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-4 text-center">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-full border border-gray-200">
+                                    <span class="text-xs font-black text-gray-900">${ent.staff_count}</span>
+                                    <span class="w-1 h-3 border-l border-gray-300"></span>
+                                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-tight">${ent.license_count} Max</span>
+                                </div>
+                            </td>
+                            <td class="p-4 text-right pr-6">
+                                <div class="flex items-center justify-end gap-2">
+                                    <button onclick="loginAsEnterprise(${ent.id})" class="p-2 rounded-xl bg-blue-50 text-blue-500 hover:bg-blue-600 hover:text-white transition shadow-sm">
+                                        <i class="bi bi-terminal-fill"></i>
+                                    </button>
+                                    <button onclick="openManageEnterpriseModal(${ent.id})" class="px-4 py-2 rounded-xl bg-white border border-gray-100 text-gray-900 text-[10px] font-black uppercase tracking-widest hover:bg-gray-50 transition">
+                                        Org Panel
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                            `).join('');
+                        document.getElementById('enterprise-list').innerHTML = enterpriseHtml || '<tr><td colspan="3" class="p-8 text-center text-gray-400">No organizations registered.</td></tr>';
+
+                    } catch (e) {
+                        console.error("Dashboard Load Error:", e);
+                        const container = document.getElementById('user-sections-container');
+                        if (container) {
+                            container.innerHTML = `
+                            < div class="flex flex-col items-center gap-4 p-20 bg-white rounded-3xl border border-red-100 shadow-sm animate-fade-in" >
+                                <div class="w-16 h-16 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center text-3xl mb-4">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                </div>
+                                <h3 class="text-lg font-black text-gray-900 uppercase tracking-tight">Access Restricted or Connection Fault</h3>
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest max-w-xs text-center leading-relaxed">
+                                    ${e.message === 'API Connection Failed' ? 'Unauthorized: You do not have root control permissions for this console.' : 'The system engine could not synchronize with the secure server.'}
+                                </p>
+                                <button onclick="loadAdminData()" class="mt-4 px-6 py-3 rounded-xl bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest hover:bg-gray-800 transition shadow-lg">
+                                    Retry Calibration
+                                </button>
+                            </div >
+                        `;
+                        }
+                    }
+                }
+
+                function openCreateEnterpriseModal() {
+                    const modal = document.getElementById('create-enterprise-modal');
+                    modal.classList.remove('hidden');
+                    setTimeout(() => modal.classList.add('scale-100'), 10);
+                }
+
+                function closeEntModal() {
+                    const modal = document.getElementById('create-enterprise-modal');
+                    modal.classList.add('hidden');
+                }
+
+                function stepValue(id, step) {
+                    const input = document.getElementById(id);
+                    const val = parseInt(input.value) || 0;
+                    input.value = Math.max(0, val + step);
+                }
+
+                window.openLicenseModal = function (entId) {
+                    const ent = cachedEnterprises.find(e => e.id == entId);
+                    if (!ent) return alert("System Error: Local cache mismatch for Org #" + entId);
+
+                    currentEnterpriseId = entId;
+                    document.getElementById('mod-licenses').value = ent.license_count || 0;
+                    document.getElementById('mod-sub-licenses').value = ent.sub_license_count || 0;
+
+                    const modal = document.getElementById('modify-license-modal');
+                    modal.classList.remove('hidden');
+                    modal.style.display = 'flex';
+
+                    modal.offsetHeight; // Reflow for transition
+
+                    modal.style.opacity = '1';
+                    modal.style.pointerEvents = 'auto';
+
+                    setTimeout(() => {
+                        const content = modal.querySelector('.modal-content');
+                        if (content) {
+                            content.classList.remove('opacity-0', 'scale-95');
+                            content.classList.add('opacity-100', 'scale-100'); content.style.opacity = '1'; content.style.transform = 'scale(1)';
+                        }
+                    }, 50);
+                };
+
+                window.closeLicenseModal = function () {
+                    const modal = document.getElementById('modify-license-modal');
+                    const content = modal.querySelector('.modal-content');
+
+                    if (content) {
+                        content.classList.add('scale-95', 'opacity-0');
+                        content.classList.remove('scale-100', 'opacity-100');
+                    }
+
+                    setTimeout(() => {
+                        modal.style.opacity = '0';
+                        modal.style.pointerEvents = 'none';
+                        setTimeout(() => modal.classList.add('hidden'), 300);
+                    }, 200);
+                };
+
+                async function saveLicenseChanges() {
+                    if (!currentEnterpriseId) return;
+                    const licenses = document.getElementById('mod-licenses').value;
+                    const subLicenses = document.getElementById('mod-sub-licenses').value;
+                    const btn = document.getElementById('btn-save-license');
+                    const originalText = btn.innerText;
+
+                    btn.innerText = "UPDATING CORE...";
+                    btn.disabled = true;
+
+                    try {
+                        const res = await adminFetch('/api/admin/update-enterprise-licenses', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                enterprise_id: currentEnterpriseId,
+                                license_count: parseInt(licenses),
+                                sub_license_count: parseInt(subLicenses)
+                            })
+                        });
+
+                        if (res.ok) {
+                            alert("Enterprise Capacity Updated.");
+                            closeLicenseModal();
+                            loadAdminData();
+                        } else {
+                            const d = await res.json();
+                            alert("Sync Failed: " + (d.error || "System Error"));
+                        }
+                    } catch (e) { alert("Network Error"); }
+                    finally { btn.innerText = originalText; btn.disabled = false; }
+                }
+
+                async function createEnterprise() {
+                    const name = document.getElementById('ent-name').value;
+                    const adminName = document.getElementById('ent-admin-name').value;
+                    const email = document.getElementById('ent-email').value;
+                    const licenses = document.getElementById('ent-licenses').value;
+                    const subLicenses = document.getElementById('ent-sub-licenses').value;
+                    const password = document.getElementById('ent-password').value;
+
+                    if (!name || !adminName || !email || !password) return alert("Required fields missing.");
+
+                    const btn = document.getElementById('btn-create-ent');
+                    const originalText = btn.innerText;
+                    btn.innerText = "INITIALIZING CORE...";
+                    btn.disabled = true;
+
+                    try {
+                        const res = await adminFetch('/api/admin/create-enterprise', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                company_name: name,
+                                super_admin_name: adminName,
+                                super_admin_email: email,
+                                super_admin_password: password,
+                                total_licenses: licenses,
+                                sub_licenses: subLicenses
+                            })
+                        });
+
+                        if (res.ok) {
+                            alert("Enterprise Network Created.");
+                            closeEntModal();
+                            loadAdminData();
+                        } else {
+                            const d = await res.json();
+                            alert("Failure: " + (d.error || "Provisioning Error"));
+                        }
+                    } catch (e) { alert("Network Error"); }
+                    finally { btn.innerText = originalText; btn.disabled = false; }
+                }
+
+                function openManageEnterpriseModal(id) {
+                    const ent = cachedEnterprises.find(e => e.id == id);
+                    if (ent) {
+                        viewEnterpriseStaff(id, ent.company_name);
+                    } else {
+                        alert("Administrative interface for Org #" + id + " is loading...");
+                    }
+                }
+
+                function loginAsEnterprise(id) {
+                    if (confirm("Proceed to Enterprise Simulation for System #" + id + "?")) {
+                        console.log("Simulating Entry...");
+                    }
+                }
+
+                async function loginAsUser(id) {
+                    if (!confirm("Confirm Account Session Takeover?")) return;
+                    try {
+                        const res = await adminFetch('/api/admin/login-as', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ user_id: id })
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                            localStorage.setItem('castle_token', data.token);
+                            window.location.href = 'dashboard.html';
+                        } else alert("Session Error");
+                    } catch (e) { alert("Simulation Error"); }
+                }
+
+                function openModal(id, email, plan) {
+                    currentUserId = id;
+                    document.getElementById('modal-email').innerText = email;
+                    document.getElementById('plan-select').value = plan;
+                    document.getElementById('edit-modal').classList.remove('hidden');
+                }
+
+                function closeModal() {
+                    document.getElementById('edit-modal').classList.add('hidden');
+                }
+
+                async function saveUserChanges() {
+                    if (!currentUserId) return;
+                    const newPlan = document.getElementById('plan-select').value;
+                    try {
+                        const res = await adminFetch('/api/admin/update-user', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ user_id: currentUserId, plan: newPlan })
+                        });
+                        if (res.ok) { alert("DB Synced."); closeModal(); loadAdminData(); }
+                    } catch (e) { alert("Sync Error"); }
+                }
+
+                async function deleteUser() {
+                    if (!confirm("Permanent Account Deletion? This cannot be undone.")) return;
+                    try {
+                        const res = await adminFetch('/api/admin/update-user', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ user_id: currentUserId, action: 'delete' })
+                        });
+                        if (res.ok) { alert("Identity Purged."); closeModal(); loadAdminData(); }
+                    } catch (e) { alert("Purge Error"); }
+                }
+            </script>
+</body>
+
+</html>

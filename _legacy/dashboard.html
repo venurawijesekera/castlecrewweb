@@ -1,0 +1,451 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Castle Cards</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { red: '#f00000', black: '#0a0a0a', dark: '#121212', sidebar: '#0f0f0f' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+        }
+
+        /* Preloader Styles */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glow animation for preloader logo */
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
+
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                DASHBOARD
+            </div>
+        </div>
+    </div>
+
+    <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6 z-20">
+        <div>
+            <div class="flex items-center gap-2 mb-10 text-xl font-bold tracking-tight">
+                <div class="w-3 h-3 bg-brand-red rotate-45"></div> CASTLE CREW
+            </div>
+            <nav class="space-y-2">
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-house-door-fill"></i> Home Page
+                </a>
+                <a href="profile.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-person-circle"></i> Profile
+                </a>
+
+                <!-- Products Link (Hidden Default) -->
+                <a href="profile.html?view=products" id="nav-products"
+                    class="hidden items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-box-seam-fill"></i> Products
+                </a>
+
+                <a href="product_leads.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-inboxes-fill"></i> Product Leads
+                </a>
+
+                <a href="leads.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-people-fill"></i> Connections
+                </a>
+                <a href="dashboard.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-brand-red/10 text-brand-red rounded-lg text-sm font-bold">
+                    <i class="bi bi-grid-fill"></i> Templates
+                </a>
+                <a href="analytics.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-bar-chart-fill"></i> Analytics
+                </a>
+                <a href="settings.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                    <i class="bi bi-gear-fill"></i> Settings
+                </a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-3 pt-6 border-t border-gray-800">
+            <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs">👤</div>
+            <div>
+                <p class="text-sm font-bold" id="user-name">Loading...</p>
+                <p class="text-[10px] text-gray-500 uppercase" id="user-plan">...</p>
+                <p class="text-[10px] text-blue-400 uppercase hidden" id="company-display">...</p>
+            </div>
+        </div>
+
+    </aside>
+
+    <main class="flex-1 relative">
+        <div
+            class="md:hidden p-4 flex justify-between items-center border-b border-gray-800 bg-brand-black sticky top-0 z-20">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMenu()" class="text-white text-2xl focus:outline-none"><i
+                        class="bi bi-list"></i></button>
+                <div class="font-bold tracking-tight flex items-center gap-2">
+                    <div class="w-2 h-2 bg-brand-red rotate-45"></div> CASTLE
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs">👤</div>
+        </div>
+
+        <div class="p-6 md:p-12 pb-32 md:pb-12 max-w-7xl mx-auto h-full md:overflow-y-auto">
+
+            <div id="enterprise-alert"
+                class="hidden bg-blue-900/30 border-l-4 border-blue-500 text-blue-100 p-4 mb-6 rounded-lg">
+                You are currently using the <span id="managed-company-name" class="font-bold"></span> corporate plan.
+                Certain features may be centrally controlled by your delegated Admin.
+            </div>
+
+            <div class="mb-10">
+                <h1 class="text-3xl md:text-4xl font-black uppercase mb-2">Choose Your <span
+                        class="text-brand-red">Look</span></h1>
+                <p class="text-gray-400">Select a template to start editing your digital business card.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div
+                    class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
+                    <div class="h-64 bg-gray-900 relative p-6 flex flex-col items-center justify-center gap-4">
+                        <div class="absolute inset-0 bg-gradient-to-b from-gray-800 to-black opacity-50"></div>
+                        <div class="relative w-32 h-32 rounded-full bg-gray-700 border-4 border-gray-600 z-10"></div>
+                        <div class="relative z-10 w-3/4 h-4 bg-gray-700 rounded"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-1">
+                            <h3 class="text-xl font-bold">Real Estate</h3>
+                            <span
+                                class="text-[10px] bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded font-bold uppercase">Pro</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-4">Clean, professional, and trust building.</p>
+                        <div class="flex gap-2">
+                            <button onclick="window.open('theme-realestate.html?id=demo', '_blank')"
+                                class="flex-1 py-3 border border-gray-700 rounded-lg text-sm font-bold hover:bg-white hover:text-black transition">Preview</button>
+                            <button id="btn-realestate" onclick="selectTemplate('realestate')"
+                                class="btn-select flex-1 py-3 bg-brand-red text-white rounded-lg text-sm font-bold hover:bg-red-700 transition"
+                                data-premium="true">Select</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300 ring-2 ring-brand-red/20">
+                    <div
+                        class="absolute top-4 right-4 bg-brand-red text-white text-[10px] font-bold px-2 py-1 rounded z-20">
+                        FREE</div>
+                    <div
+                        class="h-64 bg-gray-900 relative p-6 flex flex-col items-center justify-center gap-4 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-brand-red/20 to-black"></div>
+                        <div
+                            class="relative w-full h-full bg-black border border-brand-red/30 rounded-xl p-4 flex flex-col justify-end">
+                            <div class="w-12 h-12 bg-brand-red mb-4 rounded-full"></div>
+                            <div class="w-full h-2 bg-gray-800 rounded mb-2"></div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1 text-brand-red">Castle Signature</h3>
+                        <p class="text-xs text-gray-500 mb-4">High contrast dark mode with vibrant red accents.</p>
+                        <button id="btn-signature" onclick="selectTemplate('signature')"
+                            class="w-full py-3 bg-brand-red text-white rounded-lg text-sm font-bold hover:bg-red-700 transition">Select
+                            Template</button>
+                    </div>
+                </div>
+
+                <div
+                    class="group relative bg-brand-dark border border-gray-800 rounded-2xl overflow-hidden hover:border-brand-red transition duration-300">
+                    <div class="h-64 bg-gray-900 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000"
+                            class="w-full h-full object-cover opacity-60">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-1">
+                            <h3 class="text-xl font-bold">Creative Portfolio</h3>
+                            <span
+                                class="text-[10px] bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded font-bold uppercase">Pro</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-4">Full-screen background images. Ideal for artists.</p>
+                        <div class="flex gap-2">
+                            <button onclick="window.open('theme-creative.html?id=demo', '_blank')"
+                                class="flex-1 py-3 border border-gray-700 rounded-lg text-sm font-bold hover:bg-white hover:text-black transition">Preview</button>
+                            <button id="btn-creative" onclick="selectTemplate('creative')"
+                                class="btn-select flex-1 py-3 bg-brand-red text-white rounded-lg text-sm font-bold hover:bg-red-700 transition"
+                                data-premium="true">Select</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-50 hidden flex-col p-6 transition-opacity duration-300">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-2 text-xl font-bold tracking-tight">
+                <div class="w-3 h-3 bg-brand-red rotate-45"></div> CASTLE CREW
+            </div>
+            <button onclick="toggleMenu()" class="text-gray-400 text-3xl hover:text-white transition"><i
+                    class="bi bi-x"></i></button>
+        </div>
+        <nav class="space-y-4 text-lg">
+            <a href="index.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition">
+                <i class="bi bi-house-door-fill text-xl"></i> Home Page
+            </a>
+            <a href="profile.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-person-circle text-xl"></i> Profile</a>
+
+            <a href="profile.html?view=products"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-box-seam-fill text-xl"></i> Products</a>
+            <a href="product_leads.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-inboxes-fill text-xl"></i> Product Leads</a>
+
+            <a href="leads.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-people-fill text-xl"></i> Connections</a>
+            <a href="dashboard.html"
+                class="flex items-center gap-4 py-2 text-brand-red font-bold border-b border-brand-red/30 transition"><i
+                    class="bi bi-grid-fill text-xl"></i> Templates</a>
+            <a href="analytics.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-bar-chart-fill text-xl"></i> Analytics</a>
+            <a href="settings.html"
+                class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition">
+                <i class="bi bi-gear-fill"></i> Settings
+            </a>
+        </nav>
+        <div class="mt-auto"><button onclick="logout()"
+                class="flex items-center gap-3 text-gray-500 hover:text-white font-bold uppercase transition"><i
+                    class="bi bi-box-arrow-left text-xl"></i> Sign Out</button></div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
+        }
+
+        let userPlan = 'starter';
+
+        async function initDashboard() {
+            const token = localStorage.getItem('castle_token');
+            if (!token) return window.location.href = 'login.html';
+
+            try {
+                const res = await fetch('/api/card', { headers: { 'Authorization': token } });
+
+                // Check for unauthorized access, especially important after admin impersonation
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+
+                const data = await res.json();
+
+                // --- NEW ENTERPRISE REDIRECTION LOGIC ---
+                // Assumes /api/card now returns: data.role, data.enterprise_id, data.company_name
+                const userRole = data.role;
+                const enterpriseId = data.enterprise_id;
+
+                if (enterpriseId) {
+                    if (userRole === 'super_admin') {
+                        return window.location.href = 'enterprise_super_admin_dashboard.html';
+                    }
+                    if (userRole === 'admin') {
+                        return window.location.href = 'enterprise_admin_dashboard.html';
+                    }
+                }
+                // --- END REDIRECTION LOGIC ---
+
+
+                document.getElementById('user-name').innerText = data.full_name || "New User";
+                userPlan = data.plan || 'starter';
+
+                let planDisplay = userPlan;
+
+                // UI Adjustment for Enterprise Staff User (role='staff')
+                if (enterpriseId) {
+                    planDisplay = "Enterprise Staff";
+                    document.getElementById('company-display').innerText = data.company_name || "Enterprise Account";
+                    document.getElementById('company-display').classList.remove('hidden');
+                    document.getElementById('enterprise-alert').classList.remove('hidden');
+                    document.getElementById('managed-company-name').innerText = data.company_name || "your company";
+
+                    // Show Products Link
+                    const prodLink = document.getElementById('nav-products');
+                    if (prodLink) {
+                        prodLink.classList.remove('hidden');
+                        prodLink.classList.add('flex');
+                    }
+                }
+                document.getElementById('user-plan').innerText = planDisplay + " Role";
+
+
+                // Lock Premium Templates if user is Starter AND not an Enterprise Staff Member
+                // Enterprise staff are assumed to have premium access via their company plan.
+                const isPremiumLocked = (userPlan === 'starter' && !enterpriseId);
+
+                if (isPremiumLocked) {
+                    document.querySelectorAll('.btn-select[data-premium="true"]').forEach(btn => {
+                        btn.innerText = "🔒 Upgrade";
+                        btn.className = "flex-1 py-3 bg-gray-800 text-gray-500 rounded-lg text-sm font-bold cursor-not-allowed border border-gray-700";
+                        btn.onclick = (e) => {
+                            e.preventDefault();
+                            if (confirm("Requires PRO plan.")) window.location.href = "pricing.html";
+                        };
+                    });
+                }
+
+                const currentTemplate = data.template_id || 'signature';
+                const activeBtn = document.getElementById(`btn-${currentTemplate}`);
+                if (activeBtn) {
+                    // Reset all buttons to default state first
+                    document.querySelectorAll('.btn-select').forEach(btn => {
+                        // Only reset non-premium buttons or buttons that aren't locked
+                        if (btn.dataset.premium !== "true" || !isPremiumLocked) {
+                            btn.innerText = "Select";
+                            btn.className = "btn-select flex-1 py-3 bg-brand-red text-white rounded-lg text-sm font-bold hover:bg-red-700 transition";
+                            btn.onclick = (e) => selectTemplate(btn.id.replace('btn-', ''));
+                        }
+                    });
+
+                    // Set the currently active button
+                    activeBtn.innerText = "Edit Template";
+                    activeBtn.className = "flex-1 py-3 bg-white text-black border border-gray-200 rounded-lg text-sm font-bold hover:bg-gray-100 transition shadow-lg w-full";
+                    activeBtn.onclick = () => window.location.href = 'editor.html';
+                }
+
+            } catch (e) {
+                console.error(e);
+                // Fallback protection against bad tokens
+                if (e.message.includes('401')) {
+                    logout();
+                }
+            }
+        }
+
+        async function selectTemplate(templateName) {
+            // Check if user is trying to select a premium template without rights
+            const btn = document.getElementById(`btn-${templateName}`);
+            if (btn.dataset.premium === "true" && userPlan === 'starter' && !data.enterprise_id) {
+                return; // Guard is already handled in initDashboard, but this is a double check.
+            }
+
+            const token = localStorage.getItem('castle_token');
+            const oldText = btn.innerText;
+            btn.innerText = "Applying...";
+
+            try {
+                // Fetch current card data to preserve existing social links, etc.
+                const current = await fetch('/api/card', { headers: { 'Authorization': token } }).then(r => r.json());
+
+                // Safely parse JSON arrays/objects
+                let socialsObj = {};
+                let phonesArr = [];
+                let emailsArr = [];
+                try { socialsObj = JSON.parse(current.socials || '{}'); } catch (e) { }
+                try { phonesArr = JSON.parse(current.phones || '[]'); } catch (e) { }
+                try { emailsArr = JSON.parse(current.emails || '[]'); } catch (e) { }
+
+                const payload = {
+                    ...current,
+                    socials: socialsObj,
+                    phones: phonesArr,
+                    emails: emailsArr,
+                    template_id: templateName
+                };
+
+                // Send update request to /api/card (POST)
+                const res = await fetch('/api/card', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) window.location.href = 'editor.html';
+
+            } catch (e) {
+                alert("Error saving template");
+            }
+            btn.innerText = oldText;
+        }
+
+        function logout() {
+            localStorage.removeItem('castle_token');
+            window.location.href = 'index.html';
+        }
+
+        // Preloader Logic 
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
+
+        initDashboard();
+    </script>
+</body>
+
+</html>

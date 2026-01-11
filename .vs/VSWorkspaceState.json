@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\assets",
+    "\\functions",
+    "\\functions\\api",
+    "\\functions\\api\\admin",
+    "\\functions\\api\\analytics",
+    "\\functions\\api\\enterprise",
+    "\\functions\\api\\public",
+    "\\functions\\utils"
+  ],
+  "SelectedNode": "\\functions\\api\\admin\\update-user.js",
+  "PreviewInSolutionExplorer": false
+}

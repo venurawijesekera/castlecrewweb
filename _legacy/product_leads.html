@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Leads - Castle Cards</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { red: '#f00000', black: '#0a0a0a', dark: '#121212', sidebar: '#0f0f0f' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+        }
+
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
+
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <!-- Simplified Preloader -->
+    </div>
+
+    <aside class="w-64 bg-brand-sidebar border-r border-gray-900 hidden md:flex flex-col justify-between p-6 z-20">
+        <div>
+            <div class="flex items-center gap-2 mb-10 text-xl font-bold tracking-tight">
+                <div class="w-3 h-3 bg-brand-red rotate-45"></div> CASTLE CREW
+            </div>
+            <nav class="space-y-2">
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-house-door-fill"></i> Home Page</a>
+                <a href="profile.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-person-circle"></i> Profile</a>
+
+                <a href="profile.html?view=products" id="nav-products"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-box-seam-fill"></i> Products</a>
+
+                <!-- ACTIVE PAGE -->
+                <a href="product_leads.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-brand-red/10 text-brand-red rounded-lg text-sm font-bold"><i
+                        class="bi bi-inboxes-fill"></i> Product Leads</a>
+
+                <a href="leads.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-people-fill"></i> Connections</a>
+                <a href="dashboard.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-grid-fill"></i> Templates</a>
+                <a href="analytics.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-bar-chart-fill"></i> Analytics</a>
+
+                <!-- Admin Panel Link (Hidden Default) -->
+                <a href="#" id="admin-sidebar-link"
+                    class="hidden items-center gap-3 px-4 py-3 text-blue-500 hover:text-white hover:bg-blue-900/20 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-shield-lock-fill"></i> Admin Panel</a>
+
+                <a href="settings.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg text-sm font-medium transition"><i
+                        class="bi bi-gear-fill"></i> Settings</a>
+            </nav>
+        </div>
+        <div class="pt-6 border-t border-gray-800">
+            <button onclick="logout()"
+                class="flex items-center gap-2 text-gray-500 hover:text-white text-xs font-bold uppercase"><i
+                    class="bi bi-box-arrow-left"></i> Sign Out</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 relative">
+        <!-- Mobile Header -->
+        <div
+            class="md:hidden p-4 flex justify-between items-center border-b border-gray-800 bg-brand-black sticky top-0 z-20">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMenu()" class="text-white text-2xl focus:outline-none"><i
+                        class="bi bi-list"></i></button>
+                <div class="font-bold tracking-tight">CASTLE CREW</div>
+            </div>
+        </div>
+
+        <div class="p-6 md:p-12 pb-32 md:pb-12 max-w-6xl mx-auto h-full md:overflow-y-auto">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h1 class="text-3xl font-black uppercase mb-1">Product <span class="text-brand-red">Leads</span>
+                    </h1>
+                    <p class="text-gray-400 text-sm">Inquiries generated from your Product Cards.</p>
+                </div>
+                <button onclick="loadLeads()"
+                    class="text-xs bg-gray-800 px-3 py-2 rounded hover:bg-gray-700 text-white transition flex items-center gap-2"><i
+                        class="bi bi-arrow-clockwise"></i> Refresh</button>
+            </div>
+
+            <!-- List Header -->
+            <div
+                class="hidden md:grid grid-cols-12 gap-4 px-6 pb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                <div class="col-span-3">Name</div>
+                <div class="col-span-2">Phone</div>
+                <div class="col-span-3">Email</div>
+                <div class="col-span-2">Date</div>
+                <div class="col-span-2 text-right">Action</div>
+            </div>
+
+            <div id="leads-list" class="space-y-4">
+                <div class="text-center text-gray-600 py-10">Loading leads...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-50 hidden flex-col p-6 transition-opacity duration-300">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-2 text-xl font-bold tracking-tight">
+                <div class="w-3 h-3 bg-brand-red rotate-45"></div> CASTLE CREW
+            </div>
+            <button onclick="toggleMenu()" class="text-gray-400 text-3xl hover:text-white transition"><i
+                    class="bi bi-x"></i></button>
+        </div>
+        <nav class="space-y-4 text-lg">
+            <a href="index.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition">
+                <i class="bi bi-house-door-fill text-xl"></i> Home Page
+            </a>
+            <a href="profile.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-person-circle text-xl"></i> Profile</a>
+
+            <a href="profile.html?view=products"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-box-seam-fill text-xl"></i> Products</a>
+            <a href="product_leads.html"
+                class="flex items-center gap-4 py-2 text-brand-red font-bold border-b border-brand-red/30 transition"><i
+                    class="bi bi-inboxes-fill text-xl"></i> Product Leads</a>
+
+            <a href="leads.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-people-fill text-xl"></i> Connections</a>
+            <a href="dashboard.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-grid-fill text-xl"></i> Templates</a>
+            <a href="analytics.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-bar-chart-fill text-xl"></i> Analytics</a>
+
+            <!-- Admin Panel Link (Hidden Default) -->
+            <a href="#" id="mobile-admin-link"
+                class="hidden flex items-center gap-4 py-2 text-blue-500 hover:text-blue-400 border-b border-blue-900/30 transition font-bold"><i
+                    class="bi bi-shield-lock-fill text-xl"></i> Admin Panel</a>
+
+            <a href="settings.html"
+                class="flex items-center gap-4 py-2 text-gray-400 hover:text-white border-b border-gray-800 transition"><i
+                    class="bi bi-gear-fill text-xl"></i> Settings</a>
+        </nav>
+        <div class="mt-auto"><button onclick="logout()"
+                class="flex items-center gap-3 text-gray-500 hover:text-white font-bold uppercase transition"><i
+                    class="bi bi-box-arrow-left text-xl"></i> Sign Out</button></div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
+        }
+
+        async function loadLeads() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) preloader.classList.add('fade-out');
+
+            const token = localStorage.getItem('castle_token');
+            if (!token) return window.location.href = 'login.html';
+            try {
+                // Fetch Leads AND Products AND Card Role Info
+                const [resLeads, resProducts, resCard] = await Promise.all([
+                    fetch('/api/leads', { headers: { 'Authorization': token } }),
+                    fetch('/api/user/products', { headers: { 'Authorization': token } }),
+                    fetch('/api/card', { headers: { 'Authorization': token } })
+                ]);
+
+                // 1. Handle Role/Admin Link
+                const cardData = await resCard.json();
+                if (cardData.enterprise_id && (cardData.role === 'admin' || cardData.role === 'super_admin')) {
+                    const link = cardData.role === 'super_admin' ? 'enterprise_super_admin_dashboard.html' : 'enterprise_admin_dashboard.html';
+
+                    // Unhide Desktop Link
+                    const dLink = document.getElementById('admin-sidebar-link');
+                    if (dLink) { dLink.href = link; dLink.classList.remove('hidden'); dLink.classList.add('flex'); }
+
+                    // Unhide Mobile Link
+                    const mLink = document.getElementById('mobile-admin-link');
+                    if (mLink) { mLink.href = link; mLink.classList.remove('hidden'); mLink.classList.add('flex'); }
+                }
+
+                // 2. Handle Leads Logic
+                const allLeads = await resLeads.json();
+                const productsRes = await resProducts.json();
+
+                // API returns { cards: [...] } not just [...]
+                const products = productsRes.cards || [];
+
+                // Assume the first card (oldest) is the Main Profile.
+                // We want to SHOW leads for everything ELSE (Product Cards).
+                let mainSlug = "";
+                if (products.length > 0) {
+                    mainSlug = (products[0].slug || "").toLowerCase();
+                }
+
+                const productSlugs = new Set(products
+                    .map(p => (p.slug || "").toLowerCase())
+                    .filter(s => s !== mainSlug)
+                );
+
+                // Filter: Only show leads that belong to a product
+                const leads = allLeads.filter(lead => lead.card_slug && productSlugs.has(lead.card_slug.toLowerCase()));
+
+                const container = document.getElementById('leads-list');
+                const globalHeader = document.querySelector('.hidden.md\\:grid');
+                if (globalHeader) globalHeader.classList.add('hidden');
+
+                if (!leads || leads.length === 0) {
+                    container.innerHTML = '<div class="text-center py-12 text-gray-500">No product leads found.</div>';
+                    return;
+                }
+
+                // Group by Slug
+                const groups = {};
+                leads.forEach(lead => {
+                    const key = lead.card_slug ? `Product: /${lead.card_slug}` : 'General / Main Profile';
+                    if (!groups[key]) groups[key] = [];
+                    groups[key].push(lead);
+                });
+
+                let html = '';
+                const sortedKeys = Object.keys(groups).sort((a, b) => a.localeCompare(b));
+
+                for (const groupName of sortedKeys) {
+                    const groupLeads = groups[groupName];
+                    html += `
+                        <div class="mb-8 animate-fade-in-up">
+                            <h3 class="text-sm font-bold text-brand-red uppercase mb-3 flex items-center gap-2">
+                                <i class="bi bi-folder-fill"></i> ${groupName} 
+                                <span class="bg-gray-800 text-white text-[10px] px-2 py-0.5 rounded-full ml-auto border border-gray-700">${groupLeads.length}</span>
+                            </h3>
+                            <div class="bg-brand-dark border border-gray-800 rounded-xl overflow-hidden">
+                                 <div class="hidden md:grid grid-cols-12 gap-4 px-5 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider bg-black/20 border-b border-gray-800">
+                                    <div class="col-span-3">Name</div>
+                                    <div class="col-span-3">Phone</div>
+                                    <div class="col-span-4">Email / Message</div>
+                                    <div class="col-span-2 text-right">Date</div>
+                                </div>
+                                <div class="divide-y divide-gray-800">
+                                    ${groupLeads.map(lead => `
+                                        <div class="p-5 md:grid md:grid-cols-12 gap-4 items-center hover:bg-gray-800/20 transition">
+                                            <div class="col-span-3 font-bold text-white truncate" title="${lead.name}">${lead.name}</div>
+                                            <div class="col-span-3 text-xs text-brand-red font-mono"><a href="tel:${lead.phone}">${lead.phone}</a></div>
+                                            <div class="col-span-4 text-xs text-gray-400 truncate" title="${lead.message || lead.email}">${lead.message || lead.email || '<span class="opacity-30">-</span>'}</div>
+                                            <div class="col-span-2 text-[10px] text-gray-500 text-right font-mono">${new Date(lead.created_at).toLocaleDateString()}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                container.innerHTML = html;
+
+            } catch (e) {
+                console.error(e);
+                const container = document.getElementById('leads-list');
+                if (container) container.innerHTML = `<div class="text-center py-12 text-red-400">Error loading leads: ${e.message}</div>`;
+            }
+        }
+
+        loadLeads();
+        function logout() { localStorage.removeItem('castle_token'); window.location.href = 'index.html'; }
+    </script>
+</body>
+
+</html>

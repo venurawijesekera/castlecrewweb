@@ -1,0 +1,674 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Edit Card - Castle Cards</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { red: '#f00000', black: '#0a0a0a', dark: '#121212', sidebar: '#0f0f0f' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        .phone-screen::-webkit-scrollbar {
+            display: none;
+        }
+
+        select option {
+            background-color: #0a0a0a;
+            color: white;
+        }
+
+        .color-btn.selected {
+            ring: 2px solid white;
+            transform: scale(1.1);
+        }
+
+        /* New styles for Enterprise restriction */
+        .input-locked {
+            cursor: not-allowed;
+            opacity: 0.6;
+            background-color: #1a1a1a !important;
+        }
+
+        /* Preloader Styles (NEW) */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glow animation for preloader logo (NEW) */
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
+
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                CARD EDITOR
+            </div>
+        </div>
+    </div>
+
+
+    <div class="w-full md:w-1/2 lg:w-[600px] flex flex-col border-r border-gray-800 bg-brand-sidebar relative z-10">
+
+        <div
+            class="sticky top-0 z-50 h-16 border-b border-gray-800 flex items-center justify-between px-4 md:px-6 bg-brand-black shadow-md md:shadow-none">
+            <a href="profile.html" class="text-sm text-gray-400 hover:text-white flex items-center gap-2 transition">
+                <i class="bi bi-arrow-left"></i> <span class="hidden sm:inline">Back</span>
+            </a>
+            <div class="font-bold text-sm hidden md:block">Card Editor</div>
+            <div class="flex gap-2">
+                <a id="btn-view-live" href="#" target="_blank"
+                    class="border border-gray-700 text-gray-300 text-xs font-bold px-3 py-2 rounded hover:bg-white hover:text-black transition flex items-center gap-2">
+                    <i class="bi bi-eye"></i> <span class="hidden sm:inline">Live</span>
+                </a>
+                <button onclick="saveData()"
+                    class="bg-brand-red text-white text-xs font-bold px-4 py-2 rounded hover:bg-red-700 transition flex items-center gap-2 shadow-lg">
+                    <i class="bi bi-cloud-upload"></i> PUBLISH
+                </button>
+            </div>
+        </div>
+
+        <div class="p-4 md:p-6 space-y-6 pb-32 md:flex-1 md:overflow-y-auto md:pb-6" id="editor-form">
+
+            <div id="enterprise-editor-alert"
+                class="hidden bg-blue-900/30 border-l-4 border-blue-500 text-blue-100 p-4 rounded-xl">
+                <p class="font-bold">Managed Profile:</p>
+                <p class="text-sm">Your Castle Link, Job Title, and Company Name are controlled by your Enterprise
+                    Admin.</p>
+            </div>
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-palette-fill"></i> Design & Color
+                </h3>
+
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-2">Accent Color</label>
+                    <div class="flex flex-wrap gap-3" id="color-palette"></div>
+                    <input type="hidden" id="input-accent" value="#f00000">
+                </div>
+
+                <div>
+                    <label class="block text-xs text-gray-400 mb-2">Background Theme</label>
+                    <select id="input-theme" onchange="updatePreview()"
+                        class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm text-white focus:border-brand-red focus:outline-none">
+                        <option value="dark">Dark Mode (Classic)</option>
+                        <option value="light">Light Mode (Modern)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-gear-fill"></i> Settings
+                </h3>
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-1">Castle Link (Username)</label>
+                    <div class="relative">
+                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm font-mono">
+                            castlecrew.cc/</div>
+                        <input type="text" id="input-slug" oninput="validateSlug(this)"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-32 text-sm focus:border-brand-red focus:outline-none transition text-white font-bold">
+                        <div id="slug-status"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs font-bold"></div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Template</label>
+                    <div class="relative">
+                        <i class="bi bi-palette absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <select id="input-template" onchange="updatePreview()"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red text-white appearance-none">
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-person-fill"></i> Profile
+                </h3>
+
+                <div class="flex items-center gap-4 mb-6">
+                    <div
+                        class="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center border-2 border-brand-red overflow-hidden relative">
+                        <img id="input-avatar-preview" src="assets/img/logo.png" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <input type="file" id="upload-avatar" accept="image/*" class="hidden"
+                            onchange="handleImageUpload(event)">
+                        <button onclick="document.getElementById('upload-avatar').click()" id="btn-change-photo"
+                            class="text-xs bg-white text-black font-bold px-3 py-1.5 rounded mb-1 hover:bg-gray-200 transition">
+                            <i class="bi bi-camera"></i> Change Photo
+                        </button>
+                        <p class="text-[10px] text-gray-500">Max 5MB. Auto-compressed.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="relative"><i
+                            class="bi bi-person absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                            type="text" id="input-name" oninput="updatePreview()" placeholder="Full Name"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative"><i
+                            class="bi bi-briefcase absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                            type="text" id="input-job" oninput="updatePreview()" placeholder="Job Title"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative"><i
+                            class="bi bi-building absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                            type="text" id="input-company" oninput="updatePreview()" placeholder="Company"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative"><i
+                            class="bi bi-text-paragraph absolute left-3 top-3 text-gray-500"></i><textarea
+                            id="input-bio" rows="3" oninput="updatePreview()" placeholder="Bio / Tagline"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white"></textarea>
+                    </div>
+                    <div class="relative"><i
+                            class="bi bi-globe absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                            type="url" id="input-website" oninput="updatePreview()" placeholder="Website (https://...)"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-telephone-fill"></i> Contact Info
+                </h3>
+                <div class="mb-6"><label class="block text-xs text-gray-400 mb-2">Phone Numbers</label>
+                    <div id="phone-list" class="space-y-2"></div><button onclick="addPhoneRow()"
+                        class="mt-2 text-xs text-brand-red font-bold hover:text-white flex items-center gap-1 transition"><i
+                            class="bi bi-plus-circle"></i> Add Phone Number</button>
+                </div>
+                <div><label class="block text-xs text-gray-400 mb-2">Email Addresses</label>
+                    <div id="email-list" class="space-y-2"></div><button onclick="addEmailRow()"
+                        class="mt-2 text-xs text-brand-red font-bold hover:text-white flex items-center gap-1 transition"><i
+                            class="bi bi-plus-circle"></i> Add Email</button>
+                </div>
+            </div>
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-share-fill"></i> Social Media
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex gap-0 relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-[#25D366] z-10">
+                            <i class="bi bi-whatsapp"></i>
+                        </div>
+                        <div
+                            class="relative w-20 bg-black border border-gray-700 border-r-0 rounded-l-none pl-10 h-[42px] flex items-center">
+                            <span id="wa-display-code"
+                                class="text-sm text-gray-300 font-mono pointer-events-none">+94</span><i
+                                class="bi bi-chevron-down absolute right-1 text-[10px] text-gray-600 pointer-events-none"></i><select
+                                id="wa-country" onchange="updateWaCode(this.value); updatePreview()"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"></select>
+                        </div><input type="tel" id="social-whatsapp" oninput="formatWhatsApp(this)"
+                            placeholder="77 123 4567"
+                            class="flex-1 bg-black border border-gray-700 rounded-r px-3 py-2 text-sm focus:border-[#25D366] focus:outline-none text-white h-[42px]">
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-gray-400">
+                            <i class="bi bi-instagram"></i>
+                        </div><input type="text" id="social-instagram" oninput="updatePreview()"
+                            placeholder="Instagram Username"
+                            class="w-full bg-black border border-gray-700 rounded rounded-l-none px-3 py-2 pl-12 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-gray-400">
+                            <i class="bi bi-facebook"></i>
+                        </div><input type="text" id="social-facebook" oninput="updatePreview()"
+                            placeholder="Facebook URL"
+                            class="w-full bg-black border border-gray-700 rounded rounded-l-none px-3 py-2 pl-12 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-gray-400">
+                            <i class="bi bi-linkedin"></i>
+                        </div><input type="text" id="social-linkedin" oninput="updatePreview()"
+                            placeholder="LinkedIn URL"
+                            class="w-full bg-black border border-gray-700 rounded rounded-l-none px-3 py-2 pl-12 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-gray-400">
+                            <i class="bi bi-twitter-x"></i>
+                        </div><input type="text" id="social-twitter" oninput="updatePreview()"
+                            placeholder="X (Twitter) Username"
+                            class="w-full bg-black border border-gray-700 rounded rounded-l-none px-3 py-2 pl-12 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden md:flex flex-1 bg-[#050505] items-center justify-center relative overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[linear-gradient(rgba(30,30,30,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(30,30,30,0.5)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20">
+        </div>
+        <div
+            class="relative w-[375px] h-[750px] bg-black rounded-[50px] border-[12px] border-gray-900 shadow-2xl flex flex-col overflow-hidden">
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-7 bg-black rounded-b-2xl z-20"></div>
+            <div id="preview-screen"
+                class="phone-screen w-full h-full bg-[#111] overflow-y-auto text-white relative transition-colors duration-300">
+                <div id="preview-header" class="h-40 bg-gradient-to-br from-brand-red/20 to-black relative">
+                    <div id="preview-brand"
+                        class="absolute top-4 right-4 text-brand-red font-bold tracking-tighter text-sm">CASTLE</div>
+                </div>
+                <div class="px-6 -mt-16 relative z-10 pb-10">
+                    <div class="w-32 h-32 rounded-full border-4 border-[#111] bg-gray-800 overflow-hidden mb-4 shadow-lg"
+                        id="preview-avatar-border">
+                        <img id="preview-avatar" src="assets/img/logo.png" class="w-full h-full object-cover">
+                    </div>
+                    <h1 id="preview-name" class="text-3xl font-black uppercase leading-tight mb-1">...</h1>
+                    <p id="preview-job" class="text-brand-red font-bold text-sm mb-4">...</p>
+                    <p id="preview-bio"
+                        class="text-gray-400 text-sm leading-relaxed mb-6 border-l-2 border-gray-700 pl-3">...</p>
+                    <div id="preview-socials" class="flex gap-5 mb-6 text-xl text-gray-300"></div>
+                    <div class="flex gap-2 mb-8">
+                        <button id="btn-save"
+                            class="flex-1 bg-white text-black py-3 rounded-xl text-xs font-bold flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95"><i
+                                class="bi bi-person-plus-fill text-lg"></i><span>Save</span></button>
+                        <a id="preview-btn-whatsapp" href="#" target="_blank"
+                            class="flex-1 bg-[#25D366] text-white py-3 rounded-xl text-xs font-bold flex flex-col items-center justify-center gap-1 hidden shadow-lg active:scale-95"><i
+                                class="bi bi-whatsapp text-lg"></i><span>WhatsApp</span></a>
+                        <button id="btn-exchange"
+                            class="flex-1 bg-brand-red text-white py-3 rounded-xl text-xs font-bold flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95"><i
+                                class="bi bi-arrow-left-right text-lg"></i><span>Exchange</span></button>
+                    </div>
+                    <div id="preview-links" class="space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const colors = ['#f00000', '#F59E0B', '#3B82F6', '#10B981', '#EC4899', '#6B7280', '#FFFFFF', '#000000'];
+        const palette = document.getElementById('color-palette');
+        colors.forEach(c => {
+            const btn = document.createElement('button');
+            btn.className = 'w-8 h-8 rounded-full border border-gray-700 hover:scale-110 transition color-btn';
+            btn.style.backgroundColor = c;
+            btn.onclick = () => setAccent(c, btn);
+            palette.appendChild(btn);
+        });
+
+        const countries = [{ code: "+94", name: "Sri Lanka" }, { code: "+1", name: "USA/Canada" }, { code: "+44", name: "UK" }, { code: "+61", name: "Australia" }, { code: "+91", name: "India" }, { code: "+971", name: "UAE" }, { code: "+966", name: "Saudi Arabia" }, { code: "+65", name: "Singapore" }, { code: "+86", name: "China" }, { code: "+81", name: "Japan" }, { code: "+33", name: "France" }, { code: "+49", name: "Germany" }, { code: "+39", name: "Italy" }, { code: "+7", name: "Russia" }, { code: "+34", name: "Spain" }, { code: "+974", name: "Qatar" }, { code: "+965", name: "Kuwait" }, { code: "+60", name: "Malaysia" }, { code: "+66", name: "Thailand" }, { code: "+62", name: "Indonesia" }, { code: "+55", name: "Brazil" }, { code: "+960", name: "Maldives" }, { code: "+92", name: "Pakistan" }, { code: "+880", name: "Bangladesh" }, { code: "+64", name: "New Zealand" }].sort((a, b) => a.name.localeCompare(b.name));
+        const countryOptions = countries.map(c => `<option value="${c.code}">${c.name} (${c.code})</option>`).join('');
+
+        let phones = [], emails = [], originalSlug = "", debounceTimer, avatarBase64 = "";
+        let isEnterpriseStaff = false; // NEW GLOBAL FLAG
+
+        async function loadData() {
+            document.getElementById('wa-country').innerHTML = countryOptions;
+            const token = localStorage.getItem('castle_token');
+            if (!token) return window.location.href = 'login.html';
+
+            try {
+                // Check if editing a specific slug (Admin Impersonation)
+                const urlParams = new URLSearchParams(window.location.search);
+                const targetSlug = urlParams.get('slug');
+                const endpoint = targetSlug ? `/api/card?slug=${targetSlug}` : '/api/card';
+
+                const res = await fetch(endpoint, { headers: { 'Authorization': token } });
+                const data = await res.json();
+
+                if (data.id) {
+                    const plan = data.plan || 'starter';
+                    const enterpriseId = data.enterprise_id;
+                    const role = data.role || 'user';
+                    // Restrict only if in enterprise AND NOT an admin
+                    isEnterpriseStaff = !!enterpriseId && !['admin', 'enterprise_admin', 'enterprise_super_admin'].includes(role);
+
+                    // --- ENTERPRISE RESTRICTION LOGIC ---
+                    if (isEnterpriseStaff) {
+                        document.getElementById('enterprise-editor-alert').classList.remove('hidden');
+
+                        // Fields to lock for Enterprise Staff
+                        const lockedFields = ['input-slug', 'input-job', 'input-company'];
+                        lockedFields.forEach(id => {
+                            const input = document.getElementById(id);
+                            input.setAttribute('disabled', 'true');
+                            input.classList.add('input-locked');
+                        });
+                        // Also lock slug validation check
+                        document.getElementById('input-slug').oninput = null;
+
+                        // Ensure Enterprise Staff get premium templates regardless of 'plan' field
+                        // (We assume 'enterprise' plans include premium templates)
+                        document.getElementById('input-template').innerHTML = ""; // Clear existing
+                        document.getElementById('input-template').add(new Option('Castle Signature', 'signature'));
+                        document.getElementById('input-template').add(new Option('Eco Real Estate', 'realestate'));
+                        document.getElementById('input-template').add(new Option('The Creative', 'creative'));
+                    } else {
+                        // INDIVIDUAL USER: Dynamic Template Selector based on plan (Original Logic)
+                        const select = document.getElementById('input-template');
+                        select.innerHTML = ""; // Clear existing
+                        select.add(new Option('Castle Signature', 'signature'));
+                        if (plan !== 'starter') {
+                            select.add(new Option('Eco Real Estate', 'realestate'));
+                            select.add(new Option('The Creative', 'creative'));
+                        }
+                    }
+                    // --- END ENTERPRISE RESTRICTION LOGIC ---
+
+                    // --- POPULATE FIELDS (Runs for all users) ---
+                    const currentT = data.template_id || 'signature';
+                    let select = document.getElementById('input-template');
+                    let exists = false;
+                    for (let i = 0; i < select.options.length; i++) { if (select.options[i].value === currentT) exists = true; }
+                    select.value = exists ? currentT : 'signature';
+
+                    document.getElementById('input-slug').value = data.slug || "";
+                    originalSlug = data.slug || "";
+                    document.getElementById('input-name').value = data.full_name || "";
+                    document.getElementById('input-job').value = data.job_title || "";
+                    document.getElementById('input-company').value = data.company || "";
+                    document.getElementById('input-bio').value = data.bio || "";
+                    document.getElementById('input-website').value = data.website || "";
+                    if (data.avatar_url) { avatarBase64 = data.avatar_url; document.getElementById('input-avatar-preview').src = avatarBase64; document.getElementById('preview-avatar').src = avatarBase64; }
+
+                    const design = JSON.parse(data.design || '{}');
+                    document.getElementById('input-accent').value = design.accent || '#f00000';
+                    setAccent(document.getElementById('input-accent').value); // Select the color button
+                    document.getElementById('input-theme').value = design.theme || 'dark';
+
+                    const socials = JSON.parse(data.socials || '{}');
+                    if (socials.whatsapp) {
+                        const { code, num } = splitPhone(socials.whatsapp);
+                        document.getElementById('wa-country').value = code;
+                        document.getElementById('wa-display-code').innerText = code;
+                        document.getElementById('social-whatsapp').value = formatStringPhone(num);
+                    } else { document.getElementById('wa-country').value = "+94"; document.getElementById('wa-display-code').innerText = "+94"; }
+
+                    document.getElementById('social-instagram').value = socials.instagram || "";
+                    document.getElementById('social-facebook').value = socials.facebook || "";
+                    document.getElementById('social-linkedin').value = socials.linkedin || "";
+                    document.getElementById('social-twitter').value = socials.twitter || "";
+
+                    try {
+                        const rawPhones = JSON.parse(data.phones || '[]');
+                        phones = rawPhones.map(p => { const { code, num } = splitPhone(p.value); return { code: code, number: formatStringPhone(num), show: p.show }; });
+                        emails = JSON.parse(data.emails || '[]');
+                    } catch (e) { phones = []; emails = []; }
+                    if (phones.length === 0 && data.phone) { const { code, num } = splitPhone(data.phone); phones.push({ code: code, number: formatStringPhone(num), show: true }); }
+                    if (emails.length === 0 && data.email) emails.push({ value: data.email, show: true });
+
+                    renderPhones(); renderEmails(); updatePreview();
+                    document.getElementById('btn-view-live').href = data.slug ? `/${data.slug}` : '#';
+                }
+            } catch (err) { console.error("Load Error", err); }
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const maxSize = 400;
+                    let width = img.width; let height = img.height;
+                    if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } } else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
+                    canvas.width = width; canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    avatarBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    document.getElementById('input-avatar-preview').src = avatarBase64;
+                    updatePreview();
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function setAccent(color, btn) {
+            document.getElementById('input-accent').value = color;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('ring-2', 'ring-white', 'scale-110'));
+
+            // Find the button that matches the color and add the classes
+            const targetButton = Array.from(document.querySelectorAll('.color-btn')).find(b => b.style.backgroundColor.toLowerCase() === color.toLowerCase());
+            if (targetButton) targetButton.classList.add('ring-2', 'ring-white', 'scale-110');
+
+            updatePreview();
+        }
+
+        function splitPhone(fullStr) { if (!fullStr) return { code: "+94", num: "" }; const found = countries.find(c => fullStr.startsWith(c.code)); return found ? { code: found.code, num: fullStr.substring(found.code.length) } : { code: "+94", num: fullStr }; }
+        function formatStringPhone(val) { val = val.replace(/\D/g, ''); if (val.startsWith('0')) val = val.substring(1); if (val.length > 5) return val.replace(/^(\d{2})(\d{3})(\d+).*/, '$1 $2 $3'); else if (val.length > 2) return val.replace(/^(\d{2})(\d+)/, '$1 $2'); return val; }
+        function formatAndSetPhone(index, input) { input.value = formatStringPhone(input.value); phones[index].number = input.value; updatePreview(); }
+        function formatWhatsApp(input) { input.value = formatStringPhone(input.value); updatePreview(); }
+        function updateWaCode(code) { document.getElementById('wa-display-code').innerText = code; }
+
+        function updatePreview() {
+            document.getElementById('preview-name').innerHTML = (document.getElementById('input-name').value || "...").replace(' ', '<br>');
+            document.getElementById('preview-job').textContent = [document.getElementById('input-job').value, document.getElementById('input-company').value].filter(Boolean).join(" @ ");
+            document.getElementById('preview-bio').textContent = document.getElementById('input-bio').value;
+            if (avatarBase64) document.getElementById('preview-avatar').src = avatarBase64;
+
+            const theme = document.getElementById('input-theme').value;
+            const accent = document.getElementById('input-accent').value;
+            const screen = document.getElementById('preview-screen');
+            const pName = document.getElementById('preview-name');
+            const pBio = document.getElementById('preview-bio');
+            const pHeader = document.getElementById('preview-header');
+            const pAvatarBorder = document.getElementById('preview-avatar-border');
+
+            if (theme === 'light') {
+                screen.className = "phone-screen w-full h-full bg-gray-100 overflow-y-auto text-black relative transition-colors";
+                pName.className = "text-3xl font-black uppercase leading-tight mb-1 text-black";
+                pBio.className = "text-gray-600 text-sm leading-relaxed mb-6 border-l-2 border-gray-300 pl-3";
+                pAvatarBorder.className = "w-32 h-32 rounded-full border-4 border-white bg-gray-200 overflow-hidden mb-4 shadow-lg";
+                pHeader.style.background = `linear-gradient(to bottom right, ${accent}33, white)`;
+            } else {
+                screen.className = "phone-screen w-full h-full bg-[#111] overflow-y-auto text-white relative transition-colors";
+                pName.className = "text-3xl font-black uppercase leading-tight mb-1 text-white";
+                pBio.className = "text-gray-400 text-sm leading-relaxed mb-6 border-l-2 border-gray-700 pl-3";
+                pAvatarBorder.className = "w-32 h-32 rounded-full border-4 border-[#111] bg-gray-800 overflow-hidden mb-4 shadow-lg";
+                pHeader.style.background = `linear-gradient(to bottom right, ${accent}4D, black)`;
+            }
+
+            document.getElementById('preview-job').style.color = accent;
+            document.getElementById('preview-brand').style.color = accent;
+            document.getElementById('btn-exchange').style.backgroundColor = accent;
+
+            const sInsta = document.getElementById('social-instagram').value;
+            const sFace = document.getElementById('social-facebook').value;
+            const sLink = document.getElementById('social-linkedin').value;
+            const sTwit = document.getElementById('social-twitter').value;
+            const iconColor = theme === 'light' ? 'text-gray-600 hover:text-black' : 'text-gray-300 hover:text-white';
+            let sHtml = '';
+            // NOTE: For live preview, we use the accent color as the explicit style
+            if (sInsta) sHtml += `<i class="bi bi-instagram ${iconColor} transition" style="color:${accent}"></i>`;
+            if (sFace) sHtml += `<i class="bi bi-facebook ${iconColor} transition" style="color:${accent}"></i>`;
+            if (sLink) sHtml += `<i class="bi bi-linkedin ${iconColor} transition" style="color:${accent}"></i>`;
+            if (sTwit) sHtml += `<i class="bi bi-twitter-x ${iconColor} transition" style="color:${accent}"></i>`;
+            document.getElementById('preview-socials').innerHTML = sHtml;
+
+            const waNum = document.getElementById('social-whatsapp').value;
+            if (waNum) document.getElementById('preview-btn-whatsapp').classList.remove('hidden'); else document.getElementById('preview-btn-whatsapp').classList.add('hidden');
+
+            const cardBg = theme === 'light' ? 'bg-white border-gray-200' : 'bg-gray-900/50 border-gray-800';
+            const iconBg = theme === 'light' ? 'bg-gray-100 text-gray-700' : 'bg-gray-800 text-white';
+            const labelColor = theme === 'light' ? 'text-gray-400' : 'text-gray-500';
+            const valColor = theme === 'light' ? 'text-black' : 'text-white';
+
+            let lHtml = '';
+            emails.forEach(e => { if (e.show && e.value) lHtml += `<div class="flex items-center gap-4 p-3 ${cardBg} rounded-xl border"><div class="w-10 h-10 rounded-full ${iconBg} flex items-center justify-center text-lg"><i class="bi bi-envelope-fill"></i></div><div class="overflow-hidden"><div class="text-[8px] ${labelColor} uppercase font-bold">Email</div><div class="text-xs font-medium truncate ${valColor}">${e.value}</div></div></div>`; });
+            phones.forEach(p => { if (p.show && p.number) lHtml += `<div class="flex items-center gap-4 p-3 ${cardBg} rounded-xl border"><div class="w-10 h-10 rounded-full ${iconBg} flex items-center justify-center text-lg"><i class="bi bi-telephone-fill"></i></div><div><div class="text-[8px] ${labelColor} uppercase font-bold">Phone</div><div class="text-xs font-medium ${valColor}">${p.code} ${p.number}</div></div></div>`; });
+            const web = document.getElementById('input-website').value;
+            if (web) lHtml += `<div class="flex items-center gap-4 p-3 ${cardBg} rounded-xl border"><div class="w-10 h-10 rounded-full ${iconBg} flex items-center justify-center text-lg"><i class="bi bi-globe"></i></div><div class="overflow-hidden"><div class="text-[8px] ${labelColor} uppercase font-bold">Website</div><div class="text-xs font-medium truncate ${valColor}">${web.replace(/^https?:\/\//, '')}</div></div></div>`;
+            document.getElementById('preview-links').innerHTML = lHtml;
+        }
+
+        function addPhoneRow() { phones.push({ code: "+94", number: "", show: true }); renderPhones(); updatePreview(); }
+        function renderPhones() { document.getElementById('phone-list').innerHTML = phones.map((p, i) => `<div class="flex gap-1 items-center mb-2"><div class="relative flex-1 flex min-w-0"><div class="relative w-20 bg-black border border-gray-700 border-r-0 rounded-l h-[42px] flex items-center flex-shrink-0"><span class="absolute left-3 text-xs text-gray-300 pointer-events-none font-mono">${p.code}</span><i class="bi bi-chevron-down absolute right-1 text-[10px] text-gray-600 pointer-events-none"></i><select onchange="updatePhoneCode(${i}, this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">${countries.map(c => `<option value="${c.code}" ${c.code === p.code ? 'selected' : ''}>${c.name} (${c.code})</option>`).join('')}</select></div><input type="tel" placeholder="77 123 4567" value="${p.number}" oninput="formatAndSetPhone(${i}, this)" class="flex-1 bg-black border border-gray-700 rounded-r-none px-3 py-2 text-sm text-white ${!p.show ? 'opacity-50' : ''} h-[42px] min-w-0"></div><button onclick="copyToWhatsapp(${i})" class="w-8 h-[42px] flex items-center justify-center bg-gray-900 border border-gray-700 border-l-0 text-green-500 hover:bg-gray-800 flex-shrink-0"><i class="bi bi-whatsapp"></i></button><button onclick="togglePhone(${i})" class="w-8 h-[42px] flex items-center justify-center bg-gray-900 border border-gray-700 border-l-0 text-gray-400 hover:text-white ml-[1px] flex-shrink-0"><i class="bi ${p.show ? 'bi-eye' : 'bi-eye-slash'}"></i></button><button onclick="deletePhone(${i})" class="w-8 h-[42px] flex items-center justify-center rounded-r bg-red-900/30 text-red-500 hover:bg-red-900/50 border border-red-900/50 border-l-0 ml-[1px] flex-shrink-0"><i class="bi bi-trash"></i></button></div>`).join(''); }
+        function updatePhoneCode(i, val) { phones[i].code = val; renderPhones(); updatePreview(); }
+        function togglePhone(i) { phones[i].show = !phones[i].show; renderPhones(); updatePreview(); }
+        function deletePhone(i) { phones.splice(i, 1); renderPhones(); updatePreview(); }
+        function copyToWhatsapp(i) { const p = phones[i]; document.getElementById('wa-country').value = p.code; document.getElementById('wa-display-code').innerText = p.code; document.getElementById('social-whatsapp').value = p.number; updatePreview(); }
+        function addEmailRow() { emails.push({ value: "", show: true }); renderEmails(); updatePreview(); }
+        function renderEmails() { document.getElementById('email-list').innerHTML = emails.map((e, i) => `<div class="flex gap-1 items-center mb-2"><div class="relative flex-1 min-w-0"><i class="bi bi-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input type="email" placeholder="email@example.com" value="${e.value}" oninput="updateEmail(${i}, this.value)" class="w-full bg-black border border-gray-700 rounded rounded-r-none px-3 py-2 pl-9 text-sm text-white ${!e.show ? 'opacity-50' : ''} h-[42px]"></div><button onclick="toggleEmail(${i})" class="w-8 h-[42px] flex items-center justify-center bg-gray-900 border border-gray-700 border-l-0 text-gray-400 hover:text-white flex-shrink-0"><i class="bi ${e.show ? 'bi-eye' : 'bi-eye-slash'}"></i></button><button onclick="deleteEmail(${i})" class="w-8 h-[42px] flex items-center justify-center rounded-r bg-red-900/30 text-red-500 hover:bg-red-900/50 border border-red-900/50 border-l-0 ml-[1px] flex-shrink-0"><i class="bi bi-trash"></i></button></div>`).join(''); }
+        function updateEmail(i, val) { emails[i].value = val; updatePreview(); }
+        function toggleEmail(i) { emails[i].show = !emails[i].show; renderEmails(); updatePreview(); }
+        function deleteEmail(i) { emails.splice(i, 1); renderEmails(); updatePreview(); }
+        function validateSlug(input) {
+            // Enterprise check - if disabled, do nothing.
+            if (isEnterpriseStaff) return;
+
+            input.value = input.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+            clearTimeout(debounceTimer);
+            const status = document.getElementById('slug-status');
+            status.innerHTML = '<i class="bi bi-hourglass-split animate-spin"></i>';
+            status.className = "absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500";
+
+            debounceTimer = setTimeout(async () => {
+                const slug = input.value;
+                if (!slug || slug === originalSlug) { status.innerText = ""; return; }
+                // NOTE: Uses existing backend file: api/check-slug.js
+                const res = await fetch(`/api/check-slug?slug=${slug}`);
+                const d = await res.json();
+                status.innerHTML = d.available ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-x-circle-fill"></i>';
+                status.className = d.available ? "absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500" : "absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-red";
+            }, 500);
+        }
+
+        async function saveData() {
+            const btn = document.querySelector('button.bg-brand-red'); btn.innerHTML = '<i class="bi bi-arrow-repeat animate-spin"></i> SAVING...'; btn.disabled = true;
+            try {
+                const token = localStorage.getItem('castle_token');
+                if (!token) throw new Error("Logged out.");
+
+                const getVal = (id) => document.getElementById(id) ? document.getElementById(id).value : "";
+                const formattedPhones = phones.map(p => ({ value: p.code + p.number.replace(/\s/g, ''), show: p.show }));
+                const waCode = getVal('wa-country');
+                const waNum = getVal('social-whatsapp').replace(/\s/g, '');
+                const waFull = waNum ? (waCode + waNum) : "";
+
+                // Get the current user data to ensure locked fields are NOT overwritten with disabled values
+                const currentData = await fetch('/api/card', { headers: { 'Authorization': token } }).then(res => res.json());
+
+                // Start with the current data
+                let payload = {
+                    ...currentData,
+                    slug: getVal('input-slug'), // This will be the current slug if locked
+                    job_title: getVal('input-job'), // This will be the current job if locked
+                    company: getVal('input-company'), // This will be the current company if locked
+                };
+
+                // If fields were locked by Enterprise, use the existing values from the server fetch
+                if (isEnterpriseStaff) {
+                    payload.slug = currentData.slug;
+                    payload.job_title = currentData.job_title;
+                    payload.company = currentData.company;
+                }
+
+                // Overwrite with editable fields
+                payload.template_id = getVal('input-template');
+                payload.full_name = getVal('input-name');
+                payload.bio = getVal('input-bio');
+                payload.website = getVal('input-website');
+                payload.email = emails.find(e => e.show)?.value || "";
+                payload.phone = formattedPhones.find(p => p.show)?.value || "";
+                payload.phones = formattedPhones;
+                payload.emails = emails;
+                payload.avatar_url = avatarBase64;
+                payload.design = { theme: getVal('input-theme') || 'dark', accent: getVal('input-accent') || '#f00000' };
+                payload.socials = { whatsapp: waFull, instagram: getVal('social-instagram'), facebook: getVal('social-facebook'), linkedin: getVal('social-linkedin'), twitter: getVal('social-twitter') };
+
+                // NOTE: Uses existing backend file: api/card.js
+                const res = await fetch('/api/card', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token }, body: JSON.stringify(payload) });
+                const result = await res.json();
+
+                if (res.ok) {
+                    alert("Saved!");
+                    originalSlug = payload.slug;
+                    document.getElementById('btn-view-live').href = `/${payload.slug}`;
+                }
+                else {
+                    // Handle server-side slug validation failure or other errors
+                    throw new Error(result.error);
+                }
+            } catch (err) { alert("Publish Failed: " + err.message); }
+            finally { btn.innerHTML = '<i class="bi bi-cloud-upload"></i> PUBLISH'; btn.disabled = false; }
+        }
+
+        // Preloader Logic (NEW)
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            // Slight delay to ensure the animations are seen
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                // Remove from DOM after transition to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
+
+        loadData();
+    </script>
+</body>
+
+</html>

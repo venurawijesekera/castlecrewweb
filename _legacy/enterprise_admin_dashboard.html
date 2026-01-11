@@ -1,0 +1,967 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Admin - Castle Cards</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- jsVectorMap for Analytics Map -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap/dist/css/jsvectormap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap/dist/js/jsvectormap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsvectormap/dist/maps/world.js"></script>
+
+    <!-- PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.1.4/otpauth.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            red: '#f00000',
+                            black: '#0a0a0a',
+                            dark: '#121212'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .hidden-element {
+            display: none !important;
+        }
+
+        /* Tooltip Styles */
+        .tooltip-container {
+            position: relative;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #0a0a0a;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 50;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1.4;
+            transform: translateY(10px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #0a0a0a transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden text-sm">
+
+    <!-- Preloader -->
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-20 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col z-20">
+        <!-- Logo Area -->
+        <div class="h-20 flex items-center px-8 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-brand-black rounded-lg flex items-center justify-center text-white">
+                    <img src="assets/img/logo.png" class="w-5 h-5" alt="Logo">
+                </div>
+                <span class="font-bold text-lg tracking-tight">Castle<span class="text-brand-red">Crew</span></span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+            <p class="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Main Menu</p>
+
+            <a href="#" onclick="switchView('dashboard'); return false;" id="nav-dashboard"
+                class="flex items-center gap-3 px-4 py-3 bg-brand-black text-white rounded-xl transition-all shadow-lg shadow-gray-200">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+
+            <a href="#" onclick="switchView('staff'); return false;" id="nav-staff"
+                class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-all">
+                <i class="bi bi-people"></i>
+                <span class="font-medium">Staff Members</span>
+            </a>
+
+            <a href="#" onclick="switchView('products'); return false;" id="nav-products"
+                class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-all">
+                <i class="bi bi-qr-code-scan"></i>
+                <span class="font-medium">Products</span>
+            </a>
+
+            <a href="#" onclick="switchView('analytics'); return false;" id="nav-analytics"
+                class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-all">
+                <i class="bi bi-bar-chart"></i>
+                <span class="font-medium">Analytics</span>
+            </a>
+
+            <a href="#" onclick="switchView('messaging'); return false;" id="nav-messaging"
+                class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-all">
+                <i class="bi bi-chat-dots"></i>
+                <span class="font-medium">Support</span>
+            </a>
+
+            <div class="pt-6 mt-6 border-t border-gray-100">
+                <p class="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Settings</p>
+
+                <a href="profile.html"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-all">
+                    <i class="bi bi-person-circle"></i>
+                    <span class="font-medium">My Profile</span>
+                </a>
+            </div>
+
+            <div class="pt-6 mt-6 border-t border-gray-100">
+                <p class="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Tools</p>
+                <a href="#" onclick="switchView('qr-generator'); return false;" id="nav-qr-generator"
+                    class="hidden-element flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-all">
+                    <i class="bi bi-qr-code"></i>
+                    <span class="font-medium">QR Generator</span>
+                </a>
+                <a href="#" onclick="switchView('authenticator'); return false;" id="nav-authenticator"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-all">
+                    <i class="bi bi-shield-lock"></i>
+                    <span class="font-medium">Authenticator</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-gray-100">
+            <div class="bg-gray-50 rounded-xl p-4 flex items-center gap-3">
+                <div id="sidebar-user-avatar"
+                    class="w-8 h-8 rounded-full bg-brand-red text-white flex items-center justify-center font-bold text-xs overflow-hidden">
+                    EA
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold text-gray-900 truncate" id="sidebar-user-name">Loading...</p>
+                    <p class="text-[10px] text-gray-500 truncate">Enterprise Admin</p>
+                </div>
+                <button onclick="window.location.reload()" class="text-gray-400 hover:text-gray-600">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0 bg-[#f3f4f6]">
+        <!-- Header -->
+        <header
+            class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 sticky top-0 z-[500] shrink-0">
+            <!-- Breadcrumbs / Mobile Toggle -->
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-gray-500 text-xl">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="hidden md:flex flex-col">
+                    <span class="text-gray-400 text-xs font-medium">Overview</span>
+                    <h1 class="text-lg font-bold text-gray-900">Enterprise Admin Dashboard</h1>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center gap-6">
+                <!-- Search -->
+                <div class="relative hidden md:block" id="main-search-container">
+                    <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="main-search-input" placeholder="Search staff, products..."
+                        class="pl-10 pr-4 py-2 bg-gray-50 border-none rounded-lg text-sm w-80 focus:ring-2 focus:ring-brand-red/20 focus:bg-white transition-all">
+                </div>
+
+                <!-- Need Help Mini Card -->
+                <div
+                    class="hidden lg:flex items-center gap-3 bg-blue-600 rounded-lg px-3 py-1 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white text-xs">
+                        <i class="bi bi-question-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-blue-100 font-bold uppercase leading-none mb-0.5">Need Help?</p>
+                        <a href="mailto:support@castlecrew.cc"
+                            class="text-white text-xs font-bold hover:underline leading-none">Contact Support</a>
+                    </div>
+                </div>
+
+                <!-- Notification Bell -->
+                <button
+                    class="relative w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-brand-red hover:bg-red-50 transition shadow-sm">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-red-500 border-2 border-white"></span>
+                </button>
+
+                <!-- Profile Dropdown -->
+                <div class="flex items-center gap-3 pl-4 border-l border-gray-100">
+                    <div id="header-user-avatar"
+                        class="w-10 h-10 rounded-full bg-brand-red text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-brand-red/20 overflow-hidden">
+                        EA
+                    </div>
+                    <div class="hidden md:block text-left">
+                        <p class="text-xs font-bold text-gray-900 leading-none" id="header-user-name">Loading...</p>
+                        <p class="text-[10px] text-gray-500 font-medium leading-none mt-1">Enterprise Admin</p>
+                    </div>
+                    <div class="relative">
+                        <button onclick="toggleProfileDropdown()"
+                            class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                            <i class="bi bi-chevron-down text-xs"></i>
+                        </button>
+
+                        <!-- Profile Dropdown Menu -->
+                        <div id="profile-dropdown-menu"
+                            class="hidden absolute right-0 top-full mt-3 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-[1000] animate-fade-in origin-top-right">
+                            <a href="dashboard.html"
+                                class="block px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-red transition flex items-center gap-2">
+                                <i class="bi bi-grid-fill text-gray-400"></i> My Profile Dashboard
+                            </a>
+                            <a href="#" id="menu-visit-profile" target="_blank"
+                                class="block px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-red transition flex items-center gap-2">
+                                <i class="bi bi-person-badge-fill text-gray-400"></i> Visit My Profile
+                            </a>
+                            <a href="#" id="menu-edit-card"
+                                class="block px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-brand-red transition flex items-center gap-2">
+                                <i class="bi bi-pencil-square text-gray-400"></i> Edit Profile Card
+                            </a>
+                            <div class="border-t border-gray-50 my-1"></div>
+                            <button onclick="logout()"
+                                class="w-full text-left px-4 py-2.5 text-xs font-bold text-red-500 hover:bg-red-50 transition flex items-center gap-2">
+                                <i class="bi bi-box-arrow-right"></i> Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar relative">
+
+            <!-- DASHBOARD VIEW -->
+            <div id="dashboard-view" class="space-y-8 transition-opacity duration-300">
+
+                <!-- Welcome Header -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <h1 id="welcome-message"
+                            class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight mb-2">
+                            Enterprise Admin Dashboard
+                        </h1>
+                        <p class="text-gray-500 font-medium">Manage your delegated staff at <span id="company-name"
+                                class="text-brand-black font-bold">...</span></p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openCreateAccountModal()"
+                            class="bg-brand-black text-white font-bold py-2.5 px-6 rounded-xl text-sm hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200 flex items-center gap-2">
+                            <i class="bi bi-person-plus-fill"></i>
+                            <span>Invite Staff</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Total Staff -->
+                    <div
+                        class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110">
+                            <i class="bi bi-people-fill text-6xl"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Staff</p>
+                            <h3 id="active-staff" class="text-3xl font-black text-gray-900">0</h3>
+                            <div class="mt-4 flex items-center gap-2">
+                                <span
+                                    class="bg-green-50 text-green-600 text-[10px] font-bold px-2 py-1 rounded-full">Active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products -->
+                    <div
+                        class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110">
+                            <i class="bi bi-qr-code text-6xl"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Active Products</p>
+                            <h3 id="unassigned-seats" class="text-3xl font-black text-gray-900">0</h3>
+                            <div class="mt-4 flex items-center gap-2">
+                                <span class="text-[10px] font-bold text-gray-400">Cards Live</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Licenses -->
+                    <div
+                        class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110">
+                            <i class="bi bi-award-fill text-6xl"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">License Usage</p>
+                            <h3 id="lic-assigned" class="text-3xl font-black text-gray-900">0/0</h3>
+                            <div class="mt-4 w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                <div id="license-bar" class="bg-brand-red h-full rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Views -->
+                    <div
+                        class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110">
+                            <i class="bi bi-eye-fill text-6xl"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Views</p>
+                            <h3 id="total-views" class="text-3xl font-black text-gray-900">0</h3>
+                            <div class="mt-4 flex items-center gap-2">
+                                <span
+                                    class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-1 rounded-full">Global</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Split -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Column -->
+                    <div class="lg:col-span-2 space-y-8">
+
+                        <!-- Recent Staff -->
+                        <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                            <div class="p-6 border-b border-gray-50 flex justify-between items-center">
+                                <h3 class="font-bold text-gray-900">Recent Staff Members</h3>
+                                <button onclick="switchView('staff')"
+                                    class="text-xs font-bold text-brand-red hover:underline">View All</button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <tbody id="recent-staff-list" class="divide-y divide-gray-50">
+                                        <tr>
+                                            <td class="p-4 text-center text-gray-400 text-xs">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+
+
+                        <!-- Quick Links -->
+                        <div class="bg-brand-black rounded-2xl p-6 text-white shadow-xl">
+                            <h4 class="font-bold text-sm mb-4">Quick Actions</h4>
+                            <div class="space-y-3">
+                                <button onclick="openCreateAccountModal()"
+                                    class="w-full flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition text-xs font-medium">
+                                    <div class="w-8 h-8 rounded-lg bg-brand-red flex items-center justify-center"><i
+                                            class="bi bi-person-plus-fill"></i></div>
+                                    Add New Staff
+                                </button>
+                                <button onclick="switchView('products')"
+                                    class="w-full flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition text-xs font-medium">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center"><i
+                                            class="bi bi-qr-code"></i></div>
+                                    Manage Products
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- End Dashboard View -->
+
+            <!-- STAFF VIEW -->
+            <div id="staff-view" class="hidden-element transition-opacity duration-300">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Staff Members</h2>
+                        <p class="text-gray-500 text-sm mt-1">Manage all staff members in your enterprise.</p>
+                    </div>
+                    <button onclick="openCreateAccountModal()"
+                        class="bg-brand-black text-white font-bold py-2.5 px-6 rounded-xl text-sm hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200 flex items-center gap-2">
+                        <i class="bi bi-plus-lg"></i>
+                        <span>Add Staff</span>
+                    </button>
+                </div>
+
+                <div id="staff-grid-container"
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Cards populated by JS -->
+                </div>
+            </div>
+
+            <!-- PRODUCTS VIEW -->
+            <div id="products-view" class="hidden-element transition-opacity duration-300">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Products</h2>
+                        <p class="text-gray-500 text-sm mt-1">Manage all digital cards and licenses.</p>
+                    </div>
+                </div>
+
+                <div id="products-grid-container"
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Cards populated by JS -->
+                </div>
+            </div>
+
+            <!-- MESSAGING VIEW -->
+            <div id="messaging-view" class="hidden transition-opacity duration-300">
+                <div class="flex flex-col h-[calc(100vh-160px)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Support Messages</h2>
+                            <p class="text-gray-500 text-sm mt-1">Direct communication with Castle Crew System Admin.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
+                        <!-- Chat Header -->
+                        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-brand-red flex items-center justify-center text-white text-lg rounded-xl">
+                                    <i class="bi bi-headset"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900">Castle Crew Support</h4>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                                        <span
+                                            class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Online</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Area -->
+                        <div id="support-messaging-history"
+                            class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-gray-50/30">
+                            <div class="flex items-center justify-center h-full">
+                                <div class="flex flex-col items-center gap-2 opacity-20">
+                                    <i class="bi bi-chat-left-dots text-4xl"></i>
+                                    <p class="text-xs font-bold uppercase tracking-widest">No messages yet</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Input -->
+                        <div class="p-4 bg-white border-t border-gray-100">
+                            <div class="relative flex items-center gap-2">
+                                <div class="flex-1 relative">
+                                    <input type="text" id="support-chat-input" placeholder="Type your message here..."
+                                        onkeypress="if(event.key === 'Enter') handleSendMessage()"
+                                        class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red/20 focus:bg-white transition-all pr-12">
+                                    <button onclick="handleSendMessage()"
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-brand-black text-white flex items-center justify-center hover:bg-gray-800 transition shadow-lg">
+                                        <i class="bi bi-send-fill text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYTICS VIEW -->
+            <div id="analytics-view"
+                class="hidden-element w-full h-full frame-container relative rounded-2xl overflow-hidden border border-gray-100 bg-white">
+                <iframe src="analytics.html?mode=embed" class="w-full h-full border-0 absolute inset-0"
+                    title="Analytics"></iframe>
+            </div>
+
+            <!-- AUTHENTICATOR VIEW -->
+            <div id="authenticator-view" class="hidden-element">
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <h2 class="text-2xl font-black text-gray-900 mb-2">Authenticator Vault</h2>
+                            <p class="text-gray-500 text-sm">Secure 2FA tokens for your enterprise accounts.</p>
+                        </div>
+                        <button
+                            onclick="document.getElementById('add-auth-account-modal').classList.remove('hidden-element')"
+                            class="bg-[#1a1a1a] text-white px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-black transition shadow-lg flex items-center gap-2">
+                            <i class="bi bi-plus-lg"></i> Add Account
+                        </button>
+                    </div>
+
+                    <div id="authenticator-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Auth cards -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- MODALS -->
+
+    <!-- Create Staff Modal -->
+    <div id="create-account-modal"
+        class="fixed inset-0 bg-black/60 hidden items-center justify-center z-[1000] backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm p-0 rounded-2xl shadow-2xl relative overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-gray-900">Invite New Staff</h3>
+                <button onclick="closeCreateAccountModal()" class="text-gray-400 hover:text-gray-600"><i
+                        class="fa fa-times"></i></button>
+            </div>
+            <div class="p-6">
+                <form onsubmit="event.preventDefault(); createStaffUser();" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Full Name</label>
+                        <input type="text" id="new-staff-name" required
+                            class="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 focus:border-brand-black focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Email Address</label>
+                        <input type="email" id="new-staff-email" required
+                            class="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 focus:border-brand-black focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Phone (Optional)</label>
+                        <input type="tel" id="new-staff-phone"
+                            class="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 focus:border-brand-black focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Sub Licenses (Product
+                            Limit)</label>
+                        <input type="number" id="new-staff-licenses" value="0" min="0"
+                            class="w-full bg-gray-50 border border-gray-200 rounded px-3 py-2 text-gray-900 focus:border-brand-black focus:outline-none">
+                    </div>
+                    <div class="pt-4">
+                        <button type="submit" id="btn-create-staff"
+                            class="w-full bg-brand-black text-white font-bold py-3 rounded-lg hover:bg-gray-800 transition">SEND
+                            INVITATION</button>
+                        <p id="create-staff-error" class="text-red-500 text-xs mt-2 text-center hidden"></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Success Modal -->
+    <div id="success-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden-element flex items-center justify-center z-[1100]">
+        <div class="bg-white w-full max-w-sm p-6 rounded-2xl shadow-2xl relative text-center">
+            <div
+                class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 text-green-500 text-2xl">
+                <i class="bi bi-check-lg"></i>
+            </div>
+            <h2 class="text-xl font-bold mb-2 text-gray-900">Success!</h2>
+            <p class="text-gray-500 text-sm mb-6">Staff member has been created.</p>
+            <div class="bg-gray-50 border border-gray-100 rounded p-4 mb-6">
+                <p class="text-xs uppercase text-gray-400 font-bold mb-2">Temporary Password</p>
+                <div class="flex items-center justify-between gap-2">
+                    <code id="success-password" class="text-brand-black font-mono text-lg font-bold">...</code>
+                    <button onclick="copyPassword()"
+                        class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded text-gray-700 font-bold transition">COPY</button>
+                </div>
+            </div>
+            <button onclick="document.getElementById('success-modal').classList.add('hidden-element')"
+                class="w-full bg-brand-black text-white font-bold py-3 rounded-lg hover:bg-gray-800 transition">DONE</button>
+        </div>
+    </div>
+
+    <script>
+        // *** NAVIGATION ***
+        function switchView(viewId) {
+            // Hide all views
+            ['dashboard-view', 'staff-view', 'products-view', 'messaging-view', 'analytics-view', 'authenticator-view'].forEach(id => {
+                document.getElementById(id).classList.add('hidden-element');
+                document.getElementById(id).classList.add('hidden'); // Tailwind hidden
+            });
+
+            // Show target
+            const target = document.getElementById(viewId + '-view');
+            if (target) {
+                target.classList.remove('hidden-element');
+                target.classList.remove('hidden');
+            }
+
+            // Update Nav State
+            document.querySelectorAll('nav a').forEach(el => {
+                el.classList.remove('bg-brand-black', 'text-white', 'shadow-lg');
+                el.classList.add('text-gray-500', 'hover:bg-gray-50');
+            });
+
+            const link = document.getElementById('nav-' + viewId);
+            if (link) {
+                link.classList.remove('text-gray-500', 'hover:bg-gray-50');
+                link.classList.add('bg-brand-black', 'text-white', 'shadow-lg');
+            }
+        }
+
+        // *** DATA LOADING ***
+        let globalData = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                setTimeout(() => { preloader.style.display = 'none'; }, 700);
+            }, 500);
+            loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                const res = await fetch('/api/enterprise/dashboard');
+                if (!res.ok) {
+                    if (res.status === 401 || res.status === 403) window.location.href = 'login.html';
+                    throw new Error("Failed to fetch data");
+                }
+                const data = await res.json();
+                globalData = data;
+
+                // 1. User Info
+                if (data.viewer) {
+                    const name = data.viewer.name || "Admin";
+                    const avatarUrl = data.viewer.avatar_url;
+
+                    document.getElementById('sidebar-user-name').innerText = name;
+                    const headerName = document.getElementById('header-user-name');
+                    if (headerName) headerName.innerText = name;
+
+                    // Update Avatars
+                    const initials = (name || 'EA').match(/\b(\w)/g).join('').substring(0, 2).toUpperCase();
+                    const avatarEls = [document.getElementById('header-user-avatar'), document.getElementById('sidebar-user-avatar')];
+
+                    avatarEls.forEach(el => {
+                        if (el) {
+                            if (avatarUrl) {
+                                el.innerHTML = `<img src="${avatarUrl}" class="w-full h-full object-cover">`;
+                            } else {
+                                el.innerText = initials;
+                            }
+                        }
+                    });
+
+                    // Update Greeting
+                    const hour = new Date().getHours();
+                    let greeting = "Welcome back";
+                    if (hour < 12) greeting = "Good morning";
+                    else if (hour < 18) greeting = "Good afternoon";
+                    else greeting = "Good evening";
+
+                    const welcomeMsg = document.getElementById('welcome-message');
+                    if (welcomeMsg) {
+                        welcomeMsg.innerText = `${greeting}, ${name.split(' ')[0]}! 👋`;
+                    }
+
+                    // Update Menu Links
+                    if (data.viewer.slug) {
+                        const baseUrl = window.location.origin;
+                        document.getElementById('menu-visit-profile').href = `${baseUrl}/${data.viewer.slug}`;
+                        document.getElementById('menu-edit-card').href = `product_editor.html?slug=${data.viewer.slug}`;
+                    } else {
+                        document.getElementById('menu-visit-profile').classList.add('hidden');
+                        document.getElementById('menu-edit-card').classList.add('hidden');
+                    }
+                }
+                document.getElementById('company-name').innerText = data.company.name;
+                // Company card elements removed per user request
+
+                // 2. Stats
+                const stats = data.stats || {};
+                document.getElementById('active-staff').innerText = stats.managed_staff_count || 0;
+                document.getElementById('total-views').innerText = (stats.total_views || 0).toLocaleString();
+
+                // Products calculation
+                let totalProducts = 0;
+                let staff = data.staff || [];
+
+                // Filter to delegated staff only
+                if (data.viewer && data.viewer.id) {
+                    staff = staff.filter(u => u.assigned_admin_id === data.viewer.id);
+                }
+
+                const products = [];
+
+                staff.forEach(u => {
+                    if (u.slug) {
+                        products.push(u); // It's a card
+                        totalProducts++;
+                    }
+                });
+
+                document.getElementById('unassigned-seats').innerText = totalProducts;
+
+                // Licenses
+                const totalLic = data.company.sub_license_count || 0;
+                const assignedLic = data.company.assigned_sub_licenses || 0; // Or calculate
+                // Recalculate assigned from staff list to be safe
+                let calculatedAssigned = 0;
+                staff.forEach(u => calculatedAssigned += (u.sub_license_count || 0));
+
+                document.getElementById('lic-assigned').innerText = `${calculatedAssigned}/${totalLic}`;
+                const pct = totalLic > 0 ? (calculatedAssigned / totalLic) * 100 : 0;
+                document.getElementById('license-bar').style.width = `${pct}%`;
+
+                // 3. Render Staff Views
+                renderStaffGrid(staff);
+                renderRecentStaff(staff);
+                renderProductsGrid(products);
+
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // *** EXTRA UTILS ***
+        function toggleProfileDropdown() {
+            document.getElementById('profile-dropdown-menu').classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (event) {
+            const dropdown = document.getElementById('profile-dropdown-menu');
+            const button = event.target.closest('button');
+            const isDropdownBtn = button && button.getAttribute('onclick') === 'toggleProfileDropdown()';
+
+            if (!isDropdownBtn && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        async function logout() {
+            // alert('Logging out...');
+            document.cookie = "session_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = 'login.html';
+        }
+
+        function renderRecentStaff(staff) {
+            // Filter to actual users (no parent_id usually means a user profile card or just user)
+            // But in this DB schema, users are users. 
+            // We want the last 5 users added.
+            const uniqueUsers = staff.filter((v, i, a) => a.findIndex(t => (t.email === v.email)) === i).slice(0, 5);
+
+            const html = uniqueUsers.map(u => `
+                <tr class="hover:bg-gray-50 transition cursor-pointer">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-xs">
+                                ${(u.name || 'U').charAt(0)}
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-900 text-xs">${u.name}</p>
+                                <p class="text-[10px] text-gray-400">${u.email}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 text-right">
+                       ${u.slug ? `<a href="/${u.slug}" target="_blank" class="text-blue-500 text-xs hover:underline">/${u.slug}</a>` : '<span class="text-gray-300 text-xs">No Card</span>'}
+                    </td>
+                </tr>
+            `).join('');
+            document.getElementById('recent-staff-list').innerHTML = html || '<tr><td class="p-4 text-center text-gray-400 text-xs">No staff found.</td></tr>';
+        }
+
+        function renderStaffGrid(staff) {
+            // Deduplicate by ID
+            const uniqueUsers = staff.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+            // Note: data.staff flattens cards? 
+            // In previous dash, we grouped by email/id. Let's do that.
+            const userMap = new Map();
+            staff.forEach(u => {
+                if (!userMap.has(u.id)) userMap.set(u.id, { user: u, cards: [] });
+                if (u.slug) userMap.get(u.id).cards.push(u);
+            });
+
+            const grid = document.getElementById('staff-grid-container');
+            grid.innerHTML = Array.from(userMap.values()).map(({ user, cards }) => `
+                <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-brand-black font-bold text-sm group-hover:bg-brand-red group-hover:text-white transition">
+                            ${(user.name || 'U').charAt(0)}
+                        </div>
+                        <button class="text-gray-300 hover:text-gray-900"><i class="bi bi-three-dots"></i></button>
+                    </div>
+                    <h4 class="font-bold text-gray-900 mb-1">${user.name}</h4>
+                    <p class="text-gray-500 text-xs mb-4 truncate">${user.email}</p>
+                    
+                    <div class="flex gap-2">
+                        <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-1 rounded">
+                            ${cards.length} Products
+                        </span>
+                        <span class="bg-gray-50 text-gray-500 text-[10px] font-bold px-2 py-1 rounded">
+                            ${user.sub_license_count || 0} Lic. Limit
+                        </span>
+                    </div>
+                </div>
+             `).join('');
+        }
+
+        function renderProductsGrid(products) {
+            const grid = document.getElementById('products-grid-container');
+            grid.innerHTML = products.map(p => `
+                <div class="bg-white rounded-2xl p-0 border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition">
+                    <div class="h-24 bg-gray-100 relative">
+                        <!-- Preview IFRAME or Image placeholder -->
+                         <div class="absolute inset-0 flex items-center justify-center text-gray-300">
+                             <i class="bi bi-image text-3xl"></i>
+                         </div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-900 text-sm truncate mb-1">/${p.slug}</h4>
+                        <p class="text-gray-500 text-xs mb-3">Owner: ${p.name}</p>
+                        <div class="flex gap-2">
+                            <a href="/${p.slug}" target="_blank" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-900 text-center py-2 rounded-lg text-xs font-bold transition">View</a>
+                            <a href="product_editor.html?slug=${p.slug}" class="flex-1 bg-brand-black text-white text-center py-2 rounded-lg text-xs font-bold hover:bg-gray-800 transition">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        // *** MODALS ***
+        function openCreateAccountModal() {
+            document.getElementById('create-account-modal').classList.remove('hidden');
+        }
+        function closeCreateAccountModal() {
+            document.getElementById('create-account-modal').classList.add('hidden');
+        }
+
+
+        // *** ACTIONS ***
+        async function createStaffUser() {
+            const btn = document.getElementById('btn-create-staff');
+            const errorMsg = document.getElementById('create-staff-error');
+
+            const name = document.getElementById('new-staff-name').value;
+            const email = document.getElementById('new-staff-email').value;
+            const phone = document.getElementById('new-staff-phone').value;
+            const sub_licenses = document.getElementById('new-staff-licenses').value;
+
+            btn.disabled = true;
+            btn.innerText = "Creating...";
+            errorMsg.classList.add('hidden');
+
+            try {
+                const res = await fetch('/api/enterprise/create-staff', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, sub_licenses })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    closeCreateAccountModal();
+                    loadDashboardData();
+
+                    // Show success
+                    document.getElementById('success-password').innerText = data.temp_password || "Check Email";
+                    document.getElementById('success-modal').classList.remove('hidden-element');
+
+                } else {
+                    throw new Error(data.error || "Failed");
+                }
+            } catch (e) {
+                errorMsg.innerText = e.message;
+                errorMsg.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "SEND INVITATION";
+            }
+        }
+
+        function copyPassword() {
+            const t = document.getElementById('success-password').innerText;
+            navigator.clipboard.writeText(t);
+            alert("Copied!");
+        }
+
+
+
+    </script>
+</body>
+
+</html>

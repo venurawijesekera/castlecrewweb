@@ -1,0 +1,1117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Edit Card - Castle Cards</title>
+    <link rel="icon" type="image/png" href="assets/img/logo.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { red: '#f00000', black: '#0a0a0a', dark: '#121212', sidebar: '#0f0f0f' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        .phone-screen::-webkit-scrollbar {
+            display: none;
+        }
+
+        select option {
+            background-color: #0a0a0a;
+            color: white;
+        }
+
+        .color-btn.selected {
+            box-shadow: 0 0 0 2px white;
+            transform: scale(1.1);
+        }
+
+        /* New styles for Enterprise restriction */
+        .input-locked {
+            cursor: not-allowed;
+            opacity: 0.6;
+            background-color: #1a1a1a !important;
+        }
+
+        /* Preloader Styles (NEW) */
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glow animation for preloader logo (NEW) */
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden bg-brand-sidebar">
+
+    <div id="preloader"
+        class="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center transition-opacity duration-700 ease-out">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-red opacity-50 blur-xl rounded-full animate-pulse-glow"></div>
+                <img src="assets/img/logo.png" alt="Castle Cards Logo" class="relative w-12 h-12 z-10" />
+            </div>
+            <div class="font-black text-xl tracking-[0.2em] text-white animate-pulse">
+                CARD EDITOR
+            </div>
+        </div>
+    </div>
+
+
+    <div class="flex-1 flex flex-col h-screen relative z-10">
+        <!-- HEADER -->
+        <div class="h-16 border-b border-gray-800 flex justify-between items-center px-6 bg-[#050505]">
+            <div class="flex items-center gap-4">
+                <a href="profile.html?view=products" class="text-gray-400 hover:text-white transition"><i
+                        class="bi bi-arrow-left"></i> Back</a>
+                <h1 class="font-bold text-lg tracking-tight">Product Editor</h1>
+            </div>
+            <div class="flex gap-3">
+                <a id="btn-view-live" href="#" target="_blank"
+                    class="hidden md:flex items-center gap-2 border border-gray-700 px-4 py-2 rounded-lg text-xs font-bold hover:bg-gray-800 transition"><i
+                        class="bi bi-eye"></i> Live</a>
+                <button onclick="saveData()"
+                    class="bg-brand-red text-white px-6 py-2 rounded-lg text-xs font-bold hover:bg-red-700 transition shadow-lg shadow-brand-red/20"><i
+                        class="bi bi-cloud-upload"></i> PUBLISH</button>
+            </div>
+        </div>
+
+        <!-- EDITOR CONTENT -->
+        <div class="flex-1 overflow-y-auto p-6 md:p-10 scrollbar-hide">
+            <div class="max-w-2xl mx-auto space-y-8">
+
+                <!-- Alert Placeholder (Hidden) -->
+                <div id="enterprise-editor-alert"
+                    class="hidden bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 p-4 rounded-lg text-xs font-bold">
+                    <i class="bi bi-lock-fill mr-2"></i> Some fields are locked by your organization.
+                </div>
+            </div>
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-palette-fill"></i> Design & Color
+                </h3>
+
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-2">Accent Color</label>
+                    <div class="flex flex-wrap gap-3" id="color-palette"></div>
+                    <input type="hidden" id="input-accent" value="#f00000">
+                </div>
+
+                <div>
+                    <label class="block text-xs text-gray-400 mb-2">Background Theme</label>
+                    <select id="input-theme" onchange="updatePreview()"
+                        class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm text-white focus:border-brand-red focus:outline-none">
+                        <option value="dark">Dark Mode (Classic)</option>
+                        <option value="light">Light Mode (Modern)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-gear-fill"></i> Settings
+                </h3>
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-1">Product Link (Slug)</label>
+                    <div class="relative">
+                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm font-mono">
+                            castlecrew.cc/</div>
+                        <input type="text" id="input-slug" oninput="validateSlug(this)"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-32 text-sm focus:border-brand-red focus:outline-none transition text-white font-bold">
+                        <div id="slug-status"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs font-bold"></div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Template</label>
+                    <div class="relative">
+                        <i class="bi bi-palette absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <select id="input-template" onchange="updatePreview()"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red text-white appearance-none">
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-box-seam-fill"></i> Product Info
+                </h3>
+
+                <label class="block text-xs text-gray-400 mb-2">Product Gallery (Max 4)</label>
+                <div class="grid grid-cols-4 gap-2 mb-6">
+                    <!-- Slot 0 -->
+                    <div id="gallery-slot-0" onclick="triggerGalleryUpload(0)"
+                        class="aspect-square rounded-xl bg-gray-800 border-2 border-dashed border-gray-600 flex items-center justify-center hover:bg-gray-700 cursor-pointer overflow-hidden relative group">
+                        <i class="bi bi-plus-lg text-gray-500 text-xl"></i>
+                        <img id="gallery-img-0" class="hidden w-full h-full object-cover">
+                        <div id="gallery-remove-0" onclick="removeGalleryImage(0, event)"
+                            class="hidden absolute top-1 right-1 bg-red-600 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] hover:bg-red-700 z-10">
+                            <i class="bi bi-x"></i>
+                        </div>
+                    </div>
+                    <!-- Slot 1 -->
+                    <div id="gallery-slot-1" onclick="triggerGalleryUpload(1)"
+                        class="aspect-square rounded-xl bg-gray-800 border-2 border-dashed border-gray-600 flex items-center justify-center hover:bg-gray-700 cursor-pointer overflow-hidden relative group">
+                        <i class="bi bi-plus-lg text-gray-500 text-xl"></i>
+                        <img id="gallery-img-1" class="hidden w-full h-full object-cover">
+                        <div id="gallery-remove-1" onclick="removeGalleryImage(1, event)"
+                            class="hidden absolute top-1 right-1 bg-red-600 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] hover:bg-red-700 z-10">
+                            <i class="bi bi-x"></i>
+                        </div>
+                    </div>
+                    <!-- Slot 2 -->
+                    <div id="gallery-slot-2" onclick="triggerGalleryUpload(2)"
+                        class="aspect-square rounded-xl bg-gray-800 border-2 border-dashed border-gray-600 flex items-center justify-center hover:bg-gray-700 cursor-pointer overflow-hidden relative group">
+                        <i class="bi bi-plus-lg text-gray-500 text-xl"></i>
+                        <img id="gallery-img-2" class="hidden w-full h-full object-cover">
+                        <div id="gallery-remove-2" onclick="removeGalleryImage(2, event)"
+                            class="hidden absolute top-1 right-1 bg-red-600 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] hover:bg-red-700 z-10">
+                            <i class="bi bi-x"></i>
+                        </div>
+                    </div>
+                    <!-- Slot 3 -->
+                    <div id="gallery-slot-3" onclick="triggerGalleryUpload(3)"
+                        class="aspect-square rounded-xl bg-gray-800 border-2 border-dashed border-gray-600 flex items-center justify-center hover:bg-gray-700 cursor-pointer overflow-hidden relative group">
+                        <i class="bi bi-plus-lg text-gray-500 text-xl"></i>
+                        <img id="gallery-img-3" class="hidden w-full h-full object-cover">
+                        <div id="gallery-remove-3" onclick="removeGalleryImage(3, event)"
+                            class="hidden absolute top-1 right-1 bg-red-600 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] hover:bg-red-700 z-10">
+                            <i class="bi bi-x"></i>
+                        </div>
+                    </div>
+                </div>
+                <input type="file" id="upload-gallery" accept="image/*" class="hidden"
+                    onchange="handleGalleryUpload(event)">
+
+                <div class="space-y-4">
+                    <!-- Main Product Fields -->
+                    <div class="relative"><i
+                            class="bi bi-tag absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                            type="text" id="input-title" oninput="updatePreview()"
+                            placeholder="Product Title (e.g. BMW X5 2024)"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white font-bold">
+                    </div>
+
+                    <div class="relative mb-4 hidden"><i
+                            class="bi bi-layers absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                            type="text" id="input-job" placeholder="Subtitle / Trim"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative mb-4"><i
+                            class="bi bi-currency-dollar absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                            type="text" id="input-company" oninput="updatePreview()" placeholder="Price (e.g. $55,000)"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white font-bold">
+                    </div>
+
+                    <!-- NEW SPECS ROW -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="relative"><i
+                                class="bi bi-car-front absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                                type="text" id="input-brand" oninput="updatePreview()" placeholder="Brand (e.g. BMW)"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                        </div>
+                        <div class="relative"><i
+                                class="bi bi-calendar-event absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                                type="number" id="input-year" oninput="updatePreview()" placeholder="Year (e.g. 2024)"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="relative"><i
+                                class="bi bi-speedometer2 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                                type="text" id="input-mileage" oninput="updatePreview()" placeholder="Mileage"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                        </div>
+                        <div class="relative flex items-center bg-black border border-gray-700 rounded px-2">
+                            <i class="bi bi-palette text-gray-500 mr-2"></i>
+                            <input type="text" id="input-color" oninput="updatePreview()" placeholder="Color Name"
+                                class="flex-1 bg-transparent border-none text-sm focus:outline-none text-white h-9">
+                            <input type="color" id="input-paint" oninput="updatePreview()" value="#ffffff"
+                                class="w-8 h-8 rounded cursor-pointer bg-transparent border-none p-0">
+                        </div>
+                        <div class="relative">
+                            <select id="input-condition" onchange="updatePreview()"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 text-sm focus:border-brand-red focus:outline-none text-white appearance-none">
+                                <option value="Used">Used</option>
+                                <option value="Brand New">Brand New</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- EXTENDED SPECS -->
+                    <div class="grid grid-cols-2 gap-3 mb-4 mt-4">
+                        <div class="relative"><i
+                                class="bi bi-gear-wide-connected absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <select id="input-transmission" onchange="updatePreview()"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white appearance-none">
+                                <option value="" disabled selected>Transmission</option>
+                                <option value="Automatic">Automatic</option>
+                                <option value="Manual">Manual</option>
+                                <option value="Tiptronic">Tiptronic</option>
+                                <option value="CVT">CVT</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="relative"><i
+                                class="bi bi-fuel-pump absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <select id="input-fuel" onchange="updatePreview()"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white appearance-none">
+                                <option value="" disabled selected>Fuel Type</option>
+                                <option value="Petrol">Petrol</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="Hybrid">Hybrid</option>
+                                <option value="Electric">Electric</option>
+                                <option value="PHEV">PHEV</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="relative"><i
+                                class="bi bi-car-front-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <select id="input-body" onchange="updatePreview()"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white appearance-none">
+                                <option value="" disabled selected>Body Type</option>
+                                <option value="Sedan">Sedan</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Hatchback">Hatchback</option>
+                                <option value="Wagon">Wagon</option>
+                                <option value="Van">Van</option>
+                                <option value="Truck">Truck</option>
+                                <option value="Coupe">Coupe</option>
+                                <option value="Convertible">Convertible</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="relative"><i
+                                class="bi bi-lightning-charge absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                            <input type="text" id="input-engine" oninput="updatePreview()"
+                                placeholder="Engine (e.g. 2000 CC)"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                        </div>
+                    </div>
+
+                    <div class="relative mb-4"><i
+                            class="bi bi-tag-fill absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        <input type="text" id="input-trim" oninput="updatePreview()"
+                            placeholder="Trim / Edition (e.g. M Sport)"
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+
+                    <!-- Location / Maps Link -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="relative"><i
+                                class="bi bi-geo-alt absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                                type="text" id="input-location-name" oninput="updatePreview()"
+                                placeholder="Location Name (Showroom)"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                        </div>
+                        <div class="relative"><i
+                                class="bi bi-link-45deg absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input
+                                type="text" id="input-location-url" oninput="updatePreview()"
+                                placeholder="Google Maps Link"
+                                class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white">
+                        </div>
+                    </div>
+
+                    <div class="relative"><i class="bi bi-card-text absolute left-3 top-3 text-gray-500"></i><textarea
+                            id="input-description" rows="4" oninput="updatePreview()"
+                            placeholder="Detailed Product Description..."
+                            class="w-full bg-black border border-gray-700 rounded px-3 py-2 pl-9 text-sm focus:border-brand-red focus:outline-none text-white"></textarea>
+                    </div>
+
+                    <!-- Hidden/Optional Fields -->
+                    <input type="hidden" id="input-name" value=""> <!-- Agent Name can be hidden or separate -->
+                    <input type="hidden" id="input-bio" value=""> <!-- Mapped to Desc, so hide duplicate bio -->
+                    <input type="hidden" id="input-website" value=""> <!-- Website field to prevent JS errors -->
+                </div>
+            </div>
+
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-telephone-fill"></i> Contact Info
+                </h3>
+                <div class="mb-6"><label class="block text-xs text-gray-400 mb-2">Phone Numbers</label>
+                    <div id="phone-list" class="space-y-2"></div><button onclick="addPhoneRow()"
+                        class="mt-2 text-xs text-brand-red font-bold hover:text-white flex items-center gap-1 transition"><i
+                            class="bi bi-plus-circle"></i> Add Phone Number</button>
+                </div>
+                <div><label class="block text-xs text-gray-400 mb-2">Email Addresses</label>
+                    <div id="email-list" class="space-y-2"></div><button onclick="addEmailRow()"
+                        class="mt-2 text-xs text-brand-red font-bold hover:text-white flex items-center gap-1 transition"><i
+                            class="bi bi-plus-circle"></i> Add Email</button>
+                </div>
+            </div>
+
+            <div class="bg-brand-dark p-5 rounded-xl border border-gray-800">
+                <h3 class="text-xs font-bold uppercase text-gray-500 mb-4 tracking-wider flex items-center gap-2">
+                    <i class="bi bi-share-fill"></i> Social Media
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex gap-0 relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-[#25D366] z-10">
+                            <i class="bi bi-whatsapp"></i>
+                        </div>
+                        <div
+                            class="relative w-20 bg-black border border-gray-700 border-r-0 rounded-l-none pl-10 h-[42px] flex items-center">
+                            <span id="wa-display-code"
+                                class="text-sm text-gray-300 font-mono pointer-events-none">+94</span><i
+                                class="bi bi-chevron-down absolute right-1 text-[10px] text-gray-600 pointer-events-none"></i><select
+                                id="wa-country" onchange="updateWaCode(this.value); updatePreview()"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"></select>
+                        </div>
+                        <input type="tel" id="social-whatsapp" oninput="formatWhatsApp(this)" placeholder="77 123 4567"
+                            class="flex-1 bg-black border border-gray-700 rounded-r px-3 py-2 text-sm focus:border-[#25D366] focus:outline-none text-white h-[42px]">
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-gray-400">
+                            <i class="bi bi-instagram"></i>
+                        </div><input type="text" id="social-instagram" oninput="updatePreview()"
+                            placeholder="Instagram Username"
+                            class="w-full bg-black border border-gray-700 rounded rounded-l-none px-3 py-2 pl-12 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-gray-400">
+                            <i class="bi bi-facebook"></i>
+                        </div><input type="text" id="social-facebook" oninput="updatePreview()"
+                            placeholder="Facebook URL"
+                            class="w-full bg-black border border-gray-700 rounded rounded-l-none px-3 py-2 pl-12 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-gray-400">
+                            <i class="bi bi-linkedin"></i>
+                        </div><input type="text" id="social-linkedin" oninput="updatePreview()"
+                            placeholder="LinkedIn URL"
+                            class="w-full bg-black border border-gray-700 rounded rounded-l-none px-3 py-2 pl-12 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                    <div class="relative group">
+                        <div
+                            class="absolute left-0 top-0 bottom-0 w-10 flex items-center justify-center bg-gray-900 border border-gray-700 border-r-0 rounded-l text-gray-400">
+                            <i class="bi bi-twitter-x"></i>
+                        </div><input type="text" id="social-twitter" oninput="updatePreview()"
+                            placeholder="X (Twitter) Username"
+                            class="w-full bg-black border border-gray-700 rounded rounded-l-none px-3 py-2 pl-12 text-sm focus:border-brand-red focus:outline-none text-white">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden md:flex flex-1 bg-[#050505] items-center justify-center relative overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[linear-gradient(rgba(30,30,30,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(30,30,30,0.5)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20">
+        </div>
+        <div
+            class="relative w-[375px] h-[750px] bg-black rounded-[50px] border-[12px] border-gray-900 shadow-2xl flex flex-col overflow-hidden">
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-7 bg-black rounded-b-2xl z-20">
+            </div>
+            <div id="preview-screen"
+                class="phone-screen w-full h-full bg-[#f3f4f6] overflow-y-auto relative transition-colors font-sans flex items-center justify-center p-4">
+                <div
+                    class="w-full max-w-sm bg-white rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden">
+
+                    <!-- Hero Image Part -->
+                    <div class="relative h-72 bg-gray-100">
+                        <div class="w-full h-full">
+                            <img src="assets/img/logo.png" class="w-full h-full object-cover">
+                        </div>
+
+                        <!-- Floating Badge (Removed) -->
+                        <!-- Agent/Company Logo (Removed) -->
+                    </div>
+
+                    <!-- Details Part -->
+                    <div class="p-6 relative">
+                        <div class="mb-6">
+                            <h1 class="text-2xl font-black text-gray-900 leading-tight mb-1">PRODUCT NAME</h1>
+                            <p class="text-gray-500 font-medium">Subtitle / Trim</p>
+                        </div>
+                        <div class="mb-8">
+                            <p class="text-gray-400 text-sm leading-relaxed line-clamp-4">Product description...</p>
+                        </div>
+
+                        <!-- Price & Action -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="block text-2xl font-black text-gray-900">$0</span>
+                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">Monthly
+                                    Payment</span>
+                            </div>
+                            <button
+                                class="bg-black text-white px-6 py-3 rounded-full font-bold text-sm flex items-center gap-2">
+                                Get Offer <i class="bi bi-arrow-up-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Contact/Broker Footer -->
+                        <div class="mt-8 pt-6 border-t border-gray-100 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gray-100 overflow-hidden">
+                                <img src="assets/img/logo.png" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Financing Agent</p>
+                                <p class="text-xs font-bold text-gray-900">Verified Agent</p>
+                            </div>
+                            <div class="ml-auto flex gap-2">
+                                <span
+                                    class="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center"><i
+                                        class="bi bi-telephone-fill"></i></span>
+                                <span
+                                    class="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center"><i
+                                        class="bi bi-whatsapp"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const colors = ['#f00000', '#F59E0B', '#3B82F6', '#10B981', '#EC4899', '#6B7280', '#FFFFFF', '#000000'];
+        const palette = document.getElementById('color-palette');
+        colors.forEach(c => {
+            const btn = document.createElement('button');
+            btn.className = 'w-8 h-8 rounded-full border border-gray-700 hover:scale-110 transition color-btn';
+            btn.style.backgroundColor = c;
+            btn.onclick = () => setAccent(c, btn);
+            palette.appendChild(btn);
+        });
+
+        const countries = [{ code: "+94", name: "Sri Lanka" }, { code: "+1", name: "USA/Canada" }, { code: "+44", name: "UK" }, { code: "+61", name: "Australia" }, { code: "+91", name: "India" }, { code: "+971", name: "UAE" }, { code: "+966", name: "Saudi Arabia" }, { code: "+65", name: "Singapore" }, { code: "+86", name: "China" }, { code: "+81", name: "Japan" }, { code: "+33", name: "France" }, { code: "+49", name: "Germany" }, { code: "+39", name: "Italy" }, { code: "+7", name: "Russia" }, { code: "+34", name: "Spain" }, { code: "+974", name: "Qatar" }, { code: "+965", name: "Kuwait" }, { code: "+60", name: "Malaysia" }, { code: "+66", name: "Thailand" }, { code: "+62", name: "Indonesia" }, { code: "+55", name: "Brazil" }, { code: "+960", name: "Maldives" }, { code: "+92", name: "Pakistan" }, { code: "+880", name: "Bangladesh" }, { code: "+64", name: "New Zealand" }].sort((a, b) => a.name.localeCompare(b.name));
+        const countryOptions = countries.map(c => `<option value="${c.code}">${c.name} (${c.code})</option>`).join('');
+
+        let phones = [], emails = [], originalSlug = "", debounceTimer;
+        let gallery = [null, null, null, null];
+        let activeGallerySlot = 0;
+        let isEnterpriseStaff = false;
+        let mainProfileAgent = { name: "Verified Agent", image: "assets/img/logo.png" }; // Store main profile info
+        let enterpriseLogo = null;
+
+        async function loadData() {
+            document.getElementById('wa-country').innerHTML = countryOptions;
+            const token = localStorage.getItem('castle_token');
+            if (!token) return window.location.href = 'login.html';
+
+            try {
+                // Parse slug from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const slugParam = urlParams.get('slug');
+                let apiUrl = '/api/card';
+                if (slugParam) apiUrl += `?slug=${slugParam}`;
+
+                // (Duplicate line removed)
+
+                // Fetch Current Product Data
+                const res = await fetch(apiUrl, { headers: { 'Authorization': token } });
+                const data = await res.json();
+
+                // Fetch Main Profile (for Agent Info)
+                try {
+                    const mainRes = await fetch('/api/card', { headers: { 'Authorization': token } });
+                    const mainData = await mainRes.json();
+                    if (mainData && mainData.avatar_url) {
+                        mainProfileAgent.image = mainData.avatar_url;
+                        mainProfileAgent.name = mainData.full_name || "Verified Agent";
+                        updatePreview(); // Force update immediately when data arrives
+                    }
+                } catch (e) { console.error("Main Profile Fetch Error", e); }
+
+                if (data.id) {
+                    enterpriseLogo = data.enterprise_logo || null;
+                    const plan = data.plan || 'starter';
+                    // Disable Enterprise Locking for Product Cards
+                    isEnterpriseStaff = false; // !!data.enterprise_id;
+
+                    if (isEnterpriseStaff) {
+                        document.getElementById('enterprise-editor-alert').classList.remove('hidden');
+                        ['input-slug', 'input-job', 'input-company'].forEach(id => {
+                            const input = document.getElementById(id);
+                            input.setAttribute('disabled', 'true');
+                            input.classList.add('input-locked');
+                        });
+                        // Social Dock Logic
+                        const dock = document.getElementById('p-social-dock');
+                        dock.innerHTML = '';
+                        const socialLinks = [
+                            { key: 'facebook', icon: 'bi-facebook', url: socials.facebook },
+                            { key: 'instagram', icon: 'bi-instagram', url: socials.instagram },
+                            { key: 'linkedin', icon: 'bi-linkedin', url: socials.linkedin },
+                            { key: 'twitter', icon: 'bi-twitter-x', url: socials.twitter },
+                        ];
+
+                        socialLinks.forEach(s => {
+                            if (s.url) {
+                                const a = document.createElement('a');
+                                a.href = s.url.startsWith('http') ? s.url : `https://${s.url}`;
+                                a.target = "_blank";
+
+                                // Define brand colors
+                                let hoverClass = "";
+                                if (s.key === 'facebook') hoverClass = "hover:bg-[#1877F2] hover:text-white";
+                                else if (s.key === 'instagram') hoverClass = "hover:bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] hover:text-white";
+                                else if (s.key === 'linkedin') hoverClass = "hover:bg-[#0077b5] hover:text-white";
+                                else if (s.key === 'twitter') hoverClass = "hover:bg-black hover:text-white";
+
+                                a.className = `w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center shadow-lg transition-all duration-300 ${hoverClass}`;
+                                a.innerHTML = `<i class="bi ${s.icon} text-lg"></i>`;
+                                dock.appendChild(a);
+                            }
+                        });
+
+                        // Lead Form
+                        const form = document.getElementById('lead-form');
+                        document.getElementById('input-slug').oninput = null;
+                        const select = document.getElementById('input-template');
+                        select.innerHTML = "";
+                        select.add(new Option('Castle Signature', 'signature'));
+                        select.add(new Option('Eco Real Estate', 'realestate'));
+                        select.add(new Option('The Creative', 'creative'));
+                        // Allow CAR template if that's what is saved (Product Mode)
+                        if (data.template_id === 'car') {
+                            select.add(new Option('Automotive / Car Theme', 'car'));
+                        }
+                    } else {
+                        const select = document.getElementById('input-template');
+                        select.innerHTML = "";
+                        select.add(new Option('Automotive / Car Theme', 'car'));
+
+                        // Force 'car' if saved template is not valid for product editor
+                        if (!['car'].includes(data.template_id)) {
+                            data.template_id = 'car';
+                        }
+                    }
+
+                    let design = {};
+                    try {
+                        const parsed = typeof data.design === 'string' ? JSON.parse(data.design) : data.design;
+                        design = parsed || {};
+                    } catch (e) { console.error("Design Parse Error", e); design = {}; }
+
+                    const specs = design.specs || {};
+                    document.getElementById('input-brand').value = specs.brand || "";
+                    document.getElementById('input-year').value = specs.year || "";
+                    document.getElementById('input-mileage').value = specs.mileage || "";
+                    document.getElementById('input-color').value = specs.color || "";
+                    document.getElementById('input-paint').value = specs.paint || "#ffffff";
+                    document.getElementById('input-condition').value = specs.condition || "Used";
+                    document.getElementById('input-trim').value = specs.trim || "";
+                    document.getElementById('input-transmission').value = specs.transmission || "";
+                    document.getElementById('input-body').value = specs.body || "";
+                    document.getElementById('input-fuel').value = specs.fuel || "";
+                    document.getElementById('input-engine').value = specs.engine || "";
+                    document.getElementById('input-location-name').value = specs.locationName || "";
+                    document.getElementById('input-location-url').value = specs.locationUrl || "";
+
+                    document.getElementById('input-template').value = data.template_id || 'signature'; // Ensure template selected
+
+                    const safeSlug = (data.slug || "").trim();
+                    document.getElementById('input-slug').value = safeSlug;
+                    originalSlug = safeSlug; // FIX: Set originalSlug
+
+                    // FIX: Prioritize full_name and bio as they are the source of truth for Product Cards
+                    document.getElementById('input-title').value = data.full_name || data.title || "";
+                    document.getElementById('input-description').value = data.bio || data.description || "";
+                    document.getElementById('input-job').value = data.job_title || "";
+                    document.getElementById('input-company').value = data.company || "";
+                    document.getElementById('input-website').value = data.website || "";
+
+                    if (data.phones) {
+                        try {
+                            const rawPhones = JSON.parse(data.phones);
+                            phones = rawPhones.map(p => {
+                                const { code, num } = splitPhone(p.value);
+                                return { code: code, number: formatStringPhone(num), show: p.show };
+                            });
+                        } catch (e) { phones = []; }
+                    }
+                    if (data.emails) emails = JSON.parse(data.emails);
+                    if (phones.length === 0 && data.phone) {
+                        const { code, num } = splitPhone(data.phone);
+                        phones.push({ code: code, number: formatStringPhone(num), show: true });
+                    }
+                    if (emails.length === 0 && data.email) emails.push({ value: data.email, show: true });
+
+                    // Gallery Logic
+                    try {
+                        if (data.gallery) gallery = JSON.parse(data.gallery);
+                        // Ensure it is an array
+                        if (!Array.isArray(gallery)) gallery = [null, null, null, null];
+                        while (gallery.length < 4) gallery.push(null);
+                    } catch (e) {
+                        gallery = [data.avatar_url || null, null, null, null];
+                    }
+                    if (!gallery[0] && data.avatar_url) gallery[0] = data.avatar_url;
+
+                    renderPhones();
+                    renderEmails();
+                    renderGallery(); // Call new render function
+
+                    let socials = {};
+                    try { socials = typeof data.socials === 'string' ? JSON.parse(data.socials) : (data.socials || {}); } catch (e) { }
+
+                    document.getElementById('social-instagram').value = socials.instagram || "";
+                    document.getElementById('social-facebook').value = socials.facebook || "";
+                    document.getElementById('social-linkedin').value = socials.linkedin || "";
+                    document.getElementById('social-twitter').value = socials.twitter || "";
+
+                    // WhatsApp specific loading logic
+                    if (socials.whatsapp) {
+                        const { code, num } = splitPhone(socials.whatsapp);
+                        document.getElementById('wa-country').value = code || "+94";
+                        document.getElementById('social-whatsapp').value = formatStringPhone(num);
+                    }
+                    document.getElementById('social-twitter').value = socials.twitter || "";
+
+                    document.getElementById('btn-view-live').href = safeSlug ? `/${safeSlug}` : '#';
+                } else {
+                    console.warn("DEBUG: No data found via API for this slug/user combination.");
+                    alert("Error: Could not load card data. Please check if you are logged in correctly.");
+                }
+
+                // Always update preview
+                updatePreview();
+
+            } catch (err) {
+                console.error("Load Error", err);
+                alert("Critical Error Loading Data: " + err.message);
+            }
+        }
+
+        function triggerGalleryUpload(index) {
+            activeGallerySlot = index;
+            document.getElementById('upload-gallery').click();
+        }
+
+        function removeGalleryImage(index, event) {
+            event.stopPropagation();
+            gallery[index] = null;
+            renderGallery();
+            updatePreview();
+            document.getElementById('upload-gallery').value = "";
+        }
+
+        function handleGalleryUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const maxSize = 800;
+                    let width = img.width; let height = img.height;
+                    if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } }
+                    else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
+                    canvas.width = width; canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    gallery[activeGallerySlot] = canvas.toDataURL('image/jpeg', 0.8);
+                    renderGallery();
+                    updatePreview();
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function renderGallery() {
+            for (let i = 0; i < 4; i++) {
+                const img = gallery[i];
+                const slot = document.getElementById(`gallery-slot-${i}`);
+                const imgEl = document.getElementById(`gallery-img-${i}`);
+                const removeEl = document.getElementById(`gallery-remove-${i}`);
+                const icon = slot.querySelector('.bi-plus-lg');
+
+                if (img) {
+                    imgEl.src = img;
+                    imgEl.classList.remove('hidden');
+                    removeEl.classList.remove('hidden');
+                    icon.classList.add('hidden');
+                    slot.classList.remove('border-dashed', 'border-gray-600');
+                    slot.classList.add('border-solid', 'border-brand-red');
+                } else {
+                    imgEl.src = "";
+                    imgEl.classList.add('hidden');
+                    removeEl.classList.add('hidden');
+                    icon.classList.remove('hidden');
+                    slot.classList.add('border-dashed', 'border-gray-600');
+                    slot.classList.remove('border-solid', 'border-brand-red');
+                }
+            }
+        }
+
+        function setAccent(color, btn) {
+            document.getElementById('input-accent').value = color;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('ring-2', 'ring-white', 'scale-110'));
+
+            // Find the button that matches the color and add the classes
+            const targetButton = Array.from(document.querySelectorAll('.color-btn')).find(b => b.style.backgroundColor.toLowerCase() === color.toLowerCase());
+            if (targetButton) targetButton.classList.add('ring-2', 'ring-white', 'scale-110');
+
+            updatePreview();
+        }
+
+        function splitPhone(fullStr) { if (!fullStr) return { code: "+94", num: "" }; const found = countries.find(c => fullStr.startsWith(c.code)); return found ? { code: found.code, num: fullStr.substring(found.code.length) } : { code: "+94", num: fullStr }; }
+        function formatStringPhone(val) { val = val.replace(/\D/g, ''); if (val.startsWith('0')) val = val.substring(1); if (val.length > 5) return val.replace(/^(\d{2})(\d{3})(\d+).*/, '$1 $2 $3'); else if (val.length > 2) return val.replace(/^(\d{2})(\d+)/, '$1 $2'); return val; }
+        function formatAndSetPhone(index, input) { input.value = formatStringPhone(input.value); phones[index].number = input.value; updatePreview(); }
+        function formatWhatsApp(input) { input.value = formatStringPhone(input.value); updatePreview(); }
+        function updateWaCode(code) { document.getElementById('wa-display-code').innerText = code; }
+
+        function updatePreview() {
+            const template = document.getElementById('input-template').value;
+            const theme = document.getElementById('input-theme').value;
+            const accent = document.getElementById('input-accent').value;
+
+            // Get Values
+            const title = document.getElementById('input-title').value;
+            const desc = document.getElementById('input-description').value;
+            const name = document.getElementById('input-name').value;
+            const job = document.getElementById('input-job').value; // Subtitle / Trim
+            const company = document.getElementById('input-company').value; // Price (Hidden)
+            const bio = document.getElementById('input-bio').value; // Description mapped to Bio
+            const brand = document.getElementById('input-brand').value; // New Brand Field
+            const paint = document.getElementById('input-paint').value; // Paint Hex
+
+            const locationName = document.getElementById('input-location-name').value;
+            const locationUrl = document.getElementById('input-location-url').value;
+
+            const screen = document.getElementById('preview-screen');
+
+            // --- CAR / PRODUCT LAYOUT PREVIEW (ALWAYS) ---
+            const mainImage = gallery.find(img => img) || "assets/img/logo.png";
+
+            screen.className = "phone-screen w-full h-full bg-[#f3f4f6] overflow-y-auto relative transition-colors font-sans flex items-center justify-center p-4";
+
+            // Replicating theme-car.html structure EXACTLY
+            screen.innerHTML = `
+                <div class="relative w-full max-w-sm">
+                    <div class="w-full bg-white rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden relative z-10">
+                    
+                    <!-- Hero Image Part -->
+                    <div class="relative h-72 bg-gray-100">
+                        <div class="w-full h-full">
+                            <img src="${mainImage}" class="w-full h-full object-cover">
+                        </div>
+
+                        <!-- Enterprise Logo -->
+                        <img class="absolute top-4 right-4 w-14 h-14 object-contain z-20 ${!enterpriseLogo ? 'hidden' : ''}" src="${enterpriseLogo || ''}">
+
+
+                        <!-- Floating Badge (Removed) -->
+                        <!-- Agent/Company Logo (Removed) -->
+                    </div>
+
+                    <!-- Details Part -->
+                    <div class="p-6 relative">
+                        <div class="mb-6 relative">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h1 class="text-2xl font-black text-gray-900 leading-tight mb-1">${title || "PRODUCT NAME"}</h1>
+                                    <p class="text-gray-500 font-medium">${brand || "Brand"}</p>
+                                    <p class="text-xl font-bold text-[#f00000] mt-1 ${!company ? 'hidden' : ''}">${company}</p>
+                                </div>
+                                <div id="preview-paint" class="w-8 h-8 rounded-full shadow-sm border border-gray-100" style="background-color: ${paint || 'transparent'}; display: ${paint ? 'block' : 'none'}"></div>
+                            </div>
+                        </div>
+                        <div class="mb-8">
+                            <p class="text-gray-400 text-sm leading-relaxed line-clamp-4">${desc || bio || "Product description..."}</p>
+                        </div>
+
+                        <!-- Specs Grid -->
+                        <div class="flex flex-wrap justify-center gap-2 mb-6 text-center">
+                             <div class="bg-gray-50 rounded-lg p-2 w-[30%]">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Year</p>
+                                <p class="text-xs font-bold text-gray-900">${document.getElementById('input-year').value || "-"}</p>
+                             </div>
+                             <div class="bg-gray-50 rounded-lg p-2 w-[30%]">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Mileage</p>
+                                <p class="text-xs font-bold text-gray-900">${document.getElementById('input-mileage').value || "-"}</p>
+                             </div>
+                             <div class="bg-gray-50 rounded-lg p-2 w-[30%]">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Condition</p>
+                                <p class="text-xs font-bold text-gray-900">${document.getElementById('input-condition').value || "-"}</p>
+                             </div>
+                             
+                             <!-- Extended Specs Preview -->
+                             <div class="bg-gray-50 rounded-lg p-2 w-[30%] ${!document.getElementById('input-transmission').value ? 'hidden' : ''}">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Trans.</p>
+                                <p class="text-xs font-bold text-gray-900">${document.getElementById('input-transmission').value}</p>
+                             </div>
+                             <div class="bg-gray-50 rounded-lg p-2 w-[30%] ${!document.getElementById('input-body').value ? 'hidden' : ''}">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Body</p>
+                                <p class="text-xs font-bold text-gray-900">${document.getElementById('input-body').value}</p>
+                             </div>
+                             <div class="bg-gray-50 rounded-lg p-2 w-[30%] ${!document.getElementById('input-fuel').value ? 'hidden' : ''}">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Fuel</p>
+                                <p class="text-xs font-bold text-gray-900">${document.getElementById('input-fuel').value}</p>
+                             </div>
+                             <div class="bg-gray-50 rounded-lg p-2 w-[30%] ${!document.getElementById('input-engine').value ? 'hidden' : ''}">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Engine</p>
+                                <p class="text-xs font-bold text-gray-900">${document.getElementById('input-engine').value}</p>
+                             </div>
+                             <div class="bg-gray-50 rounded-lg p-2 w-[30%] ${!document.getElementById('input-trim').value ? 'hidden' : ''}">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Trim</p>
+                                <p class="text-xs font-bold text-gray-900">${document.getElementById('input-trim').value}</p>
+                             </div>
+                        </div>
+
+                        <!-- Location Link -->
+                        <div id="preview-location-container" class="mb-6 text-center ${locationName ? '' : 'hidden'}">
+                           <a href="${locationUrl || '#'}" target="_blank" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-50 rounded-full text-xs font-bold text-gray-700 hover:bg-gray-100 transition">
+                               <i class="bi bi-geo-alt-fill text-brand-red"></i> ${locationName}
+                           </a>
+                        </div>
+                        
+                        <!-- Contact/Broker Footer -->
+
+                        <!-- Price & Action (Removed) -->
+                        
+                        <!-- Contact/Broker Footer -->
+                        <div class="mt-8 pt-6 border-t border-gray-100 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gray-100 overflow-hidden">
+                                <img src="${mainProfileAgent.image}" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Financing Agent</p>
+                                <p class="text-xs font-bold text-gray-900">${mainProfileAgent.name}</p>
+                            </div>
+                            <div class="ml-auto flex gap-2">
+                                <span class="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center"><i class="bi bi-telephone-fill"></i></span>
+                                <span class="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center"><i class="bi bi-envelope-fill"></i></span>
+                                <span class="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center"><i class="bi bi-whatsapp"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Floating Social Dock (Preview) -->
+                <div id="preview-social-dock" class="absolute bottom-[-60px] left-1/2 transform -translate-x-1/2 flex items-center gap-4 z-0">
+                     ${document.getElementById('social-facebook').value ? '<div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center shadow-lg"><i class="bi bi-facebook text-lg"></i></div>' : ''}
+                     ${document.getElementById('social-instagram').value ? '<div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center shadow-lg"><i class="bi bi-instagram text-lg"></i></div>' : ''}
+                     ${document.getElementById('social-linkedin').value ? '<div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center shadow-lg"><i class="bi bi-linkedin text-lg"></i></div>' : ''}
+                     ${document.getElementById('social-twitter').value ? '<div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center shadow-lg"><i class="bi bi-twitter-x text-lg"></i></div>' : ''}
+                </div>
+                </div>
+            `;
+        }
+
+
+        function addPhoneRow() { phones.push({ code: "+94", number: "", show: true }); renderPhones(); updatePreview(); }
+        function renderPhones() { document.getElementById('phone-list').innerHTML = phones.map((p, i) => `<div class="flex gap-1 items-center mb-2"><div class="relative flex-1 flex min-w-0"><div class="relative w-20 bg-black border border-gray-700 border-r-0 rounded-l h-[42px] flex items-center flex-shrink-0"><span class="absolute left-3 text-xs text-gray-300 pointer-events-none font-mono">${p.code}</span><i class="bi bi-chevron-down absolute right-1 text-[10px] text-gray-600 pointer-events-none"></i><select onchange="updatePhoneCode(${i}, this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">${countries.map(c => `<option value="${c.code}" ${c.code === p.code ? 'selected' : ''}>${c.name} (${c.code})</option>`).join('')}</select></div><input type="tel" placeholder="77 123 4567" value="${p.number}" oninput="formatAndSetPhone(${i}, this)" class="flex-1 bg-black border border-gray-700 rounded-r-none px-3 py-2 text-sm text-white ${!p.show ? 'opacity-50' : ''} h-[42px] min-w-0"></div><button onclick="copyToWhatsapp(${i})" class="w-8 h-[42px] flex items-center justify-center bg-gray-900 border border-gray-700 border-l-0 text-green-500 hover:bg-gray-800 flex-shrink-0"><i class="bi bi-whatsapp"></i></button><button onclick="togglePhone(${i})" class="w-8 h-[42px] flex items-center justify-center bg-gray-900 border border-gray-700 border-l-0 text-gray-400 hover:text-white ml-[1px] flex-shrink-0"><i class="bi ${p.show ? 'bi-eye' : 'bi-eye-slash'}"></i></button><button onclick="deletePhone(${i})" class="w-8 h-[42px] flex items-center justify-center rounded-r bg-red-900/30 text-red-500 hover:bg-red-900/50 border border-red-900/50 border-l-0 ml-[1px] flex-shrink-0"><i class="bi bi-trash"></i></button></div>`).join(''); }
+        function updatePhoneCode(i, val) { phones[i].code = val; renderPhones(); updatePreview(); }
+        function togglePhone(i) { phones[i].show = !phones[i].show; renderPhones(); updatePreview(); }
+        function deletePhone(i) { phones.splice(i, 1); renderPhones(); updatePreview(); }
+        function copyToWhatsapp(i) { const p = phones[i]; document.getElementById('wa-country').value = p.code; document.getElementById('wa-display-code').innerText = p.code; document.getElementById('social-whatsapp').value = p.number; updatePreview(); }
+        function addEmailRow() { emails.push({ value: "", show: true }); renderEmails(); updatePreview(); }
+        function renderEmails() { document.getElementById('email-list').innerHTML = emails.map((e, i) => `<div class="flex gap-1 items-center mb-2"><div class="relative flex-1 min-w-0"><i class="bi bi-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i><input type="email" placeholder="email@example.com" value="${e.value}" oninput="updateEmail(${i}, this.value)" class="w-full bg-black border border-gray-700 rounded rounded-r-none px-3 py-2 pl-9 text-sm text-white ${!e.show ? 'opacity-50' : ''} h-[42px]"></div><button onclick="toggleEmail(${i})" class="w-8 h-[42px] flex items-center justify-center bg-gray-900 border border-gray-700 border-l-0 text-gray-400 hover:text-white flex-shrink-0"><i class="bi ${e.show ? 'bi-eye' : 'bi-eye-slash'}"></i></button><button onclick="deleteEmail(${i})" class="w-8 h-[42px] flex items-center justify-center rounded-r bg-red-900/30 text-red-500 hover:bg-red-900/50 border border-red-900/50 border-l-0 ml-[1px] flex-shrink-0"><i class="bi bi-trash"></i></button></div>`).join(''); }
+        function updateEmail(i, val) { emails[i].value = val; updatePreview(); }
+        function toggleEmail(i) { emails[i].show = !emails[i].show; renderEmails(); updatePreview(); }
+        function deleteEmail(i) { emails.splice(i, 1); renderEmails(); updatePreview(); }
+        function validateSlug(input) {
+            // Enterprise check - if disabled, do nothing.
+            if (isEnterpriseStaff) return;
+
+            input.value = input.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+
+            // Update Live Button immediately
+            const slug = input.value;
+            document.getElementById('btn-view-live').href = slug ? `/${slug}` : '#';
+
+            clearTimeout(debounceTimer);
+            const status = document.getElementById('slug-status');
+            status.innerHTML = '<i class="bi bi-hourglass-split animate-spin"></i>';
+            status.className = "absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500";
+
+            debounceTimer = setTimeout(async () => {
+                if (!slug || slug === originalSlug) { status.innerText = ""; return; }
+                // NOTE: Uses existing backend file: api/check-slug.js
+                const res = await fetch(`/api/check-slug?slug=${slug}`);
+                const d = await res.json();
+                status.innerHTML = d.available ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-x-circle-fill"></i>';
+                status.className = d.available ? "absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500" : "absolute right-3 top-1/2 transform -translate-y-1/2 text-brand-red";
+            }, 500);
+        }
+
+        async function saveData() {
+            // Check for slug error
+            const slugStatus = document.getElementById('slug-status');
+            if (slugStatus && slugStatus.innerHTML.includes('bi-x-circle-fill')) {
+                alert("Please correct the Slug before saving: It is already taken.");
+                return;
+            }
+
+            const btn = document.querySelector('button.bg-brand-red'); btn.innerHTML = '<i class="bi bi-arrow-repeat animate-spin"></i> SAVING...'; btn.disabled = true;
+            try {
+                const token = localStorage.getItem('castle_token');
+                if (!token) throw new Error("Logged out.");
+
+                const getVal = (id) => document.getElementById(id) ? document.getElementById(id).value : "";
+                const formattedPhones = phones.map(p => ({ value: p.code + p.number.replace(/\s/g, ''), show: p.show }));
+                const waCode = getVal('wa-country');
+                const waNum = getVal('social-whatsapp').replace(/\s/g, '');
+                const waFull = waNum ? (waCode + waNum) : "";
+
+                // Get the current user data to ensure locked fields are NOT overwritten with disabled values
+                const urlParams = new URLSearchParams(window.location.search);
+                const slugParam = urlParams.get('slug');
+                let apiUrl = '/api/card';
+                if (slugParam) apiUrl += `?slug=${slugParam}`;
+
+                const currentData = await fetch(apiUrl, { headers: { 'Authorization': token } }).then(res => res.json());
+
+                // Start with the current data
+                let payload = {
+                    ...currentData,
+                    slug: getVal('input-slug').trim(), // Trim slug for everyone
+                    job_title: getVal('input-job'),
+                    company: getVal('input-company'),
+                };
+
+                // If fields were locked by Enterprise, use the existing values (but trimmed)
+                if (isEnterpriseStaff) {
+                    payload.slug = (currentData.slug || "").trim(); // Auto-fix bad slugs on save
+                    payload.job_title = currentData.job_title;
+                    payload.company = currentData.company;
+                }
+
+                // Overwrite with editable fields
+                // Overwrite with editable fields
+                // FORCE CAR TEMPLATE FOR PRODUCTS
+                payload.template_id = 'car';
+
+                // MAPPING FOR PRODUCT MODE:
+                // Title -> full_name
+                // Subtitle -> job_title
+                // Price -> company
+                // Description -> bio
+
+                payload.full_name = getVal('input-title') || getVal('input-name') || currentData.full_name;
+                payload.job_title = getVal('input-job'); // Kept for legacy compatibility (hidden field)
+                payload.company = getVal('input-company'); // Kept for legacy compatibility (hidden field)
+                payload.bio = getVal('input-description') || getVal('input-bio') || currentData.bio;
+
+                // Explicitly set title/description if the schema supports it, otherwise rely on full_name/bio
+                payload.title = payload.full_name;
+                payload.description = payload.bio;
+
+                payload.website = getVal('input-website');
+                payload.email = emails.find(e => e.show)?.value || "";
+                payload.phone = formattedPhones.find(p => p.show)?.value || "";
+                payload.phones = formattedPhones;
+                payload.emails = emails;
+                payload.gallery = gallery;
+                payload.avatar_url = gallery.find(img => img) || "";
+                payload.design = {
+                    theme: getVal('input-theme') || 'dark',
+                    accent: getVal('input-accent') || '#f00000',
+                    specs: {
+                        brand: getVal('input-brand'),
+                        year: getVal('input-year'),
+                        mileage: getVal('input-mileage'),
+                        color: getVal('input-color'),
+                        paint: getVal('input-paint'),
+                        condition: getVal('input-condition'),
+                        condition: getVal('input-condition'),
+                        trim: getVal('input-trim'),
+                        transmission: getVal('input-transmission'),
+                        body: getVal('input-body'),
+                        fuel: getVal('input-fuel'),
+                        engine: getVal('input-engine'),
+                        locationName: getVal('input-location-name'),
+                        locationUrl: getVal('input-location-url'),
+                        agent: mainProfileAgent // Save the agent info
+                    }
+                };
+                payload.socials = { whatsapp: waFull, instagram: getVal('social-instagram'), facebook: getVal('social-facebook'), linkedin: getVal('social-linkedin'), twitter: getVal('social-twitter') };
+
+                // NOTE: Uses existing backend file: api/card.js
+                const res = await fetch('/api/card', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token }, body: JSON.stringify(payload) });
+                const result = await res.json();
+
+                if (res.ok) {
+                    alert("Saved!");
+                    originalSlug = payload.slug;
+                    document.getElementById('btn-view-live').href = `/${payload.slug}`;
+                }
+                else {
+                    // Handle server-side slug validation failure or other errors
+                    throw new Error(result.error);
+                }
+            } catch (err) { alert("Publish Failed: " + err.message); }
+            finally { btn.innerHTML = '<i class="bi bi-cloud-upload"></i> PUBLISH'; btn.disabled = false; }
+        }
+
+        // Preloader Logic (NEW)
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            // Slight delay to ensure the animations are seen
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+                // Remove from DOM after transition to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 700);
+            }, 800);
+        });
+
+        loadData();
+    </script>
+</body>
+
+</html>
