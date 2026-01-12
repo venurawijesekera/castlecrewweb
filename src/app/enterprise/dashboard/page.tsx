@@ -1,13 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function EnterpriseDashboard() {
+function DashboardContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [view, setView] = useState('dashboard'); // dashboard, staff, products
+
+    // Get view from URL or default to 'dashboard'
+    const view = searchParams.get('view') || 'dashboard';
+
+    // Helper to update URL when switching views
+    const setView = (newView: string) => {
+        router.push(`/enterprise/dashboard?view=${newView}`);
+    };
 
     useEffect(() => {
         const loadData = async () => {
@@ -386,5 +394,13 @@ function StatCard({ icon, title, value, sub, color }: any) {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function EnterpriseDashboard() {
+    return (
+        <Suspense fallback={<div className="p-10 text-gray-500">Loading Dashboard...</div>}>
+            <DashboardContent />
+        </Suspense>
     );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import EnterpriseHeader from "./EnterpriseHeader";
@@ -12,9 +12,12 @@ export default function EnterpriseLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
     const router = useRouter();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [user, setUser] = useState<any>(null);
+
+    const view = searchParams.get('view') || 'dashboard';
 
     useEffect(() => {
         // Quick check for auth token, detailed check happens in page
@@ -40,23 +43,23 @@ export default function EnterpriseLayout({
                 <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
                     <p className="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Main Menu</p>
 
-                    <Link href="/enterprise/dashboard" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/dashboard' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    <Link href="/enterprise/dashboard" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/dashboard' && view === 'dashboard' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
                         <i className="bi bi-grid-1x2-fill"></i>
                         <span className="font-medium">Dashboard</span>
                     </Link>
-                    <Link href="/enterprise/admins" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/admins' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    <Link href="/enterprise/dashboard?view=admins" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/dashboard' && view === 'admins' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
                         <i className="bi bi-shield-lock"></i>
                         <span className="font-medium">Admins</span>
                     </Link>
-                    <Link href="/enterprise/staff" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/staff' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    <Link href="/enterprise/dashboard?view=staff" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/dashboard' && view === 'staff' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
                         <i className="bi bi-people"></i>
                         <span className="font-medium">Staff Members</span>
                     </Link>
-                    <Link href="/enterprise/products" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/products' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    <Link href="/enterprise/dashboard?view=products" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/dashboard' && view === 'products' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
                         <i className="bi bi-qr-code-scan"></i>
                         <span className="font-medium">Products</span>
                     </Link>
-                    <Link href="/enterprise/analytics" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/analytics' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    <Link href="/enterprise/dashboard?view=analytics" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/dashboard' && view === 'analytics' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
                         <i className="bi bi-bar-chart-line"></i>
                         <span className="font-medium">Analytics</span>
                     </Link>
