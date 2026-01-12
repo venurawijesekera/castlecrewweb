@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         const response = NextResponse.json(responseData);
 
         // Set cookie
-        response.cookies.set("session_token", token, {
+        response.cookies.set("castle_token", token, {
             httpOnly: true,
             secure: true,
             sameSite: "strict",

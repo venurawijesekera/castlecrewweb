@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
             FROM sessions s
             JOIN users u ON s.user_id = u.id
             LEFT JOIN cards c ON u.id = c.user_id AND c.parent_id IS NULL
-            WHERE s.token = ? AND s.expires_at > ?
+            WHERE s.id = ? AND s.expires_at > ?
         `).bind(sessionToken, Date.now()).first();
 
         // Note: Legacy query used s.id = ?. If token is stored in s.token, verify schema.
