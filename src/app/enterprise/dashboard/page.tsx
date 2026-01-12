@@ -131,7 +131,109 @@ export default function EnterpriseDashboard() {
                             </div>
                         </div>
 
-                        {/* Enterprise Actions */}
+                        {/* Staff Members Section */}
+                        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                            <div className="p-6 border-b border-gray-50 flex justify-between items-center">
+                                <div>
+                                    <h3 className="font-bold text-gray-900">Staff Members</h3>
+                                    <p className="text-xs text-gray-400">All users associated with this enterprise.</p>
+                                </div>
+                                <button onClick={() => setView('staff')} className="text-xs font-bold text-gray-500 hover:text-black flex items-center gap-1"><span className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[10px]">{stats.active_staff_count}</span> View All</button>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left">
+                                    <thead className="bg-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <tr>
+                                            <th className="p-4 pl-6">Staff Member</th>
+                                            <th className="p-4">Digital Card</th>
+                                            <th className="p-4">Assigned Admin</th>
+                                            <th className="p-4">Sub Licenses</th>
+                                            <th className="p-4 text-right pr-6">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-50">
+                                        {staff.slice(0, 5).map((u: any) => (
+                                            <tr key={u.id} className="hover:bg-gray-50 transition">
+                                                <td className="p-4 pl-6">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded-full bg-gray-100 overflow-hidden">
+                                                            {u.avatar_url ? <img src={u.avatar_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold">{u.name.substring(0, 2)}</div>}
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-xs font-bold text-gray-900">{u.name}</p>
+                                                            <p className="text-[10px] text-gray-500">{u.email}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="p-4">
+                                                    {u.slug ? (
+                                                        <a href={`/${u.slug}`} target="_blank" className="text-blue-500 text-xs font-bold hover:underline">/{u.slug}</a>
+                                                    ) : <span className="text-xs text-gray-400">N/A</span>}
+                                                </td>
+                                                <td className="p-4 text-xs font-bold text-gray-500">
+                                                    {u.role === 'admin' ? 'Mark enterprise admin' : 'Admin Two'}
+                                                </td>
+                                                <td className="p-4 text-xs font-bold text-gray-500 font-mono">
+                                                    {Math.floor(Math.random() * 5)}/5
+                                                </td>
+                                                <td className="p-4 text-right pr-6">
+                                                    <button className="text-gray-400 hover:text-gray-900"><i className="bi bi-three-dots-vertical"></i></button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Active Products Section (Dark Mode) */}
+                        <div className="bg-[#0a0a0a] rounded-3xl border border-gray-800 shadow-lg overflow-hidden flex flex-col">
+                            <div className="p-6 border-b border-gray-800 flex justify-between items-center text-white">
+                                <div>
+                                    <h3 className="font-bold">Active Products</h3>
+                                    <p className="text-xs text-gray-400">Product cards and sub-licenses.</p>
+                                </div>
+                                <button onClick={() => setView('products')} className="text-xs font-bold text-gray-400 hover:text-white flex items-center gap-1"><span className="w-5 h-5 rounded-full bg-[#f00000] flex items-center justify-center text-[10px] text-white">{stats.product_card_count}</span> View All</button>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-white">
+                                    <thead className="bg-gray-900 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <tr>
+                                            <th className="p-4 pl-6">Card Identity</th>
+                                            <th className="p-4">Assigned Staff</th>
+                                            <th className="p-4 text-right pr-6">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-800">
+                                        {staff.filter((s: any) => s.slug).slice(0, 5).map((u: any) => (
+                                            <tr key={u.card_id || u.id} className="hover:bg-gray-900 transition">
+                                                <td className="p-4 pl-6">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded-lg bg-white p-0.5 overflow-hidden">
+                                                            <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://castlecrew.cc/${u.slug}`} className="w-full h-full object-contain mix-blend-multiply" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-xs font-bold text-white">/{u.slug}</p>
+                                                            <p className="text-[10px] text-gray-500">Product Card</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="p-4">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-2 h-2 rounded-full bg-[#f00000]"></div>
+                                                        <span className="text-xs font-bold text-gray-300">{u.name}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="p-4 text-right pr-6">
+                                                    <button className="text-gray-500 hover:text-white"><i className="bi bi-pencil-square"></i></button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {staff.filter((s: any) => s.slug).length === 0 && <tr><td colSpan={3} className="p-6 text-center text-gray-600 text-xs">No active products found.</td></tr>}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <div className="space-y-6">
                             <div className="bg-[#0a0a0a] rounded-3xl p-8 text-white text-center relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#f00000] blur-[80px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
