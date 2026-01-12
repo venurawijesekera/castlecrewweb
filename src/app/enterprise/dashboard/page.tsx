@@ -188,6 +188,21 @@ export default function EnterpriseDashboard() {
                         {/* RIGHT COLUMN (Span 1) */}
                         <div className="space-y-6">
                             {/* Staff Members Section */}
+                            <div className="bg-[#0a0a0a] rounded-3xl p-8 text-white text-center relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-[#f00000] blur-[80px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                                <div className="relative z-10 flex flex-col items-center">
+                                    <div className="w-12 h-12 mb-4 bg-gray-800 rounded-full flex items-center justify-center text-yellow-400 text-xl animate-pulse"><i className="bi bi-lightning-fill"></i></div>
+                                    <h3 className="font-bold text-lg mb-2">Enterprise Actions</h3>
+                                    <p className="text-gray-400 text-xs mb-8">Quickly manage your enterprise settings and preferences.</p>
+
+                                    <div className="space-y-3 w-full">
+                                        <button className="w-full bg-white text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wide hover:bg-gray-100 transition">Edit Company Details</button>
+                                        <button className="w-full bg-gray-800 text-gray-300 font-bold py-3 rounded-xl text-xs uppercase tracking-wide hover:bg-gray-700 hover:text-white transition">Create New Account</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Staff Members Section */}
                             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
                                 <div className="p-6 border-b border-gray-50 flex justify-between items-center">
                                     <div>
@@ -239,20 +254,6 @@ export default function EnterpriseDashboard() {
                                             ))}
                                         </tbody>
                                     </table>
-                                </div>
-                            </div>
-
-                            <div className="bg-[#0a0a0a] rounded-3xl p-8 text-white text-center relative overflow-hidden group">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-[#f00000] blur-[80px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
-                                <div className="relative z-10 flex flex-col items-center">
-                                    <div className="w-12 h-12 mb-4 bg-gray-800 rounded-full flex items-center justify-center text-yellow-400 text-xl animate-pulse"><i className="bi bi-lightning-fill"></i></div>
-                                    <h3 className="font-bold text-lg mb-2">Enterprise Actions</h3>
-                                    <p className="text-gray-400 text-xs mb-8">Quickly manage your enterprise settings and preferences.</p>
-
-                                    <div className="space-y-3 w-full">
-                                        <button className="w-full bg-white text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wide hover:bg-gray-100 transition">Edit Company Details</button>
-                                        <button className="w-full bg-gray-800 text-gray-300 font-bold py-3 rounded-xl text-xs uppercase tracking-wide hover:bg-gray-700 hover:text-white transition">Create New Account</button>
-                                    </div>
                                 </div>
                             </div>
 
