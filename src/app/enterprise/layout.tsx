@@ -44,33 +44,64 @@ export default function EnterpriseLayout({
                         <i className="bi bi-grid-1x2-fill"></i>
                         <span className="font-medium">Dashboard</span>
                     </Link>
-
-                    {/* Pending Pages - pointing to dashboard for now or # */}
-                    <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-all">
+                    <Link href="/enterprise/admins" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/admins' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                        <i className="bi bi-shield-lock"></i>
+                        <span className="font-medium">Admins</span>
+                    </Link>
+                    <Link href="/enterprise/staff" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/staff' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
                         <i className="bi bi-people"></i>
                         <span className="font-medium">Staff Members</span>
-                    </a>
-                    <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-all">
+                    </Link>
+                    <Link href="/enterprise/products" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/products' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
                         <i className="bi bi-qr-code-scan"></i>
                         <span className="font-medium">Products</span>
-                    </a>
+                    </Link>
+                    <Link href="/enterprise/analytics" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/analytics' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                        <i className="bi bi-bar-chart-line"></i>
+                        <span className="font-medium">Analytics</span>
+                    </Link>
 
                     <div className="pt-6 mt-6 border-t border-gray-100">
                         <p className="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Settings</p>
+                        <Link href="/enterprise/settings" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/settings' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                            <i className="bi bi-gear"></i>
+                            <span className="font-medium">Company Settings</span>
+                        </Link>
+                        <Link href="/enterprise/requests" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/requests' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                            <i className="bi bi-inbox"></i>
+                            <span className="font-medium">Open Requests</span>
+                        </Link>
                         <Link href="/profile" className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl transition-all">
                             <i className="bi bi-person-circle"></i>
                             <span className="font-medium">My Profile</span>
                         </Link>
                     </div>
+
+                    <div className="pt-6 mt-6 border-t border-gray-100">
+                        <p className="px-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Tools</p>
+                        <Link href="/enterprise/messages" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/messages' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                            <i className="bi bi-chat-dots"></i>
+                            <span className="font-medium">Message</span>
+                        </Link>
+                        <Link href="/enterprise/qr" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/qr' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                            <i className="bi bi-qr-code"></i>
+                            <span className="font-medium">Generate QR</span>
+                        </Link>
+                        <Link href="/enterprise/auth" className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${pathname === '/enterprise/auth' ? 'bg-[#0a0a0a] text-white shadow-lg' : 'text-gray-500 hover:bg-gray-50'}`}>
+                            <i className="bi bi-shield-check"></i>
+                            <span className="font-medium">Authenticator</span>
+                        </Link>
+                    </div>
                 </nav>
 
                 <div className="p-4 border-t border-gray-100">
-                    <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-[#f00000] text-white flex items-center justify-center font-bold text-xs overflow-hidden">
-                            EA
+                    <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3 group cursor-pointer hover:bg-gray-100 transition">
+                        <div className="w-8 h-8 rounded-full bg-[#f00000] text-white flex items-center justify-center font-bold text-xs overflow-hidden shadow-md group-hover:scale-110 transition">
+                            SA
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-xs font-bold text-gray-900 truncate">Enterprise Admin</p>
+                            <p className="text-xs font-bold text-gray-900 truncate">Super Admin</p>
+                            <p className="text-[10px] text-gray-400 truncate">Enterprise Mode</p>
                         </div>
                         <button onClick={() => {
                             localStorage.removeItem('castle_token');
