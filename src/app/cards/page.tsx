@@ -72,7 +72,7 @@ export default function SmartCardsPage() {
             try {
                 const res = await fetch('/api/random-avatars');
                 if (res.ok) {
-                    const data = await res.json();
+                    const data = await res.json() as string[];
                     setAvatars(data);
                 }
             } catch (e) {
