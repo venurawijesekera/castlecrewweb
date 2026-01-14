@@ -107,7 +107,7 @@ export default function Home() {
           <div
             className="lg:col-span-2 relative rounded-[2rem] overflow-hidden img-zoom-container group h-[400px] lg:h-full border border-[#f00000]/50">
 
-            <img src="assets/img/figurine_kit_placeholder.jpg"
+            <img src="assets/img/front-sculpt-banner.png"
               className="w-full h-full object-cover opacity-90 group-hover:opacity-100"
               alt="Sculpt Me Figurine Kit" />
 
