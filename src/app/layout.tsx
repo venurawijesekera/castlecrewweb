@@ -7,10 +7,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Castle Crew - Physical Branding Agency",
   description: "Elevate Your Brand with Castle Crew",
-  icons: {
-    icon: "/assets/img/logo.png",
-    apple: "/assets/img/logo.png",
-  },
 };
 
 export default function RootLayout({
