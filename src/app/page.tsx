@@ -146,7 +146,7 @@ export default function Home() {
 
             <div
               className="relative rounded-[2rem] overflow-hidden img-zoom-container flex-1 h-[250px] lg:h-auto border border-gray-800 group cursor-pointer">
-              <img src="assets/img/paint_kit_placeholder.jpg"
+              <img src="assets/img/color-pallet.png"
                 className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
 
