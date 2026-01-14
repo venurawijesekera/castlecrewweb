@@ -10,41 +10,32 @@ export default function Navigation() {
     const [userAvatar, setUserAvatar] = useState<string | null>(null);
     const pathname = usePathname();
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
-            if (currentScrollY > 100) {
-                if (currentScrollY > lastScrollY) {
-                    setIsHidden(true);
-                } else {
-                    setIsHidden(false);
-                }
-            } else {
-                setIsHidden(false);
-            }
-            setLastScrollY(currentScrollY);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [lastScrollY]);
+    const getLinkClass = (path: string) => {
+        const isActive = pathname === path || (path !== "/" && pathname.startsWith(path));
+        return `transition font-bold ${isActive ? "text-[#f00000]" : "hover:text-white"}`;
+    };
 
     useEffect(() => {
         const checkAuth = async () => {
             const token = localStorage.getItem("castle_token");
             if (token) {
                 try {
-                    // Note: API routes need to be migrated for this to work fully.
-                    // For now, checks if token exists. function implementation pending.
-                    // Fetch user data logic will go here.
-                    // const res = await fetch("/api/card", { headers: { Authorization: token } });
-                    // const data = await res.json();
-                    // if (data.avatar_url) setUserAvatar(data.avatar_url);
+                    const res = await fetch("/api/card", {
+                        headers: {
+                            'Authorization': token
+                        }
+                    });
+                    if (res.ok) {
+                        const data: any = await res.json();
+                        if (data.avatar_url) {
+                            setUserAvatar(data.avatar_url);
+                        } else {
+                            setUserAvatar("default");
+                        }
+                    }
                 } catch (e) {
                     console.error("Auth check failed", e);
                 }
-                // Placeholder for logged in state if no avatar
-                // setUserAvatar("default"); 
             }
         };
         checkAuth();
@@ -65,13 +56,13 @@ export default function Navigation() {
             </Link>
 
             <div className="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
-                <Link href="/" className="hover:text-white transition">
+                <Link href="/" className={getLinkClass("/")}>
                     Home
                 </Link>
-                <Link href="/cards" className="hover:text-white transition">
+                <Link href="/cards" className={getLinkClass("/cards")}>
                     Smart Cards
                 </Link>
-                <Link href="/#sculpt-me" className="hover:text-white transition text-[#f00000]">
+                <Link href="/#sculpt-me" className="hover:text-white transition">
                     Sculpt Me
                 </Link>
                 <Link href="/#packaging" className="hover:text-white transition">
@@ -87,8 +78,8 @@ export default function Navigation() {
 
             <div id="auth-nav">
                 {userAvatar ? (
-                    <Link href="/profile" className="profile-icon w-10 h-10 flex items-center justify-center bg-white text-black rounded-full overflow-hidden hover:bg-[#f00000] hover:text-white transition">
-                        {userAvatar !== "default" ? <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" /> : <i className="bi bi-person-fill"></i>}
+                    <Link href="/profile" className="profile-icon w-10 h-10 flex items-center justify-center bg-gray-100 text-black rounded-full overflow-hidden hover:ring-2 hover:ring-[#f00000] transition">
+                        {userAvatar !== "default" ? <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" /> : <i className="bi bi-person-fill text-lg"></i>}
                     </Link>
                 ) : (
                     <Link
