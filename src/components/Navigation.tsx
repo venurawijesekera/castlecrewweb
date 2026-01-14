@@ -62,7 +62,7 @@ export default function Navigation() {
                 <Link href="/cards" className={getLinkClass("/cards")}>
                     Smart Cards
                 </Link>
-                <Link href="/#sculpt-me" className="hover:text-white transition">
+                <Link href="/sculptme" className={getLinkClass("/sculptme")}>
                     Sculpt Me
                 </Link>
                 <Link href="/#packaging" className="hover:text-white transition">
