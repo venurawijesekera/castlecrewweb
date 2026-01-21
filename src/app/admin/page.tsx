@@ -696,7 +696,7 @@ function ImageUploader({ images, onChange, masterKey }: { images: string[], onCh
         }
 
         const filesToUpload = Array.from(files).slice(0, maxImages - currentCount);
-        
+
         setUploading(true);
         try {
             const uploadPromises = filesToUpload.map(async (file) => {
@@ -710,7 +710,7 @@ function ImageUploader({ images, onChange, masterKey }: { images: string[], onCh
                 });
 
                 if (!res.ok) {
-                    const error = await res.json();
+                    const error = await res.json() as { error?: string };
                     throw new Error(error.error || 'Upload failed');
                 }
 
@@ -755,9 +755,8 @@ function ImageUploader({ images, onChange, masterKey }: { images: string[], onCh
         <div>
             {/* Upload Area */}
             <div
-                className={`border-2 border-dashed rounded-xl p-6 text-center transition ${
-                    dragActive ? 'border-black bg-gray-50' : 'border-gray-300'
-                } ${uploading ? 'opacity-50 pointer-events-none' : ''}`}
+                className={`border-2 border-dashed rounded-xl p-6 text-center transition ${dragActive ? 'border-black bg-gray-50' : 'border-gray-300'
+                    } ${uploading ? 'opacity-50 pointer-events-none' : ''}`}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
