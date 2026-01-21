@@ -1,5 +1,7 @@
 "use client";
 
+export const runtime = 'edge';
+
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Navigation from "@/components/Navigation";
@@ -115,8 +117,8 @@ export default function ProductDetailPage() {
                                             key={index}
                                             onClick={() => setSelectedImage(index)}
                                             className={`aspect-square rounded-xl overflow-hidden border-2 transition ${selectedImage === index
-                                                    ? 'border-[#f00000]'
-                                                    : 'border-gray-800 hover:border-gray-600'
+                                                ? 'border-[#f00000]'
+                                                : 'border-gray-800 hover:border-gray-600'
                                                 }`}
                                         >
                                             <img
@@ -189,8 +191,8 @@ export default function ProductDetailPage() {
                                     onClick={handleOrder}
                                     disabled={product.stock === 0}
                                     className={`flex-1 py-4 rounded-full font-bold uppercase text-sm transition ${product.stock === 0
-                                            ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
-                                            : 'bg-[#f00000] text-white hover:bg-red-700'
+                                        ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
+                                        : 'bg-[#f00000] text-white hover:bg-red-700'
                                         }`}
                                 >
                                     {product.stock === 0 ? (
