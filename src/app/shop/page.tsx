@@ -42,7 +42,26 @@ export default function ShopPage() {
         }
     };
 
-    const categories = Array.from(new Set(products.map(p => p.category)));
+    const [allCategories, setAllCategories] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const res = await fetch('/api/products');
+            if (res.ok) {
+                const data = await res.json() as Product[];
+                const categories = Array.from(new Set(data.flatMap(p => {
+                    try {
+                        const parsed = JSON.parse(p.category);
+                        return Array.isArray(parsed) ? parsed : [p.category];
+                    } catch {
+                        return [p.category];
+                    }
+                }))).filter(Boolean);
+                setAllCategories(categories);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     return (
         <main className="bg-[#050505] min-h-screen text-white">
@@ -73,7 +92,7 @@ export default function ShopPage() {
                         >
                             All Products
                         </button>
-                        {categories.map((cat) => (
+                        {allCategories.map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
@@ -128,9 +147,25 @@ export default function ShopPage() {
                                         )}
                                     </div>
                                     <div className="p-6">
-                                        <span className="text-[#f00000] text-xs font-bold uppercase tracking-wider">
-                                            {product.category}
-                                        </span>
+                                        <div className="flex flex-wrap gap-1">
+                                            {(() => {
+                                                try {
+                                                    const cats = JSON.parse(product.category);
+                                                    const catList = Array.isArray(cats) ? cats : [product.category];
+                                                    return catList.map((c, i) => (
+                                                        <span key={i} className="text-[#f00000] text-[10px] font-bold uppercase tracking-wider">
+                                                            {c}{i < catList.length - 1 ? " • " : ""}
+                                                        </span>
+                                                    ));
+                                                } catch {
+                                                    return (
+                                                        <span className="text-[#f00000] text-[10px] font-bold uppercase tracking-wider">
+                                                            {product.category}
+                                                        </span>
+                                                    );
+                                                }
+                                            })()}
+                                        </div>
                                         <h3 className="text-xl font-bold mt-2 mb-2">{product.name}</h3>
                                         <p className="text-gray-400 text-sm mb-4 line-clamp-2">
                                             {product.description}

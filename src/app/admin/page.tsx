@@ -34,7 +34,7 @@ interface Product {
     name: string;
     description: string;
     price: number;
-    category: string;
+    category: string; // Will store JSON array string
     image_url: string;
     images: string;  // JSON string of image URLs
     tags: string;    // JSON string of tags for search optimization
@@ -163,7 +163,22 @@ export default function AdminPage() {
             {modal.type === 'user' && <ManageUserModal data={modal.data} close={() => setModal({ type: null })} refresh={loadData} masterKey={masterKey} />}
             {modal.type === 'enterprise' && <CreateEnterpriseModal close={() => setModal({ type: null })} refresh={loadData} masterKey={masterKey} />}
             {modal.type === 'licenses' && <ModifyLicensesModal data={modal.data} close={() => setModal({ type: null })} refresh={loadData} masterKey={masterKey} />}
-            {modal.type === 'product' && <ProductModal data={modal.data} close={() => setModal({ type: null })} refresh={loadData} masterKey={masterKey} />}
+            {modal.type === 'product' && (
+                <ProductModal
+                    data={modal.data}
+                    close={() => setModal({ type: null })}
+                    refresh={loadData}
+                    masterKey={masterKey}
+                    allCategories={Array.from(new Set(products.flatMap(p => {
+                        try {
+                            const cats = JSON.parse(p.category);
+                            return Array.isArray(cats) ? cats : [p.category];
+                        } catch {
+                            return [p.category];
+                        }
+                    }))).filter(Boolean)}
+                />
+            )}
         </div>
     );
 }
@@ -311,14 +326,22 @@ function ProductsView({ products, setModal }: any) {
     );
 }
 
-function ProductModal({ data, close, refresh, masterKey }: any) {
+function ProductModal({ data, close, refresh, masterKey, allCategories }: any) {
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         name: data?.name || '',
         description: data?.description || '',
         sku: data?.sku || '',
         price: data?.price || 0,
-        category: data?.category || 'General',
+        categories: (() => {
+            if (!data?.category) return ['General'];
+            try {
+                const parsed = JSON.parse(data.category);
+                return Array.isArray(parsed) ? parsed : [data.category];
+            } catch {
+                return [data.category];
+            }
+        })(),
         images: (data?.images ? JSON.parse(data.images) : []) as string[],
         tags: (data?.tags ? JSON.parse(data.tags) : []) as string[],
         stock: data?.stock || 0,
@@ -335,8 +358,8 @@ function ProductModal({ data, close, refresh, masterKey }: any) {
         try {
             const method = data ? 'PUT' : 'POST';
             const body = data
-                ? { id: data.id, ...form }
-                : form;
+                ? { id: data.id, ...form, category: JSON.stringify(form.categories) }
+                : { ...form, category: JSON.stringify(form.categories) };
 
             const res = await fetch('/api/admin/products', {
                 method,
@@ -447,72 +470,70 @@ function ProductModal({ data, close, refresh, masterKey }: any) {
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Category</label>
-                        <input
-                            type="text"
-                            value={form.category}
-                            onChange={(e) => setForm({ ...form, category: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
-                            placeholder="e.g., Smart Cards, Merch"
+                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Categories</label>
+                        <CategoryInput
+                            categories={form.categories}
+                            allCategories={allCategories}
+                            onChange={(cats: string[]) => setForm({ ...form, categories: cats })}
                         />
-                    </div>
-
-                    <div>
-                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                            Tags / Labels (for search optimization)
-                        </label>
-                        <TagInput
-                            tags={form.tags || []}
-                            onChange={(tags) => setForm({ ...form, tags })}
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                            Product Images (4-10 images)
-                        </label>
-                        <ImageUploader
-                            images={form.images || []}
-                            onChange={(images) => setForm({ ...form, images })}
-                            masterKey={masterKey}
-                        />
-                    </div>
-
-                    <div className="flex items-center">
-                        <input
-                            type="checkbox"
-                            checked={form.is_active === 1}
-                            onChange={(e) => setForm({ ...form, is_active: e.target.checked ? 1 : 0 })}
-                            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black"
-                        />
-                        <label className="ml-2 text-sm font-bold text-gray-700">Active (visible in shop)</label>
                     </div>
                 </div>
 
-                <div className="flex gap-4 mt-8">
+                <div>
+                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                        Tags / Labels (for search optimization)
+                    </label>
+                    <TagInput
+                        tags={form.tags || []}
+                        onChange={(tags) => setForm({ ...form, tags })}
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                        Product Images (4-10 images)
+                    </label>
+                    <ImageUploader
+                        images={form.images || []}
+                        onChange={(images) => setForm({ ...form, images })}
+                        masterKey={masterKey}
+                    />
+                </div>
+
+                <div className="flex items-center">
+                    <input
+                        type="checkbox"
+                        checked={form.is_active === 1}
+                        onChange={(e) => setForm({ ...form, is_active: e.target.checked ? 1 : 0 })}
+                        className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black"
+                    />
+                    <label className="ml-2 text-sm font-bold text-gray-700">Active (visible in shop)</label>
+                </div>
+            </div>
+
+            <div className="flex gap-4 mt-8">
+                <button
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className="flex-1 bg-black text-white font-bold py-4 rounded-2xl hover:bg-gray-800 transition uppercase tracking-wider text-sm disabled:opacity-50"
+                >
+                    {loading ? 'Saving...' : 'Save Product'}
+                </button>
+                {data && (
                     <button
-                        onClick={handleSubmit}
+                        onClick={handleDelete}
                         disabled={loading}
-                        className="flex-1 bg-black text-white font-bold py-4 rounded-2xl hover:bg-gray-800 transition uppercase tracking-wider text-sm disabled:opacity-50"
+                        className="bg-red-50 text-red-600 font-bold px-6 py-4 rounded-2xl hover:bg-red-600 hover:text-white transition uppercase tracking-wider text-sm"
                     >
-                        {loading ? 'Saving...' : 'Save Product'}
+                        Delete
                     </button>
-                    {data && (
-                        <button
-                            onClick={handleDelete}
-                            disabled={loading}
-                            className="bg-red-50 text-red-600 font-bold px-6 py-4 rounded-2xl hover:bg-red-600 hover:text-white transition uppercase tracking-wider text-sm"
-                        >
-                            Delete
-                        </button>
-                    )}
-                    <button
-                        onClick={close}
-                        className="px-6 py-4 text-gray-400 text-sm font-bold uppercase tracking-wider hover:text-gray-900"
-                    >
-                        Cancel
-                    </button>
-                </div>
+                )}
+                <button
+                    onClick={close}
+                    className="px-6 py-4 text-gray-400 text-sm font-bold uppercase tracking-wider hover:text-gray-900"
+                >
+                    Cancel
+                </button>
             </div>
         </div>
     );
@@ -866,6 +887,109 @@ function ImageUploader({ images, onChange, masterKey }: { images: string[], onCh
         </div>
     );
 }
+// CategoryInput Component
+function CategoryInput({ categories, allCategories, onChange }: { categories: string[], allCategories: string[], onChange: (categories: string[]) => void }) {
+    const [inputValue, setInputValue] = useState('');
+    const [showSuggestions, setShowSuggestions] = useState(false);
+
+    const addCategory = (cat: string) => {
+        const trimmed = cat.trim();
+        if (trimmed && !categories.includes(trimmed)) {
+            onChange([...categories, trimmed]);
+            setInputValue('');
+        }
+        setShowSuggestions(false);
+    };
+
+    const removeCategory = (index: number) => {
+        onChange(categories.filter((_, i) => i !== index));
+    };
+
+    const suggestions = allCategories.filter(c =>
+        !categories.includes(c) &&
+        c.toLowerCase().includes(inputValue.toLowerCase())
+    );
+
+    const availableCategories = allCategories.filter(c => !categories.includes(c));
+
+    return (
+        <div className="relative">
+            <div className="flex flex-wrap gap-2 mb-3">
+                {categories.map((cat, index) => (
+                    <span key={index} className="bg-black text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-2">
+                        {cat}
+                        <button onClick={() => removeCategory(index)} className="hover:text-red-400">
+                            <i className="bi bi-x"></i>
+                        </button>
+                    </span>
+                ))}
+            </div>
+
+            <div className="flex gap-2 mb-4">
+                <div className="relative flex-1">
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => {
+                            setInputValue(e.target.value);
+                            setShowSuggestions(true);
+                        }}
+                        onFocus={() => setShowSuggestions(true)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                addCategory(inputValue);
+                            }
+                        }}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
+                        placeholder="Add a category (press Enter)"
+                    />
+
+                    {showSuggestions && suggestions.length > 0 && (
+                        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                            {suggestions.map((suggestion, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => addCategory(suggestion)}
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center justify-between"
+                                >
+                                    {suggestion}
+                                    <span className="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded">Existing</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                <button
+                    onClick={() => addCategory(inputValue)}
+                    className="bg-black text-white px-4 rounded-xl hover:bg-gray-800 transition"
+                >
+                    <i className="bi bi-plus-lg"></i>
+                </button>
+            </div>
+
+            {availableCategories.length > 0 && (
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        Suggested Categories
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        {availableCategories.map((cat, i) => (
+                            <button
+                                key={i}
+                                onClick={() => addCategory(cat)}
+                                className="px-3 py-1 bg-white border border-gray-200 text-gray-600 rounded-full text-xs font-semibold hover:border-black hover:text-black transition"
+                            >
+                                + {cat}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
 // TagInput Component
 function TagInput({ tags, onChange }: { tags: string[], onChange: (tags: string[]) => void }) {
     const [inputValue, setInputValue] = useState('');

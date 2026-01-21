@@ -14,8 +14,8 @@ export async function GET(request: NextRequest) {
         const params: any[] = [];
 
         if (category) {
-            query += ` AND category = ?`;
-            params.push(category);
+            query += ` AND (category = ? OR category LIKE '%"' || ? || '"%')`;
+            params.push(category, category);
         }
 
         query += ` ORDER BY created_at DESC`;
