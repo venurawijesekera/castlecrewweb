@@ -2,6 +2,7 @@ name = "castlecrewweb"
 pages_build_output_dir = ".vercel/output/static"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
+account_id = "bb50d16c3f261b3ac26a42eceb3793ea"
 
 [[d1_databases]]
 binding = "DB"
