@@ -65,6 +65,9 @@ export default function Navigation() {
                 <Link href="/sculptme" className={getLinkClass("/sculptme")}>
                     Sculpt Me
                 </Link>
+                <Link href="/shop" className={getLinkClass("/shop")}>
+                    Shop
+                </Link>
                 <Link href="/#packaging" className="hover:text-white transition">
                     Packaging
                 </Link>

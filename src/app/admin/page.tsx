@@ -29,6 +29,17 @@ interface Enterprise {
     active_sub_licenses: number;
 }
 
+interface Product {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    category: string;
+    image_url: string;
+    stock: number;
+    is_active: number;
+}
+
 export default function AdminPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
@@ -38,10 +49,11 @@ export default function AdminPage() {
     // Data
     const [users, setUsers] = useState<User[]>([]);
     const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [stats, setStats] = useState({ totalUsers: 0, paidUsers: 0, enterpriseCount: 0 });
 
     // Modals
-    const [modal, setModal] = useState<{ type: 'user' | 'enterprise' | 'licenses' | null, data?: any }>({ type: null });
+    const [modal, setModal] = useState<{ type: 'user' | 'enterprise' | 'licenses' | 'product' | null, data?: any }>({ type: null });
 
     useEffect(() => {
         // Auth Check
@@ -93,17 +105,21 @@ export default function AdminPage() {
             }
 
             const usersData: User[] = await resUsers.json();
-            const entsData: Enterprise[] = await resEnts.json();
+            const enterprisesData: Enterprise[] = await resEnts.json();
+
+            const productsRes = await fetch('/api/admin/products', { headers });
+            const productsData: Product[] = await productsRes.json();
 
             setUsers(usersData);
-            setEnterprises(entsData);
+            setEnterprises(enterprisesData);
+            setProducts(productsData);
 
             // Calc Stats
             const paid = usersData.filter(u => u.plan === 'professional' || u.plan === 'executive').length;
             setStats({
                 totalUsers: usersData.length,
                 paidUsers: paid,
-                enterpriseCount: entsData.length
+                enterpriseCount: enterprisesData.length
             });
 
         } catch (e) {
@@ -120,6 +136,7 @@ export default function AdminPage() {
     const renderView = () => {
         if (activeView === 'dashboard') return <DashboardView users={users} enterprises={enterprises} stats={stats} setView={setActiveView} setModal={setModal} />;
         if (activeView === 'enterprise_grid') return <EnterpriseGridView enterprises={enterprises} users={users} setModal={setModal} />;
+        if (activeView === 'products') return <ProductsView products={products} setModal={setModal} />;
         return <UserGridView plan={activeView} users={users} setModal={setModal} />;
     };
 
@@ -135,6 +152,7 @@ export default function AdminPage() {
             {modal.type === 'user' && <ManageUserModal data={modal.data} close={() => setModal({ type: null })} refresh={loadData} masterKey={masterKey} />}
             {modal.type === 'enterprise' && <CreateEnterpriseModal close={() => setModal({ type: null })} refresh={loadData} masterKey={masterKey} />}
             {modal.type === 'licenses' && <ModifyLicensesModal data={modal.data} close={() => setModal({ type: null })} refresh={loadData} masterKey={masterKey} />}
+            {modal.type === 'product' && <ProductModal data={modal.data} close={() => setModal({ type: null })} refresh={loadData} masterKey={masterKey} />}
         </div>
     );
 }
@@ -148,6 +166,7 @@ function Sidebar({ activeView, setView }: any) {
         { id: 'professional', label: 'Professional', icon: 'bi-award-fill' },
         { id: 'executive', label: 'Executive', icon: 'bi-rocket-takeoff-fill' },
         { id: 'enterprise_grid', label: 'Enterprise', icon: 'bi-buildings-fill' },
+        { id: 'products', label: 'Products', icon: 'bi-shop' },
     ];
 
     return (
@@ -486,6 +505,239 @@ function ManageUserModal({ data, close, refresh, masterKey }: any) {
                         {loading ? 'Processing...' : 'Delete Account'}
                     </button>
                     <button onClick={close} className="w-full text-gray-400 text-xs font-bold uppercase tracking-widest mt-2 hover:text-gray-900">Close</button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// Products View Component
+function ProductsView({ products, setModal }: any) {
+    return (
+        <div>
+            <div className=\"flex justify-between items-center mb-8\">
+                <h2 className=\"text-3xl font-black text-gray-900\">Product Management</h2>
+                <button
+                    onClick={() => setModal({ type: 'product', data: null })}
+                    className=\"bg-black text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-gray-800 transition\"
+                >
+                    + Add Product
+                </button>
+            </div>
+
+            <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">
+                {products.map((product: any) => (
+                    <div
+                        key={product.id}
+                        onClick={() => setModal({ type: 'product', data: product })}
+                        className=\"bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition cursor-pointer\"
+                    >
+                        <div className=\"h-48 bg-gray-100 flex items-center justify-center overflow-hidden\">
+                            {product.image_url ? (
+                                <img src={product.image_url} alt={product.name} className=\"w-full h-full object-cover\" />
+                            ) : (
+                                <i className=\"bi bi-box text-6xl text-gray-400\"></i>
+                            )}
+                        </div>
+                        <div className=\"p-5\">
+                            <div className=\"flex items-center justify-between mb-2\">
+                                <span className=\"text-xs font-bold text-gray-500 uppercase tracking-wider\">{product.category}</span>
+                                <span className={\w-2 h-2 rounded-full \\}></span>
+                            </div>
+                            <h3 className=\"font-bold text-lg text-gray-900 mb-1\">{product.name}</h3>
+                            <p className=\"text-sm text-gray-600 mb-3 line-clamp-2\">{product.description}</p>
+                            <div className=\"flex items-center justify-between\">
+                                <span className=\"text-2xl font-black text-black\">\</span>
+                                <span className=\"text-xs font-bold text-gray-500\">Stock: {product.stock}</span>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+// Product Modal Component
+function ProductModal({ data, close, refresh, masterKey }: any) {
+    const [loading, setLoading] = useState(false);
+    const [form, setForm] = useState({
+        name: data?.name || '',
+        description: data?.description || '',
+        price: data?.price || 0,
+        category: data?.category || 'General',
+        image_url: data?.image_url || '',
+        stock: data?.stock || 0,
+        is_active: data?.is_active ?? 1
+    });
+
+    const handleSubmit = async () => {
+        if (!form.name || !form.price) {
+            alert(\"Name and price are required\");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const method = data ? 'PUT' : 'POST';
+            const body = data
+                ? { id: data.id, ...form }
+                : form;
+
+            const res = await fetch('/api/admin/products', {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Admin-Master-Key': masterKey
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok) {
+                refresh();
+                close();
+            } else {
+                alert(\"Error saving product\");
+            }
+        } catch (e) {
+            alert(\"Error\");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!data || !confirm(\"Delete this product?\")) return;
+
+        setLoading(true);
+        try {
+            const res = await fetch(\/api/admin/products?id=\\, {
+                method: 'DELETE',
+                headers: { 'X-Admin-Master-Key': masterKey }
+            });
+
+            if (res.ok) {
+                refresh();
+                close();
+            } else {
+                alert(\"Error deleting product\");
+            }
+        } catch (e) {
+            alert(\"Error\");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className=\"fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4\">
+            <div className=\"bg-white w-full max-w-2xl p-8 rounded-3xl shadow-2xl relative max-h-[90vh] overflow-y-auto\">
+                <h2 className=\"text-2xl font-black text-gray-900 uppercase tracking-tight mb-6\">
+                    {data ? 'Edit Product' : 'Add Product'}
+                </h2>
+
+                <div className=\"space-y-4\">
+                    <div>
+                        <label className=\"block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2\">Product Name</label>
+                        <input
+                            type=\"text\"
+                            value={form.name}
+                            onChange={(e) => setForm({ ...form, name: e.target.value })}
+                            className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none\"
+                            placeholder=\"Enter product name\"
+                        />
+                    </div>
+
+                    <div>
+                        <label className=\"block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2\">Description</label>
+                        <textarea
+                            value={form.description}
+                            onChange={(e) => setForm({ ...form, description: e.target.value })}
+                            className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none\"
+                            rows={3}
+                            placeholder=\"Product description\"
+                        />
+                    </div>
+
+                    <div className=\"grid grid-cols-2 gap-4\">
+                        <div>
+                            <label className=\"block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2\">Price (\$)</label>
+                            <input
+                                type=\"number\"
+                                value={form.price}
+                                onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) || 0 })}
+                                className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none\"
+                                step=\"0.01\"
+                            />
+                        </div>
+
+                        <div>
+                            <label className=\"block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2\">Stock</label>
+                            <input
+                                type=\"number\"
+                                value={form.stock}
+                                onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })}
+                                className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none\"
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className=\"block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2\">Category</label>
+                        <input
+                            type=\"text\"
+                            value={form.category}
+                            onChange={(e) => setForm({ ...form, category: e.target.value })}
+                            className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none\"
+                            placeholder=\"e.g., Smart Cards, Merch\"
+                        />
+                    </div>
+
+                    <div>
+                        <label className=\"block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2\">Image URL</label>
+                        <input
+                            type=\"text\"
+                            value={form.image_url}
+                            onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                            className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none\"
+                            placeholder=\"https://example.com/image.jpg\"
+                        />
+                    </div>
+
+                    <div className=\"flex items-center\">
+                        <input
+                            type=\"checkbox\"
+                            checked={form.is_active === 1}
+                            onChange={(e) => setForm({ ...form, is_active: e.target.checked ? 1 : 0 })}
+                            className=\"w-4 h-4 rounded border-gray-300 text-black focus:ring-black\"
+                        />
+                        <label className=\"ml-2 text-sm font-bold text-gray-700\">Active (visible in shop)</label>
+                    </div>
+                </div>
+
+                <div className=\"flex gap-4 mt-8\">
+                    <button
+                        onClick={handleSubmit}
+                        disabled={loading}
+                        className=\"flex-1 bg-black text-white font-bold py-4 rounded-2xl hover:bg-gray-800 transition uppercase tracking-wider text-sm disabled:opacity-50\"
+                    >
+                        {loading ? 'Saving...' : 'Save Product'}
+                    </button>
+                    {data && (
+                        <button
+                            onClick={handleDelete}
+                            disabled={loading}
+                            className=\"bg-red-50 text-red-600 font-bold px-6 py-4 rounded-2xl hover:bg-red-600 hover:text-white transition uppercase tracking-wider text-sm\"
+                        >
+                            Delete
+                        </button>
+                    )}
+                    <button
+                        onClick={close}
+                        className=\"px-6 py-4 text-gray-400 text-sm font-bold uppercase tracking-wider hover:text-gray-900\"
+                    >
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>
