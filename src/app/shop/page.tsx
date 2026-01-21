@@ -104,9 +104,10 @@ export default function ShopPage() {
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {products.map((product) => (
-                                <div
+                                <Link
                                     key={product.id}
-                                    className="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden hover:border-[#f00000]/50 transition group"
+                                    href={`/shop/${product.id}`}
+                                    className="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden hover:border-[#f00000]/50 transition group block"
                                 >
                                     <div className="relative h-64 bg-[#0a0a0a] overflow-hidden">
                                         {product.image_url ? (
@@ -138,18 +139,12 @@ export default function ShopPage() {
                                             <span className="text-2xl font-black text-[#f00000]">
                                                 Rs {product.price.toFixed(2)}
                                             </span>
-                                            <button
-                                                disabled={product.stock === 0}
-                                                className={`px-6 py-2 rounded-full text-sm font-bold uppercase transition ${product.stock === 0
-                                                    ? "bg-gray-800 text-gray-600 cursor-not-allowed"
-                                                    : "bg-[#f00000] text-white hover:bg-red-700"
-                                                    }`}
-                                            >
-                                                {product.stock === 0 ? "Sold Out" : "Order Now"}
-                                            </button>
+                                            <span className="text-sm text-gray-400 group-hover:text-[#f00000] transition">
+                                                View Details <i className="bi bi-arrow-right ml-1"></i>
+                                            </span>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     )}
