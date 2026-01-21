@@ -320,7 +320,7 @@ export default function SmartCardsPage() {
                             Coming Soon
                         </div>
                         <div className="text-center">
-                            <img src="/assets/img/apple_wallet_icon.png" alt="Apple Wallet" className="h-20 mx-auto mb-4 object-contain" />
+                            <img src="/assets/img/Apple_Wallet_Icon.svg" alt="Apple Wallet" className="h-20 mx-auto mb-4 object-contain" />
                             <span className="font-bold text-2xl">Wallet</span>
                         </div>
                     </div>
