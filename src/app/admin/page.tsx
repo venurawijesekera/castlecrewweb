@@ -36,6 +36,7 @@ interface Product {
     price: number;
     category: string;
     image_url: string;
+    images: string;  // JSON string of image URLs
     stock: number;
     is_active: number;
 }
@@ -315,7 +316,7 @@ function ProductModal({ data, close, refresh, masterKey }: any) {
         description: data?.description || '',
         price: data?.price || 0,
         category: data?.category || 'General',
-        image_url: data?.image_url || '',
+        images: (data?.images ? JSON.parse(data.images) : []) as string[],
         stock: data?.stock || 0,
         is_active: data?.is_active ?? 1
     });
@@ -443,13 +444,13 @@ function ProductModal({ data, close, refresh, masterKey }: any) {
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Image URL</label>
-                        <input
-                            type="text"
-                            value={form.image_url}
-                            onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
-                            placeholder="https://example.com/image.jpg"
+                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                            Product Images (4-10 images)
+                        </label>
+                        <ImageUploader
+                            images={form.images || []}
+                            onChange={(images) => setForm({ ...form, images })}
+                            masterKey={masterKey}
                         />
                     </div>
 
@@ -672,6 +673,142 @@ function ManageUserModal({ data, close, refresh, masterKey }: any) {
                     <button onClick={close} className="w-full text-gray-400 text-xs font-bold uppercase tracking-widest mt-2 hover:text-gray-900">Close</button>
                 </div>
             </div>
+        </div>
+    );
+}
+
+// ImageUploader Component
+function ImageUploader({ images, onChange, masterKey }: { images: string[], onChange: (images: string[]) => void, masterKey: string }) {
+    const [uploading, setUploading] = useState(false);
+    const [dragActive, setDragActive] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileSelect = async (files: FileList | null) => {
+        if (!files) return;
+
+        const maxImages = 10;
+        const minImages = 4;
+        const currentCount = images.length;
+
+        if (currentCount >= maxImages) {
+            alert(`Maximum ${maxImages} images allowed`);
+            return;
+        }
+
+        const filesToUpload = Array.from(files).slice(0, maxImages - currentCount);
+        
+        setUploading(true);
+        try {
+            const uploadPromises = filesToUpload.map(async (file) => {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const res = await fetch('/api/admin/upload-image', {
+                    method: 'POST',
+                    headers: { 'X-Admin-Master-Key': masterKey },
+                    body: formData
+                });
+
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(error.error || 'Upload failed');
+                }
+
+                const data = await res.json();
+                return data.url;
+            });
+
+            const uploadedUrls = await Promise.all(uploadPromises);
+            onChange([...images, ...uploadedUrls]);
+        } catch (error: any) {
+            alert(`Upload error: ${error.message}`);
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const handleDrag = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "dragenter" || e.type === "dragover") {
+            setDragActive(true);
+        } else if (e.type === "dragleave") {
+            setDragActive(false);
+        }
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+        if (e.dataTransfer.files) {
+            handleFileSelect(e.dataTransfer.files);
+        }
+    };
+
+    const removeImage = (index: number) => {
+        const newImages = images.filter((_, i) => i !== index);
+        onChange(newImages);
+    };
+
+    return (
+        <div>
+            {/* Upload Area */}
+            <div
+                className={`border-2 border-dashed rounded-xl p-6 text-center transition ${
+                    dragActive ? 'border-black bg-gray-50' : 'border-gray-300'
+                } ${uploading ? 'opacity-50 pointer-events-none' : ''}`}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+            >
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={(e) => handleFileSelect(e.target.files)}
+                    className="hidden"
+                />
+                <i className="bi bi-cloud-upload text-4xl text-gray-400 mb-2"></i>
+                <p className="text-sm font-bold text-gray-600">
+                    {uploading ? 'Uploading...' : 'Click or drag images here'}
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                    {images.length} / 10 images ({images.length < 4 ? `Need ${4 - images.length} more` : 'Ready'})
+                </p>
+            </div>
+
+            {/* Image Previews */}
+            {images.length > 0 && (
+                <div className="grid grid-cols-5 gap-3 mt-4">
+                    {images.map((url, index) => (
+                        <div key={index} className="relative group">
+                            <img
+                                src={url}
+                                alt={`Product ${index + 1}`}
+                                className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
+                            />
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    removeImage(index);
+                                }}
+                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                            >
+                                <i className="bi bi-x text-sm"></i>
+                            </button>
+                            {index === 0 && (
+                                <span className="absolute bottom-1 left-1 bg-black text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+                                    MAIN
+                                </span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

@@ -8,6 +8,10 @@ binding = "DB"
 database_name = "castle-db"
 database_id = "14c3aebd-86c7-4529-aba0-bb6ddf0b9e7f"
 
+[[r2_buckets]]
+binding = "PRODUCT_IMAGES"
+bucket_name = "castle-crew-products"
+
 [vars]
 # Secrets are managed in Cloudflare Dashboard or .dev.vars for local dev
 GOOGLE_WALLET_ISSUER_ID = "3388000000023062718"
