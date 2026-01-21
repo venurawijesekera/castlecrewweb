@@ -408,132 +408,139 @@ function ProductModal({ data, close, refresh, masterKey, allCategories }: any) {
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
-            <div className="bg-white w-full max-w-2xl p-8 rounded-3xl shadow-2xl relative max-h-[90vh] overflow-y-auto">
-                <h2 className="text-2xl font-black text-gray-900 uppercase tracking-tight mb-6">
-                    {data ? 'Edit Product' : 'Add Product'}
-                </h2>
+            <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+                {/* Header */}
+                <div className="p-8 pb-4 border-b border-gray-100">
+                    <h2 className="text-2xl font-black text-gray-900 uppercase tracking-tight">
+                        {data ? 'Edit Product' : 'Add Product'}
+                    </h2>
+                </div>
 
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Product Name</label>
-                        <input
-                            type="text"
-                            value={form.name}
-                            onChange={(e) => setForm({ ...form, name: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
-                            placeholder="Enter product name"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Description</label>
-                        <textarea
-                            value={form.description}
-                            onChange={(e) => setForm({ ...form, description: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
-                            rows={3}
-                            placeholder="Product description"
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
+                {/* Body - Scrollable */}
+                <div className="flex-1 overflow-y-auto p-8 space-y-6">
+                    <div className="space-y-4">
                         <div>
-                            <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Product SKU</label>
+                            <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Product Name</label>
                             <input
                                 type="text"
-                                value={form.sku}
-                                onChange={(e) => setForm({ ...form, sku: e.target.value })}
+                                value={form.name}
+                                onChange={(e) => setForm({ ...form, name: e.target.value })}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
-                                placeholder="e.g., CC-NFC-RED-01"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Price (LKR)</label>
-                            <input
-                                type="number"
-                                value={form.price}
-                                onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) || 0 })}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
-                                step="0.01"
+                                placeholder="Enter product name"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Stock</label>
-                            <input
-                                type="number"
-                                value={form.stock}
-                                onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })}
+                            <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Description</label>
+                            <textarea
+                                value={form.description}
+                                onChange={(e) => setForm({ ...form, description: e.target.value })}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
+                                rows={3}
+                                placeholder="Product description"
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Product SKU</label>
+                                <input
+                                    type="text"
+                                    value={form.sku}
+                                    onChange={(e) => setForm({ ...form, sku: e.target.value })}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
+                                    placeholder="e.g., CC-NFC-RED-01"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Price (LKR)</label>
+                                <input
+                                    type="number"
+                                    value={form.price}
+                                    onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) || 0 })}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
+                                    step="0.01"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Stock</label>
+                                <input
+                                    type="number"
+                                    value={form.stock}
+                                    onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Categories</label>
+                            <CategoryInput
+                                categories={form.categories}
+                                allCategories={allCategories}
+                                onChange={(cats: string[]) => setForm({ ...form, categories: cats })}
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Categories</label>
-                        <CategoryInput
-                            categories={form.categories}
-                            allCategories={allCategories}
-                            onChange={(cats: string[]) => setForm({ ...form, categories: cats })}
+                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                            Tags / Labels (for search optimization)
+                        </label>
+                        <TagInput
+                            tags={form.tags || []}
+                            onChange={(tags) => setForm({ ...form, tags })}
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                            Product Images (4-10 images)
+                        </label>
+                        <ImageUploader
+                            images={form.images || []}
+                            onChange={(images) => setForm({ ...form, images })}
+                            masterKey={masterKey}
+                        />
+                    </div>
+
+                    <div className="flex items-center">
+                        <input
+                            type="checkbox"
+                            checked={form.is_active === 1}
+                            onChange={(e) => setForm({ ...form, is_active: e.target.checked ? 1 : 0 })}
+                            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black"
+                        />
+                        <label className="ml-2 text-sm font-bold text-gray-700">Active (visible in shop)</label>
                     </div>
                 </div>
 
-                <div>
-                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                        Tags / Labels (for search optimization)
-                    </label>
-                    <TagInput
-                        tags={form.tags || []}
-                        onChange={(tags) => setForm({ ...form, tags })}
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                        Product Images (4-10 images)
-                    </label>
-                    <ImageUploader
-                        images={form.images || []}
-                        onChange={(images) => setForm({ ...form, images })}
-                        masterKey={masterKey}
-                    />
-                </div>
-
-                <div className="flex items-center">
-                    <input
-                        type="checkbox"
-                        checked={form.is_active === 1}
-                        onChange={(e) => setForm({ ...form, is_active: e.target.checked ? 1 : 0 })}
-                        className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black"
-                    />
-                    <label className="ml-2 text-sm font-bold text-gray-700">Active (visible in shop)</label>
-                </div>
-            </div>
-
-            <div className="flex gap-4 mt-8">
-                <button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className="flex-1 bg-black text-white font-bold py-4 rounded-2xl hover:bg-gray-800 transition uppercase tracking-wider text-sm disabled:opacity-50"
-                >
-                    {loading ? 'Saving...' : 'Save Product'}
-                </button>
-                {data && (
+                {/* Footer - Fixed */}
+                <div className="p-8 pt-4 border-t border-gray-100 flex gap-4">
                     <button
-                        onClick={handleDelete}
+                        onClick={handleSubmit}
                         disabled={loading}
-                        className="bg-red-50 text-red-600 font-bold px-6 py-4 rounded-2xl hover:bg-red-600 hover:text-white transition uppercase tracking-wider text-sm"
+                        className="flex-1 bg-black text-white font-bold py-4 rounded-2xl hover:bg-gray-800 transition uppercase tracking-wider text-sm disabled:opacity-50"
                     >
-                        Delete
+                        {loading ? 'Saving...' : 'Save Product'}
                     </button>
-                )}
-                <button
-                    onClick={close}
-                    className="px-6 py-4 text-gray-400 text-sm font-bold uppercase tracking-wider hover:text-gray-900"
-                >
-                    Cancel
-                </button>
+                    {data && (
+                        <button
+                            onClick={handleDelete}
+                            disabled={loading}
+                            className="bg-red-50 text-red-600 font-bold px-6 py-4 rounded-2xl hover:bg-red-600 hover:text-white transition uppercase tracking-wider text-sm"
+                        >
+                            Delete
+                        </button>
+                    )}
+                    <button
+                        onClick={close}
+                        className="px-6 py-4 text-gray-400 text-sm font-bold uppercase tracking-wider hover:text-gray-900"
+                    >
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     );
