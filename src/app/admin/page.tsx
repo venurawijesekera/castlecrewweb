@@ -37,6 +37,7 @@ interface Product {
     category: string;
     image_url: string;
     images: string;  // JSON string of image URLs
+    tags: string;    // JSON string of tags for search optimization
     stock: number;
     is_active: number;
 }
@@ -317,6 +318,7 @@ function ProductModal({ data, close, refresh, masterKey }: any) {
         price: data?.price || 0,
         category: data?.category || 'General',
         images: (data?.images ? JSON.parse(data.images) : []) as string[],
+        tags: (data?.tags ? JSON.parse(data.tags) : []) as string[],
         stock: data?.stock || 0,
         is_active: data?.is_active ?? 1
     });
@@ -440,6 +442,16 @@ function ProductModal({ data, close, refresh, masterKey }: any) {
                             onChange={(e) => setForm({ ...form, category: e.target.value })}
                             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
                             placeholder="e.g., Smart Cards, Merch"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                            Tags / Labels (for search optimization)
+                        </label>
+                        <TagInput
+                            tags={form.tags || []}
+                            onChange={(tags) => setForm({ ...form, tags })}
                         />
                     </div>
 
@@ -808,6 +820,77 @@ function ImageUploader({ images, onChange, masterKey }: { images: string[], onCh
                     ))}
                 </div>
             )}
+        </div>
+    );
+}
+
+// TagInput Component
+function TagInput({ tags, onChange }: { tags: string[], onChange: (tags: string[]) => void }) {
+    const [inputValue, setInputValue] = useState('');
+
+    const addTag = () => {
+        const trimmed = inputValue.trim();
+        if (trimmed && !tags.includes(trimmed)) {
+            onChange([...tags, trimmed]);
+            setInputValue('');
+        }
+    };
+
+    const removeTag = (index: number) => {
+        onChange(tags.filter((_, i) => i !== index));
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTag();
+        }
+    };
+
+    return (
+        <div>
+            <div className="flex gap-2 mb-3">
+                <input
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Add a tag (press Enter)"
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
+                />
+                <button
+                    type="button"
+                    onClick={addTag}
+                    className="bg-black text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-800 transition"
+                >
+                    <i className="bi bi-plus-lg"></i>
+                </button>
+            </div>
+
+            {tags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                    {tags.map((tag, index) => (
+                        <span
+                            key={index}
+                            className="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-3 py-1.5 rounded-full text-sm font-semibold"
+                        >
+                            <i className="bi bi-tag-fill text-xs"></i>
+                            {tag}
+                            <button
+                                type="button"
+                                onClick={() => removeTag(index)}
+                                className="text-gray-500 hover:text-red-600 transition"
+                            >
+                                <i className="bi bi-x text-lg"></i>
+                            </button>
+                        </span>
+                    ))}
+                </div>
+            )}
+
+            <p className="text-xs text-gray-500 mt-2">
+                {tags.length} tag{tags.length !== 1 ? 's' : ''} added • Use keywords like "premium", "luxury", "nfc", etc.
+            </p>
         </div>
     );
 }
