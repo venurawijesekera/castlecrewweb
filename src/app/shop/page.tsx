@@ -63,6 +63,12 @@ export default function ShopPage() {
         fetchCategories();
     }, []);
 
+    const getImageUrl = (url: string) => {
+        if (!url) return '';
+        if (url.startsWith('http') || url.startsWith('/')) return url;
+        return `/${url}`;
+    };
+
     return (
         <main className="bg-[#050505] min-h-screen text-white">
             <Navigation />
@@ -131,7 +137,7 @@ export default function ShopPage() {
                                     <div className="relative h-64 bg-[#0a0a0a] overflow-hidden">
                                         {product.image_url ? (
                                             <img
-                                                src={product.image_url}
+                                                src={getImageUrl(product.image_url)}
                                                 alt={product.name}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                                             />

@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 
 export default function SmartCardsPage() {
     const [activeFeature, setActiveFeature] = useState(1);
-    const [featureImage, setFeatureImage] = useState("assets/img/templates.png");
+    const [featureImage, setFeatureImage] = useState("/assets/img/templates.png");
     const [avatars, setAvatars] = useState<string[]>([]);
     const [loadingAvatars, setLoadingAvatars] = useState(true);
 
@@ -18,25 +18,25 @@ export default function SmartCardsPage() {
             id: 1,
             title: "01. Choose Your Template",
             desc: "Select from 6 premium digital templates upon login.",
-            img: "assets/img/templates.png"
+            img: "/assets/img/templates.png"
         },
         {
             id: 2,
             title: "02. Edit Real-Time",
             desc: "Changed jobs? Update your dashboard and your card updates instantly.",
-            img: "assets/img/edit.png"
+            img: "/assets/img/edit.png"
         },
         {
             id: 3,
             title: "03. Track Analytics",
             desc: "See how many people are viewing your profile.",
-            img: "assets/img/analytics.png"
+            img: "/assets/img/analytics.png"
         },
         {
             id: 4,
             title: "04. Compatible Everywhere",
             desc: "Works on iPhone, Android, and any samrt device.",
-            img: "assets/img/templates.png" // Reusing templates or check if there was a separate image for everywhere? Logic said img not provided for 4th
+            img: "/assets/img/templates.png" // Reusing templates or check if there was a separate image for everywhere? Logic said img not provided for 4th
         }
     ];
 
@@ -234,7 +234,7 @@ export default function SmartCardsPage() {
                                 <div className="absolute -inset-1 bg-gradient-to-r from-[#f00000] to-purple-600 opacity-20 blur-lg group-hover:opacity-30 transition duration-1000"></div>
 
                                 <div className="relative w-full">
-                                    <img id="feature-img" src={`/${featureImage}`} // ensuring root path for consistency
+                                    <img id="feature-img" src={featureImage}
                                         className="w-full h-auto object-cover hover:scale-105 transition-all duration-500"
                                         alt="UI Templates" />
                                 </div>

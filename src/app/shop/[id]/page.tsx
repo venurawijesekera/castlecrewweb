@@ -59,6 +59,14 @@ export default function ProductDetailPage() {
         }
     };
 
+    const getImageUrl = (url: string) => {
+        if (!url) return '';
+        if (url.startsWith('http') || url.startsWith('/')) return url;
+        return `/${url}`;
+    };
+
+
+
     const handleOrder = () => {
         // TODO: Implement order/contact functionality
         alert(`Order functionality coming soon! Product: ${product?.name}`);
@@ -99,7 +107,7 @@ export default function ProductDetailPage() {
                             <div className="bg-[#121212] rounded-2xl overflow-hidden mb-4 aspect-square">
                                 {imageList.length > 0 ? (
                                     <img
-                                        src={imageList[selectedImage]}
+                                        src={getImageUrl(imageList[selectedImage])}
                                         alt={product.name}
                                         className="w-full h-full object-cover"
                                     />
@@ -123,7 +131,7 @@ export default function ProductDetailPage() {
                                                 }`}
                                         >
                                             <img
-                                                src={img}
+                                                src={getImageUrl(img)}
                                                 alt={`${product.name} ${index + 1}`}
                                                 className="w-full h-full object-cover"
                                             />
