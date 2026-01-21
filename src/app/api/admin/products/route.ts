@@ -34,8 +34,8 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-        const body = await request.json() as { name: string; description?: string; price: number; category?: string; images?: string[]; tags?: string[]; stock?: number };
-        const { name, description, price, category, images, tags, stock } = body;
+        const body = await request.json() as { name: string; description?: string; sku?: string; price: number; category?: string; images?: string[]; tags?: string[]; stock?: number };
+        const { name, description, sku, price, category, images, tags, stock } = body;
 
         if (!name || !price) {
             return NextResponse.json(
@@ -55,9 +55,9 @@ export async function POST(request: NextRequest) {
         const imagesJson = JSON.stringify(images);
         const tagsJson = JSON.stringify(tags || []);
         const result = await db.prepare(
-            `INSERT INTO products (name, description, price, category, image_url, images, tags, stock, is_active)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`
-        ).bind(name, description || "", price, category || "General", images[0] || "", imagesJson, tagsJson, stock || 0).run();
+            `INSERT INTO products (name, description, sku, price, category, image_url, images, tags, stock, is_active)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`
+        ).bind(name, description || "", sku || null, price, category || "General", images[0] || "", imagesJson, tagsJson, stock || 0).run();
 
         return NextResponse.json({
             success: true,
@@ -75,8 +75,8 @@ export async function PUT(request: NextRequest) {
     }
 
     try {
-        const body = await request.json() as { id: number; name?: string; description?: string; price?: number; category?: string; images?: string[]; tags?: string[]; stock?: number; is_active?: boolean };
-        const { id, name, description, price, category, images, tags, stock, is_active } = body;
+        const body = await request.json() as { id: number; name?: string; description?: string; sku?: string; price?: number; category?: string; images?: string[]; tags?: string[]; stock?: number; is_active?: boolean };
+        const { id, name, description, sku, price, category, images, tags, stock, is_active } = body;
 
         if (!id) {
             return NextResponse.json({ error: "Product ID required" }, { status: 400 });
@@ -89,11 +89,11 @@ export async function PUT(request: NextRequest) {
         const db = getDB();
         await db.prepare(
             `UPDATE products 
-             SET name = ?, description = ?, price = ?, category = ?, 
+             SET name = ?, description = ?, sku = ?, price = ?, category = ?, 
                  image_url = ?, images = ?, tags = ?, stock = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
              WHERE id = ?`
         ).bind(
-            name, description, price, category, mainImage, imagesJson, tagsJson, stock, is_active ? 1 : 0, id
+            name, description, sku, price, category, mainImage, imagesJson, tagsJson, stock, is_active ? 1 : 0, id
         ).run();
 
         return NextResponse.json({ success: true });

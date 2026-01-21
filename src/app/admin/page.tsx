@@ -38,6 +38,7 @@ interface Product {
     image_url: string;
     images: string;  // JSON string of image URLs
     tags: string;    // JSON string of tags for search optimization
+    sku?: string;
     stock: number;
     is_active: number;
 }
@@ -315,6 +316,7 @@ function ProductModal({ data, close, refresh, masterKey }: any) {
     const [form, setForm] = useState({
         name: data?.name || '',
         description: data?.description || '',
+        sku: data?.sku || '',
         price: data?.price || 0,
         category: data?.category || 'General',
         images: (data?.images ? JSON.parse(data.images) : []) as string[],
@@ -412,6 +414,16 @@ function ProductModal({ data, close, refresh, masterKey }: any) {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Product SKU</label>
+                            <input
+                                type="text"
+                                value={form.sku}
+                                onChange={(e) => setForm({ ...form, sku: e.target.value })}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none"
+                                placeholder="e.g., CC-NFC-RED-01"
+                            />
+                        </div>
                         <div>
                             <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Price (LKR)</label>
                             <input

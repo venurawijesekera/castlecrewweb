@@ -16,6 +16,7 @@ interface Product {
     image_url: string;
     images: string;
     tags: string;
+    sku?: string;
     stock: number;
     is_active: number;
 }
@@ -217,7 +218,7 @@ export default function ProductDetailPage() {
                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                     <div>
                                         <p className="text-gray-500 mb-1">SKU</p>
-                                        <p className="font-bold">CASTLE-{product.id}</p>
+                                        <p className="font-bold">{product.sku || `CASTLE-${product.id}`}</p>
                                     </div>
                                     <div>
                                         <p className="text-gray-500 mb-1">Availability</p>
