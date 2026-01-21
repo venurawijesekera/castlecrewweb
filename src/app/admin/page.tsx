@@ -1,4 +1,4 @@
-"use client";
+ï»¿"use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -823,7 +823,6 @@ function ImageUploader({ images, onChange, masterKey }: { images: string[], onCh
         </div>
     );
 }
-
 // TagInput Component
 function TagInput({ tags, onChange }: { tags: string[], onChange: (tags: string[]) => void }) {
     const [inputValue, setInputValue] = useState('');
@@ -889,7 +888,7 @@ function TagInput({ tags, onChange }: { tags: string[], onChange: (tags: string[
             )}
 
             <p className="text-xs text-gray-500 mt-2">
-                {tags.length} tag{tags.length !== 1 ? 's' : ''} added • Use keywords like "premium", "luxury", "nfc", etc.
+                {tags.length} tag{tags.length !== 1 ? 's' : ''} added
             </p>
         </div>
     );
