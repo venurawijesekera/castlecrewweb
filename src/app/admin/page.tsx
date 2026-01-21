@@ -714,7 +714,7 @@ function ImageUploader({ images, onChange, masterKey }: { images: string[], onCh
                     throw new Error(error.error || 'Upload failed');
                 }
 
-                const data = await res.json();
+                const data = await res.json() as { url: string };
                 return data.url;
             });
 
