@@ -299,7 +299,7 @@ function ProductsView({ products, setModal }: any) {
                             <h3 className="font-bold text-lg text-gray-900 mb-1">{product.name}</h3>
                             <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
                             <div className="flex items-center justify-between">
-                                <span className="text-2xl font-black text-black">${product.price.toFixed(2)}</span>
+                                <span className="text-2xl font-black text-black">Rs {product.price.toFixed(2)}</span>
                                 <span className="text-xs font-bold text-gray-500">Stock: {product.stock}</span>
                             </div>
                         </div>
@@ -413,7 +413,7 @@ function ProductModal({ data, close, refresh, masterKey }: any) {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Price ($)</label>
+                            <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Price (LKR)</label>
                             <input
                                 type="number"
                                 value={form.price}

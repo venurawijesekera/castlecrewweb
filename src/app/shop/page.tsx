@@ -136,7 +136,7 @@ export default function ShopPage() {
                                         </p>
                                         <div className="flex items-center justify-between">
                                             <span className="text-2xl font-black text-[#f00000]">
-                                                ${product.price.toFixed(2)}
+                                                Rs {product.price.toFixed(2)}
                                             </span>
                                             <button
                                                 disabled={product.stock === 0}
