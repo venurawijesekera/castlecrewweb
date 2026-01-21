@@ -808,7 +808,38 @@ function ImageUploader({ images, onChange, masterKey }: { images: string[], onCh
             {images.length > 0 && (
                 <div className="grid grid-cols-5 gap-3 mt-4">
                     {images.map((url, index) => (
-                        <div key={index} className="relative group">
+                        <div
+                            key={url}
+                            className="relative group cursor-move"
+                            draggable
+                            onDragStart={(e) => {
+                                e.dataTransfer.setData('text/plain', index.toString());
+                                e.currentTarget.classList.add('opacity-50');
+                            }}
+                            onDragEnd={(e) => {
+                                e.currentTarget.classList.remove('opacity-50');
+                            }}
+                            onDragOver={(e) => {
+                                e.preventDefault();
+                                e.currentTarget.classList.add('border-black');
+                            }}
+                            onDragLeave={(e) => {
+                                e.currentTarget.classList.remove('border-black');
+                            }}
+                            onDrop={(e) => {
+                                e.preventDefault();
+                                e.currentTarget.classList.remove('border-black');
+                                const sourceIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                                const targetIndex = index;
+
+                                if (sourceIndex !== targetIndex) {
+                                    const newImages = [...images];
+                                    const [movedImage] = newImages.splice(sourceIndex, 1);
+                                    newImages.splice(targetIndex, 0, movedImage);
+                                    onChange(newImages);
+                                }
+                            }}
+                        >
                             <img
                                 src={url}
                                 alt={`Product ${index + 1}`}
