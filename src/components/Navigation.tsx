@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import MobileMenu from "./MobileMenu";
 
 export default function Navigation() {
     const [isHidden, setIsHidden] = useState(false);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [userAvatar, setUserAvatar] = useState<string | null>(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
     const pathname = usePathname();
 
     const getLinkClass = (path: string) => {
@@ -42,57 +44,73 @@ export default function Navigation() {
     }, [pathname]);
 
     return (
-        <nav
-            id="main-nav"
-            className={`w-full py-8 px-6 md:px-12 flex justify-between items-center sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md transition-transform duration-300 ${isHidden ? "-translate-y-full" : "translate-y-0"
-                }`}
-        >
-            <Link
-                href="/"
-                className="text-2xl font-black tracking-tighter flex items-center gap-2"
+        <>
+            <nav
+                id="main-nav"
+                className={`w-full py-8 px-6 md:px-12 flex justify-between items-center sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md transition-transform duration-300 ${isHidden ? "-translate-y-full" : "translate-y-0"
+                    }`}
             >
-                <div className="w-3 h-3 bg-[#f00000] rotate-45"></div>
-                CASTLE CREW
-            </Link>
+                <Link
+                    href="/"
+                    className="text-2xl font-black tracking-tighter flex items-center gap-2"
+                >
+                    <div className="w-3 h-3 bg-[#f00000] rotate-45"></div>
+                    CASTLE CREW
+                </Link>
 
-            <div className="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
-                <Link href="/" className={getLinkClass("/")}>
-                    Home
-                </Link>
-                <Link href="/cards" className={getLinkClass("/cards")}>
-                    Smart Cards
-                </Link>
-                <Link href="/sculptme" className={getLinkClass("/sculptme")}>
-                    Sculpt Me
-                </Link>
-                <Link href="/shop" className={getLinkClass("/shop")}>
-                    Shop
-                </Link>
-                <Link href="/#packaging" className="hover:text-white transition">
-                    Packaging
-                </Link>
-                <Link href="/#signage" className="hover:text-white transition">
-                    Signage
-                </Link>
-                <Link href="/#merch" className="hover:text-white transition">
-                    Merch
-                </Link>
-            </div>
+                {/* Mobile Menu Toggle */}
+                <button
+                    className="md:hidden text-white text-2xl"
+                    onClick={() => setIsMobileMenuOpen(true)}
+                    aria-label="Open Menu"
+                >
+                    <i className="bi bi-list"></i>
+                </button>
 
-            <div id="auth-nav">
-                {userAvatar ? (
-                    <Link href="/profile" className="profile-icon w-10 h-10 flex items-center justify-center bg-gray-100 text-black rounded-full overflow-hidden hover:ring-2 hover:ring-[#f00000] transition">
-                        {userAvatar !== "default" ? <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" /> : <i className="bi bi-person-fill text-lg"></i>}
+                <div className="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+                    <Link href="/" className={getLinkClass("/")}>
+                        Home
                     </Link>
-                ) : (
-                    <Link
-                        href="/login"
-                        className="text-xs font-bold border-b border-white pb-1 hover:text-[#f00000] hover:border-[#f00000] transition"
-                    >
-                        CLIENT LOGIN
+                    <Link href="/cards" className={getLinkClass("/cards")}>
+                        Smart Cards
                     </Link>
-                )}
-            </div>
-        </nav>
+                    <Link href="/sculptme" className={getLinkClass("/sculptme")}>
+                        Sculpt Me
+                    </Link>
+                    <Link href="/shop" className={getLinkClass("/shop")}>
+                        Shop
+                    </Link>
+                    <Link href="/#packaging" className="hover:text-white transition">
+                        Packaging
+                    </Link>
+                    <Link href="/#signage" className="hover:text-white transition">
+                        Signage
+                    </Link>
+                    <Link href="/#merch" className="hover:text-white transition">
+                        Merch
+                    </Link>
+                </div>
+
+                <div id="auth-nav" className="hidden md:block">
+                    {userAvatar ? (
+                        <Link href="/profile" className="profile-icon w-10 h-10 flex items-center justify-center bg-gray-100 text-black rounded-full overflow-hidden hover:ring-2 hover:ring-[#f00000] transition">
+                            {userAvatar !== "default" ? <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" /> : <i className="bi bi-person-fill text-lg"></i>}
+                        </Link>
+                    ) : (
+                        <Link
+                            href="/login"
+                            className="text-xs font-bold border-b border-white pb-1 hover:text-[#f00000] hover:border-[#f00000] transition"
+                        >
+                            CLIENT LOGIN
+                        </Link>
+                    )}
+                </div>
+            </nav>
+            <MobileMenu
+                isOpen={isMobileMenuOpen}
+                onClose={() => setIsMobileMenuOpen(false)}
+                userAvatar={userAvatar}
+            />
+        </>
     );
 }

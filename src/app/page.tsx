@@ -11,7 +11,7 @@ export default function Home() {
 
       <header className="px-4 md:px-6 mb-20">
         <div className="relative w-full h-[80vh] rounded-[2rem] overflow-hidden border border-gray-800">
-          <img src="assets/img/banner.png"
+          <img src="/assets/img/banner.png"
             className="w-full h-full object-cover opacity-60" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
 
@@ -36,7 +36,7 @@ export default function Home() {
 
           <div
             className="lg:col-span-2 relative rounded-[2rem] overflow-hidden img-zoom-container group h-[400px] lg:h-full">
-            <img src="assets/img/nfc-cards01.jpg" className="w-full h-full object-cover transform transition duration-700 ease group-hover:scale-105" />
+            <img src="/assets/img/nfc-cards01.jpg" className="w-full h-full object-cover transform transition duration-700 ease group-hover:scale-105" />
 
             <div className="absolute bottom-0 left-0 bg-[#050505] pt-6 pr-8 rounded-tr-[3rem] z-10">
               <div className="relative z-20 pl-8 pb-8">
@@ -75,7 +75,7 @@ export default function Home() {
 
             <div
               className="relative rounded-[2rem] overflow-hidden img-zoom-container flex-1 h-[250px] lg:h-auto border border-gray-800 group cursor-pointer">
-              <img src="assets/img/templates.png"
+              <img src="/assets/img/templates.png"
                 className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
 
@@ -107,7 +107,7 @@ export default function Home() {
           <div
             className="lg:col-span-2 relative rounded-[2rem] overflow-hidden img-zoom-container group h-[400px] lg:h-full border border-[#f00000]/50">
 
-            <img src="assets/img/front-sculpt-banner.png"
+            <img src="/assets/img/front-sculpt-banner.png"
               className="w-full h-full object-cover opacity-90 group-hover:opacity-100"
               alt="Sculpt Me Figurine Kit" />
 
@@ -146,7 +146,7 @@ export default function Home() {
 
             <div
               className="relative rounded-[2rem] overflow-hidden img-zoom-container flex-1 h-[250px] lg:h-auto border border-gray-800 group cursor-pointer">
-              <img src="assets/img/color-pallet.png"
+              <img src="/assets/img/color-pallet.png"
                 className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
 
@@ -204,7 +204,7 @@ export default function Home() {
 
           <Link href="/cards"
             className="group relative block break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 h-[450px] mb-4">
-            <img src="assets/img/nfc-card.png"
+            <img src="/assets/img/nfc-card.png"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-90 group-hover:opacity-100" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80">
             </div>
@@ -219,7 +219,7 @@ export default function Home() {
 
           <div
             className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[300px] mb-4">
-            <img src="assets/img/Lightbox.png"
+            <img src="/assets/img/Lightbox.png"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
             </div>
@@ -234,7 +234,7 @@ export default function Home() {
 
           <div
             className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[380px] mb-4">
-            <img src="assets/img/hoodie.png"
+            <img src="/assets/img/hoodie.png"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
             </div>
@@ -249,7 +249,7 @@ export default function Home() {
 
           <div
             className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[450px] mb-4">
-            <img src="assets/img/box.png"
+            <img src="/assets/img/box.png"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
             </div>
@@ -264,7 +264,7 @@ export default function Home() {
 
           <div
             className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[300px] mb-4">
-            <img src="assets/img/mug.png"
+            <img src="/assets/img/mug.png"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
             </div>
@@ -279,7 +279,7 @@ export default function Home() {
 
           <div
             className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[350px] mb-4">
-            <img src="assets/img/coaster.png"
+            <img src="/assets/img/coaster.png"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
             </div>
@@ -294,7 +294,7 @@ export default function Home() {
 
           <div
             className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[420px] mb-4">
-            <img src="assets/img/sticker.png"
+            <img src="/assets/img/sticker.png"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-60 group-hover:opacity-100" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
             </div>
@@ -309,7 +309,7 @@ export default function Home() {
 
           <div
             className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[380px] mb-4">
-            <img src="assets/img/kiosk.png"
+            <img src="/assets/img/kiosk.png"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80">
             </div>
