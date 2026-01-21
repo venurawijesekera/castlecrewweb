@@ -6,13 +6,15 @@ export const runtime = 'edge';
 // GET - Get single product by ID (public)
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await context.params;
+
         const db = getDB();
         const product = await db.prepare(
             `SELECT * FROM products WHERE id = ? AND is_active = 1`
-        ).bind(params.id).first();
+        ).bind(id).first();
 
         if (!product) {
             return NextResponse.json({ error: "Product not found" }, { status: 404 });
