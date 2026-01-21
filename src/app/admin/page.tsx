@@ -640,7 +640,7 @@ function ModifyLicensesModal({ data, close, refresh, masterKey }: any) {
     );
 }
 
-function ManageUserModal({ data, close, refresh, master Key }: any) {
+function ManageUserModal({ data, close, refresh, masterKey }: any) {
     const [loading, setLoading] = useState(false);
 
     const handleDelete = async () => {
