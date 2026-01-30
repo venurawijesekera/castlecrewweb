@@ -9,6 +9,7 @@ export default function Navigation() {
     const [isHidden, setIsHidden] = useState(false);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [userAvatar, setUserAvatar] = useState<string | null>(null);
+    const [userRole, setUserRole] = useState<string | null>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
     const pathname = usePathname();
 
@@ -24,24 +25,43 @@ export default function Navigation() {
                 try {
                     const res = await fetch("/api/card", {
                         headers: {
-                            'Authorization': token
+                            'Authorization': `Bearer ${token}`
                         }
                     });
                     if (res.ok) {
                         const data: any = await res.json();
+                        setUserRole(data.role || 'staff');
                         if (data.avatar_url) {
                             setUserAvatar(data.avatar_url);
                         } else {
                             setUserAvatar("default");
                         }
+                    } else if (res.status === 401) {
+                        // Token expired or invalid
+                        localStorage.removeItem("castle_token");
+                        setUserAvatar(null);
+                        setUserRole(null);
                     }
                 } catch (e) {
                     console.error("Auth check failed", e);
                 }
+            } else {
+                setUserAvatar(null);
+                setUserRole(null);
             }
         };
         checkAuth();
     }, [pathname]);
+
+    const getProfileLink = () => {
+        if (userRole === 'admin' || userRole === 'super_admin') {
+            return "/enterprise/dashboard";
+        }
+        // If they are a master admin (not enterprise admin), they might use /admin
+        // But role usually comes as 'super_admin' for enterprise. 
+        // Let's check if they have enterprise_id.
+        return "/profile";
+    };
 
     return (
         <>
@@ -93,7 +113,7 @@ export default function Navigation() {
 
                 <div id="auth-nav" className="hidden md:block">
                     {userAvatar ? (
-                        <Link href="/profile" className="profile-icon w-10 h-10 flex items-center justify-center bg-gray-100 text-black rounded-full overflow-hidden hover:ring-2 hover:ring-[#f00000] transition">
+                        <Link href={getProfileLink()} className="profile-icon w-10 h-10 flex items-center justify-center bg-gray-100 text-black rounded-full overflow-hidden hover:ring-2 hover:ring-[#f00000] transition">
                             {userAvatar !== "default" ? <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" /> : <i className="bi bi-person-fill text-lg"></i>}
                         </Link>
                     ) : (
@@ -110,6 +130,7 @@ export default function Navigation() {
                 isOpen={isMobileMenuOpen}
                 onClose={() => setIsMobileMenuOpen(false)}
                 userAvatar={userAvatar}
+                userRole={userRole}
             />
         </>
     );

@@ -5,7 +5,7 @@ export async function getUserIdFromToken(request: NextRequest): Promise<number |
     let token: string | undefined;
 
     // 1. Check Cookie
-    const cookieToken = request.cookies.get("session_token");
+    const cookieToken = request.cookies.get("castle_token");
     if (cookieToken) {
         token = cookieToken.value;
     }

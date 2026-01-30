@@ -31,16 +31,20 @@ function ProfileContent() {
                 }
 
                 // Fetch Main User Data
-                const resCard = await fetch("/api/card");
+                const resCard = await fetch("/api/card", {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (resCard.status === 401) {
-                    router.push("/login"); // Middleware should handle, but verify
+                    router.push("/login");
                     return;
                 }
                 const dataCard: any = await resCard.json();
                 setUser(dataCard);
 
                 if (view === "products") {
-                    const resProducts = await fetch("/api/user/products");
+                    const resProducts = await fetch("/api/user/products", {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
                     const dataProducts: any = await resProducts.json();
                     const productCards = dataProducts.cards ? dataProducts.cards.filter((c: any) => c.parent_id) : [];
                     setProducts(productCards);

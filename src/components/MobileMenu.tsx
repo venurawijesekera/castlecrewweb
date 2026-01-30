@@ -8,9 +8,10 @@ interface MobileMenuProps {
     isOpen: boolean;
     onClose: () => void;
     userAvatar: string | null;
+    userRole: string | null;
 }
 
-export default function MobileMenu({ isOpen, onClose, userAvatar }: MobileMenuProps) {
+export default function MobileMenu({ isOpen, onClose, userAvatar, userRole }: MobileMenuProps) {
     const pathname = usePathname();
 
     // Prevent body scroll when menu is open
@@ -69,7 +70,11 @@ export default function MobileMenu({ isOpen, onClose, userAvatar }: MobileMenuPr
 
             <div className="mt-4">
                 {userAvatar ? (
-                    <Link href="/profile" className="flex flex-col items-center gap-2 group" onClick={onClose}>
+                    <Link
+                        href={(userRole === 'admin' || userRole === 'super_admin') ? "/enterprise/dashboard" : "/profile"}
+                        className="flex flex-col items-center gap-2 group"
+                        onClick={onClose}
+                    >
                         <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gray-700 group-hover:border-[#f00000] transition">
                             {userAvatar !== "default" ? (
                                 <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />

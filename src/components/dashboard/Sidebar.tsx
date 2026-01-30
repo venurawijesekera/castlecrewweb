@@ -10,11 +10,12 @@ export default function Sidebar() {
     const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
-        // Quick client-side check or fetch user data
-        // Ideally this should come from a Context or Layout fetch
         const fetchUser = async () => {
             try {
-                const res = await fetch("/api/card");
+                const token = localStorage.getItem("castle_token");
+                const res = await fetch("/api/card", {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
                 if (res.ok) {
                     const data: any = await res.json();
                     setUser(data);
@@ -40,7 +41,7 @@ export default function Sidebar() {
         localStorage.removeItem("castle_token");
         // Call Logout API if we implement one to clear cookie
         // For now just redirect
-        document.cookie = "session_token=; Max-Age=0; path=/;";
+        document.cookie = "castle_token=; Max-Age=0; path=/;";
         window.location.href = "/";
     };
 
