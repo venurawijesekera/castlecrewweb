@@ -20,17 +20,21 @@ export default function Footer() {
                             STARTED</Link>
                     </div>
 
-                    <div className="md:pl-10">
+                    <div className="md:pl-10 md:col-span-1">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Menu</h5>
-                        <ul className="space-y-3 text-base opacity-90">
-                            <li><Link href="/" className="hover:underline">Home</Link></li>
-                            <li><Link href="/cards" className="hover:underline">Smart Cards</Link></li>
-                            <li><Link href="#" className="hover:underline uppercase text-xs font-black tracking-widest bg-white/20 px-2 py-0.5 rounded">Sculpt Me</Link></li>
-                            <li><Link href="/shop" className="hover:underline">Shop</Link></li>
-                            <li><Link href="/services" className="hover:underline">Services</Link></li>
-                            <li><Link href="/about" className="hover:underline">About</Link></li>
-                            <li><Link href="/contact" className="hover:underline font-bold">Contact Us</Link></li>
-                        </ul>
+                        <div className="grid grid-cols-2 gap-x-8">
+                            <ul className="space-y-3 text-base opacity-90 text-nowrap">
+                                <li><Link href="/" className="hover:underline">Home</Link></li>
+                                <li><Link href="/cards" className="hover:underline">Smart Cards</Link></li>
+                                <li><Link href="/sculptme" className="hover:underline">Sculpt Me</Link></li>
+                                <li><Link href="/shop" className="hover:underline">Shop</Link></li>
+                            </ul>
+                            <ul className="space-y-3 text-base opacity-90 text-nowrap">
+                                <li><Link href="/services" className="hover:underline">Services</Link></li>
+                                <li><Link href="/about" className="hover:underline">About</Link></li>
+                                <li><Link href="/contact" className="hover:underline font-bold">Contact Us</Link></li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div>
@@ -65,10 +69,9 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-red-400/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-red-100">
-                    <p>&copy; 2024 Castle Crew.</p>
+                    <p>&copy; {new Date().getFullYear()} Castle Crew.</p>
                     <div className="flex gap-6 font-bold">
-                        <Link href="#" className="hover:text-white">X</Link>
-                        <Link href="#" className="hover:text-white">LinkedIn</Link>
+                        <Link href="#" className="hover:text-white">Facebook</Link>
                         <Link href="#" className="hover:text-white">Instagram</Link>
                     </div>
                 </div>
