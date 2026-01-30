@@ -1,7 +1,41 @@
+"use client";
+
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { useState } from "react";
 
 export default function ContactPage() {
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        subject: "General Inquiry",
+        message: ""
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus("loading");
+
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+
+            if (res.ok) {
+                setStatus("success");
+                setFormData({ firstName: "", lastName: "", email: "", subject: "General Inquiry", message: "" });
+            } else {
+                setStatus("error");
+            }
+        } catch (err) {
+            setStatus("error");
+        }
+    };
+
     return (
         <main className="bg-[#050505] min-h-screen text-white">
             <Navigation />
@@ -53,38 +87,96 @@ export default function ContactPage() {
                     </div>
 
                     <div className="lg:w-1/2">
-                        <form className="bg-[#121212] border border-gray-800 p-8 md:p-12 rounded-[2.5rem] space-y-6 shadow-2xl">
+                        <form onSubmit={handleSubmit} className="bg-[#121212] border border-gray-800 p-8 md:p-12 rounded-[2.5rem] space-y-6 shadow-2xl relative overflow-hidden">
+                            {status === "success" && (
+                                <div className="absolute inset-0 bg-[#121212]/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-center p-8 animate-in fade-in duration-500">
+                                    <div className="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mb-6">
+                                        <i className="bi bi-check-lg text-4xl"></i>
+                                    </div>
+                                    <h3 className="text-2xl font-black uppercase mb-2">Message Sent!</h3>
+                                    <p className="text-gray-400 mb-8">We've received your inquiry and will get back to you shortly.</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setStatus("idle")}
+                                        className="text-[#f00000] font-bold uppercase tracking-widest text-xs hover:underline"
+                                    >
+                                        Send another message
+                                    </button>
+                                </div>
+                            )}
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-xs font-bold uppercase text-gray-500 mb-2">First Name</label>
-                                    <input type="text" placeholder="John" className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition" />
+                                    <input
+                                        required
+                                        type="text"
+                                        placeholder="John"
+                                        value={formData.firstName}
+                                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                                        className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition"
+                                    />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Last Name</label>
-                                    <input type="text" placeholder="Doe" className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition" />
+                                    <input
+                                        type="text"
+                                        placeholder="Doe"
+                                        value={formData.lastName}
+                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                                        className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition"
+                                    />
                                 </div>
                             </div>
                             <div>
                                 <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Email Address</label>
-                                <input type="email" placeholder="john@example.com" className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition" />
+                                <input
+                                    required
+                                    type="email"
+                                    placeholder="john@example.com"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition"
+                                />
                             </div>
                             <div>
                                 <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Subject</label>
-                                <select className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition text-gray-400">
-                                    <option>Select a service...</option>
+                                <select
+                                    value={formData.subject}
+                                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                                    className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition text-gray-400"
+                                >
+                                    <option>General Inquiry</option>
                                     <option>Smart NFC Cards</option>
                                     <option>Digital Advertising</option>
                                     <option>Custom Solutions</option>
-                                    <option>General Inquiry</option>
                                 </select>
                             </div>
                             <div>
                                 <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Message</label>
-                                <textarea rows={4} placeholder="How can we help you?" className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition resize-none"></textarea>
+                                <textarea
+                                    required
+                                    rows={4}
+                                    placeholder="How can we help you?"
+                                    value={formData.message}
+                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                    className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition resize-none"
+                                ></textarea>
                             </div>
-                            <button className="w-full bg-[#f00000] text-white font-black py-5 rounded-2xl uppercase tracking-widest hover:bg-white hover:text-[#f00000] transition shadow-2xl transform active:scale-95">
-                                Send Message
+                            <button
+                                disabled={status === "loading"}
+                                className="w-full bg-[#f00000] text-white font-black py-5 rounded-2xl uppercase tracking-widest hover:bg-white hover:text-[#f00000] transition shadow-2xl transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                            >
+                                {status === "loading" ? (
+                                    <>
+                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                        Sending...
+                                    </>
+                                ) : "Send Message"}
                             </button>
+                            {status === "error" && (
+                                <p className="text-red-500 text-xs font-bold text-center mt-4">Something went wrong. Please try again.</p>
+                            )}
                         </form>
                     </div>
                 </div>
