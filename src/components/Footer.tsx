@@ -21,36 +21,50 @@ export default function Footer() {
                     </div>
 
                     <div className="md:pl-10">
-                        <h5 className="font-bold mb-6 text-red-200 text-lg">Features</h5>
-                        <ul className="space-y-4 text-base opacity-90">
-                            <li><Link href="#" className="hover:underline">Analytics</Link></li>
-                            <li><Link href="#" className="hover:underline">Collaboration</Link></li>
-                            <li><Link href="#" className="hover:underline">Data Management</Link></li>
-                            <li><Link href="#" className="hover:underline">Security</Link></li>
+                        <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Menu</h5>
+                        <ul className="space-y-3 text-base opacity-90">
+                            <li><Link href="/" className="hover:underline">Home</Link></li>
+                            <li><Link href="/cards" className="hover:underline">Smart Cards</Link></li>
+                            <li><Link href="#" className="hover:underline uppercase text-xs font-black tracking-widest bg-white/20 px-2 py-0.5 rounded">Sculpt Me</Link></li>
+                            <li><Link href="/shop" className="hover:underline">Shop</Link></li>
+                            <li><Link href="/services" className="hover:underline">Services</Link></li>
+                            <li><Link href="/about" className="hover:underline">About</Link></li>
+                            <li><Link href="/contact" className="hover:underline font-bold">Contact Us</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h5 className="font-bold mb-6 text-red-200 text-lg">Castle Crew</h5>
-                        <ul className="space-y-4 text-base opacity-90">
-                            <li><Link href="#" className="hover:underline">About us</Link></li>
-                            <li><Link href="#" className="hover:underline">Blog</Link></li>
-                            <li><Link href="#" className="hover:underline">Careers</Link></li>
-                            <li><Link href="#" className="hover:underline">Contact</Link></li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h5 className="font-bold mb-6 text-red-200 text-lg">Support</h5>
-                        <ul className="space-y-4 text-base opacity-90">
-                            <li><Link href="#" className="hover:underline">Help Center</Link></li>
+                        <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Support</h5>
+                        <ul className="space-y-3 text-base opacity-90">
+                            <li><Link href="/contact" className="hover:underline">Help Center</Link></li>
                             <li><Link href="#" className="hover:underline">Terms of Service</Link></li>
                             <li><Link href="#" className="hover:underline">Privacy Policy</Link></li>
                         </ul>
                     </div>
+
+                    <div>
+                        <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Contact Info</h5>
+                        <ul className="space-y-5 text-base opacity-90">
+                            <li>
+                                <p className="font-bold text-red-200 text-xs uppercase tracking-widest mb-1">Locations</p>
+                                <p>Colombo, Sri Lanka</p>
+                                <p>Kandy, Sri Lanka</p>
+                            </li>
+                            <li>
+                                <p className="font-bold text-red-200 text-xs uppercase tracking-widest mb-1">Contact Numbers</p>
+                                <p>+94 70 700 0006</p>
+                                <p>+94 70 600 0006</p>
+                            </li>
+                            <li>
+                                <p className="font-bold text-red-200 text-xs uppercase tracking-widest mb-1">Emails</p>
+                                <p>info@castlecrew.cc</p>
+                                <p>support@castlecrew.cc</p>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div className="border-t border-red-400/50 pt-8 flex justify-between items-center text-sm text-red-100">
+                <div className="border-t border-red-400/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-red-100">
                     <p>&copy; 2024 Castle Crew.</p>
                     <div className="flex gap-6 font-bold">
                         <Link href="#" className="hover:text-white">X</Link>
