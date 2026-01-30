@@ -57,14 +57,14 @@ export default function MobileMenu({ isOpen, onClose, userAvatar, userRole }: Mo
                 <Link href="/shop" className={getLinkClass("/shop")} onClick={onClose}>
                     Shop
                 </Link>
-                <Link href="/#packaging" className="text-xl font-bold uppercase tracking-wider text-gray-400 hover:text-white transition" onClick={onClose}>
-                    Packaging
+                <Link href="/services" className={getLinkClass("/services")} onClick={onClose}>
+                    Services
                 </Link>
-                <Link href="/#signage" className="text-xl font-bold uppercase tracking-wider text-gray-400 hover:text-white transition" onClick={onClose}>
-                    Signage
+                <Link href="/about" className={getLinkClass("/about")} onClick={onClose}>
+                    About
                 </Link>
-                <Link href="/#merch" className="text-xl font-bold uppercase tracking-wider text-gray-400 hover:text-white transition" onClick={onClose}>
-                    Merch
+                <Link href="/contact" className={getLinkClass("/contact")} onClick={onClose}>
+                    Contact Us
                 </Link>
             </div>
 

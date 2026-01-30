@@ -100,14 +100,14 @@ export default function Navigation() {
                     <Link href="/shop" className={getLinkClass("/shop")}>
                         Shop
                     </Link>
-                    <Link href="/#packaging" className="hover:text-white transition">
-                        Packaging
+                    <Link href="/services" className={getLinkClass("/services")}>
+                        Services
                     </Link>
-                    <Link href="/#signage" className="hover:text-white transition">
-                        Signage
+                    <Link href="/about" className={getLinkClass("/about")}>
+                        About
                     </Link>
-                    <Link href="/#merch" className="hover:text-white transition">
-                        Merch
+                    <Link href="/contact" className={getLinkClass("/contact")}>
+                        Contact Us
                     </Link>
                 </div>
 
