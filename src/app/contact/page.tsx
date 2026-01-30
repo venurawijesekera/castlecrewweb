@@ -7,7 +7,7 @@ export default function ContactPage() {
             <Navigation />
 
             <section className="pt-12 pb-20 px-6">
-                <div className="max-w-[95%] mx-auto flex flex-col lg:flex-row gap-16">
+                <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
                     <div className="lg:w-1/2">
                         <h1 className="text-6xl md:text-8xl font-black uppercase mb-8 tracking-tighter leading-none">
                             Get In <span className="text-[#f00000]">Touch</span>
