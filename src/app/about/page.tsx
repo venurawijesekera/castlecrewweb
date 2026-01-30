@@ -6,11 +6,11 @@ export default function AboutPage() {
         <main className="bg-[#050505] min-h-screen text-white">
             <Navigation />
 
-            <section className="pt-32 pb-20 px-6">
+            <section className="pt-12 pb-20 px-6">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
                     <div className="flex-1">
                         <h1 className="text-6xl md:text-8xl font-black uppercase mb-8 tracking-tighter leading-none">
-                            About <br /><span className="text-[#f00000]">Castle Crew</span>
+                            About <span className="text-[#f00000]">Castle Crew</span>
                         </h1>
                         <p className="text-gray-400 text-lg leading-relaxed mb-6">
                             Founded on the principle of innovation, Castle Crew is a boutique branding agency specializing in the intersection of physical products and digital identities.

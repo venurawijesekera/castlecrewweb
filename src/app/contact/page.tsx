@@ -6,11 +6,11 @@ export default function ContactPage() {
         <main className="bg-[#050505] min-h-screen text-white">
             <Navigation />
 
-            <section className="pt-32 pb-20 px-6">
+            <section className="pt-12 pb-20 px-6">
                 <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
                     <div className="lg:w-1/2">
                         <h1 className="text-6xl md:text-8xl font-black uppercase mb-8 tracking-tighter leading-none">
-                            Get In <br /><span className="text-[#f00000]">Touch</span>
+                            Get In <span className="text-[#f00000]">Touch</span>
                         </h1>
                         <p className="text-gray-400 text-lg mb-12">
                             Have a project in mind or want to learn more about our enterprise solutions? Drop us a message or visit our offices.

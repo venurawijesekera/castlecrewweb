@@ -64,10 +64,10 @@ export default function ServicesPage() {
         <main className="bg-[#050505] min-h-screen text-white">
             <Navigation />
 
-            <section className="pt-32 pb-16 px-6">
+            <section className="pt-12 pb-16 px-6">
                 <div className="max-w-7xl mx-auto">
                     <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-4">
-                        Our <br /><span className="text-[#f00000]">Services</span>
+                        Our <span className="text-[#f00000]">Services</span>
                     </h1>
                     <p className="text-gray-400 max-w-xl text-lg font-medium">
                         Premium branding solutions tailored for the modern era. From digital identity to physical presence.
