@@ -47,22 +47,16 @@ export default function ServicesPage() {
             className: "md:col-span-1 md:row-span-1"
         },
         {
-            title: "Custom Stickers",
-            description: "Industrial-grade vinyl stickers with custom die-cut shapes and premium finishes.",
-            image: "/assets/img/sticker.png",
-            className: "md:col-span-1 md:row-span-1"
-        },
-        {
-            title: "Printing Services",
-            description: "High-end industrial printing for all your corporate and creative needs.",
-            image: "/assets/img/coaster.png",
-            className: "md:col-span-2 md:row-span-1"
-        },
-        {
             title: "Kiosk Displays",
             description: "Interactive digital kiosks for malls, showrooms, and public spaces.",
             image: "/assets/img/kiosk.png",
             className: "md:col-span-1 md:row-span-2"
+        },
+        {
+            title: "Printing Services",
+            description: "High-end industrial printing for all your corporate and creative needs.",
+            image: "/assets/img/sticker.png",
+            className: "md:col-span-2 md:row-span-1"
         }
     ];
 
