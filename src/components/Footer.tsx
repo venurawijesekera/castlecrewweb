@@ -11,8 +11,8 @@ export default function Footer() {
             </div>
 
             <div className="w-full relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20 text-white">
-                    <div>
+                <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-4 mb-20 text-white">
+                    <div className="lg:w-1/4">
                         <h4 className="font-bold text-3xl mb-8 leading-tight">ELEVATE YOUR BRAND<br />EXPERIENCE WITH<br />CASTLE CREW
                         </h4>
                         <Link href="/services"
@@ -20,16 +20,16 @@ export default function Footer() {
                             SERVICES</Link>
                     </div>
 
-                    <div className="md:col-span-1">
+                    <div className="lg:w-1/3">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Menu</h5>
                         <div className="grid grid-cols-2 gap-x-8">
-                            <ul className="space-y-3 text-base opacity-90 text-nowrap">
+                            <ul className="space-y-3 text-base opacity-90">
                                 <li><Link href="/" className="hover:underline">Home</Link></li>
                                 <li><Link href="/cards" className="hover:underline">Smart Cards</Link></li>
                                 <li><Link href="/sculptme" className="hover:underline">Sculpt Me</Link></li>
                                 <li><Link href="/shop" className="hover:underline">Shop</Link></li>
                             </ul>
-                            <ul className="space-y-3 text-base opacity-90 text-nowrap">
+                            <ul className="space-y-3 text-base opacity-90">
                                 <li><Link href="/services" className="hover:underline">Services</Link></li>
                                 <li><Link href="/about" className="hover:underline">About</Link></li>
                                 <li><Link href="/contact" className="hover:underline font-bold">Contact Us</Link></li>
@@ -37,7 +37,7 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="lg:w-1/6">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Support</h5>
                         <ul className="space-y-3 text-base opacity-90">
                             <li><Link href="/contact" className="hover:underline">Help Center</Link></li>
@@ -46,7 +46,7 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    <div>
+                    <div className="lg:w-1/4">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Contact Info</h5>
                         <ul className="space-y-5 text-base opacity-90">
                             <li>
