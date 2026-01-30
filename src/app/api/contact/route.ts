@@ -9,16 +9,18 @@ export const runtime = 'edge';
 export async function POST(request: NextRequest) {
     try {
         const body: any = await request.json();
-        const { firstName, lastName, email, subject, message } = body;
+        const { firstName, lastName, email, phone, subject, message } = body;
 
         // Validation
-        if (!firstName || !email || !message) {
+        if (!firstName || !email || !phone || !message) {
             return NextResponse.json({ error: "Required fields missing" }, { status: 400 });
         }
 
         console.log("Contact Form Submission Received:", {
             to: "info@castlecrew.cc",
+            cc: "info.castlecrewlk@gmail.com",
             from: `${firstName} ${lastName} <${email}>`,
+            phone: phone,
             subject: `Website Inquiry: ${subject}`,
             body: message
         });

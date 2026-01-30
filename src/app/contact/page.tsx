@@ -10,6 +10,7 @@ export default function ContactPage() {
         firstName: "",
         lastName: "",
         email: "",
+        phone: "",
         subject: "General Inquiry",
         message: ""
     });
@@ -27,7 +28,7 @@ export default function ContactPage() {
 
             if (res.ok) {
                 setStatus("success");
-                setFormData({ firstName: "", lastName: "", email: "", subject: "General Inquiry", message: "" });
+                setFormData({ firstName: "", lastName: "", email: "", phone: "", subject: "General Inquiry", message: "" });
             } else {
                 setStatus("error");
             }
@@ -136,6 +137,17 @@ export default function ContactPage() {
                                     placeholder="john@example.com"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Contact Number</label>
+                                <input
+                                    required
+                                    type="tel"
+                                    placeholder="+94 7X XXX XXXX"
+                                    value={formData.phone}
+                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                     className="w-full bg-[#050505] border border-gray-800 rounded-xl px-5 py-4 focus:border-[#f00000] outline-none transition"
                                 />
                             </div>
