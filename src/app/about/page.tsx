@@ -7,7 +7,7 @@ export default function AboutPage() {
             <Navigation />
 
             <section className="pt-12 pb-20 px-6">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+                <div className="max-w-[95%] mx-auto flex flex-col md:flex-row items-center gap-16">
                     <div className="flex-1">
                         <h1 className="text-6xl md:text-8xl font-black uppercase mb-8 tracking-tighter leading-none">
                             About <span className="text-[#f00000]">Castle Crew</span>
@@ -27,7 +27,7 @@ export default function AboutPage() {
             </section>
 
             <section className="py-20 bg-[#f00000] text-white">
-                <div className="max-w-7xl mx-auto px-6 text-center">
+                <div className="max-w-[95%] mx-auto px-6 text-center">
                     <h2 className="text-4xl md:text-6xl font-black uppercase mb-12">Driven by Excellence</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                         <div>

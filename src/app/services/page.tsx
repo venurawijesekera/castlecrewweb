@@ -65,7 +65,7 @@ export default function ServicesPage() {
             <Navigation />
 
             <section className="pt-12 pb-16 px-6">
-                <div className="max-w-7xl mx-auto">
+                <div className="max-w-[95%] mx-auto">
                     <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-4">
                         Our <span className="text-[#f00000]">Services</span>
                     </h1>
@@ -76,7 +76,7 @@ export default function ServicesPage() {
             </section>
 
             <section className="pb-32 px-4 md:px-6">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+                <div className="max-w-[95%] mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[300px]">
                     {services.map((service, index) => (
                         <div
                             key={index}
