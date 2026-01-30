@@ -76,32 +76,32 @@ export default function ServicesPage() {
             </section>
 
             <section className="pb-32 px-4 md:px-6">
-                <div className="max-w-[95%] mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[300px]">
+                <div className="max-w-[95%] mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[400px]">
                     {services.map((service, index) => (
                         <div
                             key={index}
-                            className={`group relative bg-[#121212] rounded-[2.5rem] overflow-hidden border border-gray-800 p-8 flex flex-col justify-between hover:border-gray-700 hover:shadow-2xl hover:shadow-[#f00000]/5 transition-all duration-500 ${service.className}`}
+                            className={`group relative bg-[#121212] rounded-[2.5rem] overflow-hidden border border-gray-800 flex flex-col justify-end hover:border-gray-700 hover:shadow-2xl hover:shadow-[#f00000]/10 transition-all duration-500 ${service.className}`}
                         >
-                            <div className="relative z-10 max-w-[200px]">
-                                <h3 className="text-2xl font-bold mb-3 tracking-tight text-white">{service.title}</h3>
-                                <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                            {/* Background Image */}
+                            <div className="absolute inset-0 z-0">
+                                <img
+                                    src={service.image}
+                                    className="w-full h-full object-cover brightness-[0.4] group-hover:brightness-[0.6] group-hover:scale-110 transition-all duration-700"
+                                    alt={service.title}
+                                />
+                                {/* Gradient Overlay for Text Readability */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                            </div>
+
+                            <div className="relative z-10 p-10">
+                                <h3 className="text-3xl font-black mb-3 tracking-tight text-white drop-shadow-lg">{service.title}</h3>
+                                <p className="text-gray-300 text-sm leading-relaxed mb-6 font-medium drop-shadow-md">
                                     {service.description}
                                 </p>
-                                <Link href="/contact" className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-2 group-hover:text-[#f00000] transition-colors text-gray-500">
+                                <Link href="/contact" className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-2 text-[#f00000] drop-shadow-lg group-hover:gap-4 transition-all">
                                     Explore category <i className="bi bi-arrow-right"></i>
                                 </Link>
                             </div>
-
-                            <div className="absolute -right-10 -bottom-10 w-2/3 h-2/3 group-hover:scale-110 transition-transform duration-700 ease-out">
-                                <img
-                                    src={service.image}
-                                    className="w-full h-full object-contain filter drop-shadow-2xl brightness-90 group-hover:brightness-110 transition-all"
-                                    alt={service.title}
-                                />
-                            </div>
-
-                            {/* Decorative background element */}
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-gray-800/20 rounded-full -mr-16 -mt-16 opacity-50 blur-2xl"></div>
                         </div>
                     ))}
                 </div>
