@@ -53,6 +53,12 @@ export default function ServicesPage() {
             className: "md:col-span-1 md:row-span-2"
         },
         {
+            title: "Custom Stickers",
+            description: "High-quality custom vinyl stickers and decals for your brand.",
+            image: "/assets/img/sticker.png",
+            className: "md:col-span-1 md:row-span-1"
+        },
+        {
             title: "Printing Services",
             description: "High-end industrial printing for all your corporate and creative needs.",
             image: "/assets/img/sticker.png",
@@ -86,16 +92,16 @@ export default function ServicesPage() {
                             <div className="absolute inset-0 z-0">
                                 <img
                                     src={service.image}
-                                    className="w-full h-full object-cover brightness-[0.4] group-hover:brightness-[0.6] group-hover:scale-110 transition-all duration-700"
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 opacity-80 group-hover:opacity-100"
                                     alt={service.title}
                                 />
-                                {/* Gradient Overlay for Text Readability */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                                {/* Targeted Bottom Gradient for Text Legibility */}
+                                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
                             </div>
 
-                            <div className="relative z-10 p-10">
-                                <h3 className="text-3xl font-black mb-3 tracking-tight text-white drop-shadow-lg">{service.title}</h3>
-                                <p className="text-gray-300 text-sm leading-relaxed mb-6 font-medium drop-shadow-md">
+                            <div className="relative z-10 p-8 md:p-10">
+                                <h3 className="text-3xl font-black mb-2 tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] leading-tight">{service.title}</h3>
+                                <p className="text-gray-300 text-sm leading-relaxed mb-6 font-medium drop-shadow-[0_2px_5px_rgba(0,0,0,0.8)]">
                                     {service.description}
                                 </p>
                                 <Link href="/contact" className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-2 text-[#f00000] drop-shadow-lg group-hover:gap-4 transition-all">
