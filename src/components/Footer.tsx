@@ -22,7 +22,7 @@ export default function Footer() {
 
                     <div className="lg:w-1/3">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Menu</h5>
-                        <div className="grid grid-cols-2 gap-x-8">
+                        <div className="flex gap-x-8">
                             <ul className="space-y-3 text-base opacity-90">
                                 <li><Link href="/" className="hover:underline">Home</Link></li>
                                 <li><Link href="/cards" className="hover:underline">Smart Cards</Link></li>
