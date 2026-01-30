@@ -221,6 +221,51 @@ export default function Home() {
 
           <div
             className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[300px] mb-4">
+            <img src="/assets/img/Lightbox.png"
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+            </div>
+            <div className="absolute bottom-6 left-6 text-white text-xl font-bold tracking-tight">
+              Signage
+            </div>
+            <div
+              className="absolute bottom-6 right-6 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+              <i className="bi bi-arrow-up-right"></i>
+            </div>
+          </div>
+
+          <div
+            className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[380px] mb-4">
+            <img src="/assets/img/hoodie.png"
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+            </div>
+            <div className="absolute bottom-6 left-6 text-white text-xl font-bold tracking-tight">
+              Brand Merch
+            </div>
+            <div
+              className="absolute bottom-6 right-6 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+              <i className="bi bi-arrow-up-right"></i>
+            </div>
+          </div>
+
+          <div
+            className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[450px] mb-4">
+            <img src="/assets/img/box.png"
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+            </div>
+            <div className="absolute bottom-6 left-6 text-white text-xl font-bold tracking-tight">
+              Packaging
+            </div>
+            <div
+              className="absolute bottom-6 right-6 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center transition transform group-hover:scale-110 shadow-lg">
+              <i className="bi bi-arrow-up-right"></i>
+            </div>
+          </div>
+
+          <div
+            className="group relative break-inside-avoid rounded-[2rem] overflow-hidden bg-gray-900 cursor-pointer h-[300px] mb-4">
             <img src="/assets/img/mug.png"
               className="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
@@ -282,6 +327,6 @@ export default function Home() {
         </div>
       </section>
       <Footer />
-    </main>
+    </main >
   );
 }
