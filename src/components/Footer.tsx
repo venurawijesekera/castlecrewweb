@@ -13,14 +13,14 @@ export default function Footer() {
             <div className="w-full relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20 text-white">
                     <div>
-                        <h4 className="font-bold text-3xl mb-8 leading-tight">READY TO TAKE<br />CONTROL OF YOUR<br />NETWORKING?
+                        <h4 className="font-bold text-3xl mb-8 leading-tight">ELEVATE YOUR BRAND<br />EXPERIENCE WITH<br />CASTLE CREW
                         </h4>
-                        <Link href="/register"
-                            className="bg-white text-[#f00000] px-8 py-4 rounded-full text-sm font-bold inline-block hover:bg-black hover:text-white transition shadow-lg">GET
-                            STARTED</Link>
+                        <Link href="/services"
+                            className="bg-white text-[#f00000] px-8 py-4 rounded-full text-sm font-bold inline-block hover:bg-black hover:text-white transition shadow-lg uppercase">OUR
+                            SERVICES</Link>
                     </div>
 
-                    <div className="md:pl-10 md:col-span-1">
+                    <div className="md:col-span-1">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Menu</h5>
                         <div className="grid grid-cols-2 gap-x-8">
                             <ul className="space-y-3 text-base opacity-90 text-nowrap">
