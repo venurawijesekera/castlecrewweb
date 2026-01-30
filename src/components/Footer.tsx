@@ -20,7 +20,7 @@ export default function Footer() {
                             SERVICES</Link>
                     </div>
 
-                    <div className="lg:col-span-3 lg:ml-auto">
+                    <div className="lg:col-span-3">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Menu</h5>
                         <div className="flex gap-x-8">
                             <ul className="space-y-3 text-base opacity-90">
@@ -37,7 +37,7 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    <div className="lg:col-span-2 lg:ml-auto">
+                    <div className="lg:col-span-2">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Support</h5>
                         <ul className="space-y-3 text-base opacity-90">
                             <li><Link href="/contact" className="hover:underline">Help Center</Link></li>
@@ -46,7 +46,7 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    <div className="lg:col-span-3 lg:ml-auto">
+                    <div className="lg:col-span-3">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Contact Info</h5>
                         <ul className="space-y-5 text-base opacity-90">
                             <li>
