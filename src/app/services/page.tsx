@@ -1,55 +1,107 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Link from "next/link";
 
 export default function ServicesPage() {
     const services = [
         {
-            title: "Digital Business Cards",
-            description: "Go paperless with our premium NFC-enabled smart cards. Instant sharing, real-time updates, and powerful analytics.",
-            icon: "bi-card-heading"
+            title: "Brand Starter Kit",
+            description: "Everything you need to kickstart your professional identity in one premium bundle.",
+            image: "/assets/img/banner.png",
+            className: "md:col-span-2 md:row-span-2"
         },
         {
-            title: "Custom 3D Minis",
-            description: "Transform your photos into high-quality SLA 3D printed miniatures with our Sculpt Me service.",
-            icon: "bi-person-bounding-box"
+            title: "Smart NFC Cards",
+            description: "The next generation of networking. Share your details with a single tap.",
+            image: "/assets/img/nfc-cards01.jpg",
+            className: "md:col-span-1 md:row-span-1"
         },
         {
-            title: "Brand Strategy",
-            description: "Scale your brand with our custom design and identity services tailored for modern businesses.",
-            icon: "bi-rocket-takeoff"
+            title: "Custom Packaging",
+            description: "Bespoke packaging solutions that reflect your brand's quality and attention to detail.",
+            image: "/assets/img/box.png",
+            className: "md:col-span-1 md:row-span-1"
         },
         {
-            title: "Enterprise Solutions",
-            description: "Scalable smart card management for teams and large organizations with central administration.",
-            icon: "bi-buildings"
+            title: "LightUp Signs",
+            description: "High-impact illuminated signage to make your business stand out day or night.",
+            image: "/assets/img/Lightbox.png",
+            className: "md:col-span-1 md:row-span-2"
+        },
+        {
+            title: "Custom Apparel",
+            description: "Premium quality branded clothing designed for comfort and style.",
+            image: "/assets/img/hoodie.png",
+            className: "md:col-span-1 md:row-span-1"
+        },
+        {
+            title: "Advertising Displays",
+            description: "Physical advertising structures built to capture attention in any environment.",
+            image: "/assets/img/templates.png",
+            className: "md:col-span-1 md:row-span-1"
+        },
+        {
+            title: "Digital Displays",
+            description: "Cloud-managed smart screens for dynamic real-time content delivery.",
+            image: "/assets/img/analytics.png",
+            className: "md:col-span-1 md:row-span-1"
+        },
+        {
+            title: "Kiosk Displays",
+            description: "Interactive digital kiosks for malls, showrooms, and public spaces.",
+            image: "/assets/img/kiosk.png",
+            className: "md:col-span-2 md:row-span-1"
+        },
+        {
+            title: "Printing Services",
+            description: "High-end industrial printing for all your corporate and creative needs.",
+            image: "/assets/img/sticker.png",
+            className: "md:col-span-1 md:row-span-1"
         }
     ];
 
     return (
-        <main className="bg-[#050505] min-h-screen text-white">
+        <main className="bg-[#f8f9fa] min-h-screen text-[#050505]">
             <Navigation />
 
-            <section className="pt-32 pb-20 px-6">
-                <div className="max-w-7xl mx-auto text-center">
-                    <h1 className="text-6xl md:text-8xl font-black uppercase mb-6 tracking-tighter">
-                        Our <span className="text-[#f00000]">Services</span>
+            <section className="pt-32 pb-16 px-6">
+                <div className="max-w-7xl mx-auto">
+                    <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-4">
+                        Our <br /><span className="text-[#f00000]">Services</span>
                     </h1>
-                    <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                        We provide cutting-edge solutions for modern networking and personal branding.
+                    <p className="text-gray-500 max-w-xl text-lg font-medium">
+                        Premium branding solutions tailored for the modern era. From digital identity to physical presence.
                     </p>
                 </div>
             </section>
 
-            <section className="pb-32 px-6">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            <section className="pb-32 px-4 md:px-6">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
                     {services.map((service, index) => (
-                        <div key={index} className="bg-[#121212] border border-gray-800 p-10 rounded-[2rem] hover:border-[#f00000] transition group">
-                            <i className={`bi ${service.icon} text-5xl text-[#f00000] mb-6 block`}></i>
-                            <h3 className="text-3xl font-bold mb-4 uppercase">{service.title}</h3>
-                            <p className="text-gray-400 leading-relaxed mb-6 italic">
-                                "{service.description}"
-                            </p>
-                            <div className="w-12 h-1 bg-gray-800 group-hover:bg-[#f00000] transition"></div>
+                        <div
+                            key={index}
+                            className={`group relative bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-100 p-8 flex flex-col justify-between hover:shadow-xl transition-all duration-500 ${service.className}`}
+                        >
+                            <div className="relative z-10 max-w-[200px]">
+                                <h3 className="text-2xl font-bold mb-3 tracking-tight">{service.title}</h3>
+                                <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                                    {service.description}
+                                </p>
+                                <Link href="/contact" className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-2 group-hover:text-[#f00000] transition-colors">
+                                    Explore category <i className="bi bi-arrow-right"></i>
+                                </Link>
+                            </div>
+
+                            <div className="absolute -right-10 -bottom-10 w-2/3 h-2/3 group-hover:scale-110 transition-transform duration-700 ease-out">
+                                <img
+                                    src={service.image}
+                                    className="w-full h-full object-contain filter drop-shadow-2xl"
+                                    alt={service.title}
+                                />
+                            </div>
+
+                            {/* Decorative background element */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-full -mr-16 -mt-16 opacity-50"></div>
                         </div>
                     ))}
                 </div>
