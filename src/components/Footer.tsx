@@ -46,7 +46,7 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    <div className="lg:col-span-3">
+                    <div className="lg:col-span-3 lg:ml-auto">
                         <h5 className="font-bold mb-6 text-red-200 text-lg uppercase tracking-wider">Contact Info</h5>
                         <ul className="space-y-5 text-base opacity-90">
                             <li>
