@@ -322,11 +322,8 @@ export default function SmartCardsPage() {
                         </div>
                     </div>
 
-                    <div className="bg-[#f00000] p-8 rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition relative overflow-hidden group">
-                        <div className="text-center">
-                            <img src="/assets/img/google-wallet.png" alt="Google Wallet" className="h-24 mx-auto mb-4 object-contain" />
-                            <span className="font-bold text-2xl">Google Wallet</span>
-                        </div>
+                    <div className="bg-[#f00000] rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition relative overflow-hidden group">
+                        <img src="/assets/img/google-wallet.png" alt="Google Wallet" className="w-full h-full object-contain p-6" />
                     </div>
 
                     <div className="bg-[#121212] p-8 rounded-2xl flex flex-col justify-between min-h-[18rem]">
