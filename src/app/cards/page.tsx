@@ -315,15 +315,25 @@ export default function SmartCardsPage() {
                         <p className="text-gray-400 text-sm">Users prefer adding our cards to their mobile wallets.</p>
                     </div>
 
-                    <div className="flex items-center justify-center min-h-[18rem] transition relative overflow-hidden group rounded-2xl">
+                    <div className="bg-[#121212] flex flex-col items-center justify-center min-h-[18rem] transition relative overflow-hidden group rounded-2xl border border-gray-800">
                         <div className="absolute top-4 right-4 bg-white text-[#f00000] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md z-20">
                             Coming Soon
                         </div>
-                        <img src="/assets/img/Apple_Wallet_Icon.svg" alt="Apple Wallet" className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" />
+                        <div className="relative flex flex-col items-center justify-center transition-all duration-500 group-hover:scale-150">
+                            <img src="/assets/img/Apple_Wallet_Icon.svg" alt="Apple Wallet" className="h-28 w-auto mb-4 object-contain transition-all duration-500 group-hover:mb-0" />
+                        </div>
+                        <span className="font-bold text-xl text-white transition-opacity duration-300 group-hover:opacity-0 absolute bottom-12">
+                            Apple Wallet
+                        </span>
                     </div>
 
-                    <div className="flex items-center justify-center min-h-[18rem] transition relative overflow-hidden group rounded-2xl">
-                        <img src="/assets/img/google_Wallet_Icon.svg" alt="Google Wallet" className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" />
+                    <div className="bg-[#121212] flex flex-col items-center justify-center min-h-[18rem] transition relative overflow-hidden group rounded-2xl border border-gray-800">
+                        <div className="relative flex flex-col items-center justify-center transition-all duration-500 group-hover:scale-150">
+                            <img src="/assets/img/google_Wallet_Icon.svg" alt="Google Wallet" className="h-28 w-auto mb-4 object-contain transition-all duration-500 group-hover:mb-0" />
+                        </div>
+                        <span className="font-bold text-xl text-white transition-opacity duration-300 group-hover:opacity-0 absolute bottom-12">
+                            Google Wallet
+                        </span>
                     </div>
 
                     <div className="bg-[#121212] p-8 rounded-2xl flex flex-col justify-between min-h-[18rem]">
