@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
                 'Authorization': `Bearer ${env.RESEND_API_KEY}`
             },
             body: JSON.stringify({
-                from: 'Castle Crew <onboarding@resend.dev>', // Keep as onboarding for now unless domain is verified
+                from: 'Castle Crew <inquiry@castlecrew.cc>',
                 to: ['info@castlecrew.cc', 'info.castlecrewlk@gmail.com'],
                 reply_to: email,
                 subject: `Website Inquiry: ${subject}`,
@@ -48,11 +48,11 @@ export async function POST(request: NextRequest) {
             })
         });
 
-        const resData = await res.json();
+        const resData: any = await res.json();
 
         if (!res.ok) {
             console.error("Resend API Error:", resData);
-            return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
+            return NextResponse.json({ error: resData.message || "Failed to send email" }, { status: 500 });
         }
 
         return NextResponse.json({
@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (e: any) {
-        return NextResponse.json({ error: e.message }, { status: 500 });
+        console.error("Contact API Catch:", e);
+        return NextResponse.json({ error: e.message || "An unexpected error occurred" }, { status: 500 });
     }
 }

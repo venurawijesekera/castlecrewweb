@@ -15,9 +15,12 @@ export default function ContactPage() {
         message: ""
     });
 
+    const [errorMsg, setErrorMsg] = useState("");
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus("loading");
+        setErrorMsg("");
 
         try {
             const res = await fetch("/api/contact", {
@@ -26,14 +29,18 @@ export default function ContactPage() {
                 body: JSON.stringify(formData)
             });
 
+            const data: any = await res.json();
+
             if (res.ok) {
                 setStatus("success");
                 setFormData({ firstName: "", lastName: "", email: "", phone: "", subject: "General Inquiry", message: "" });
             } else {
                 setStatus("error");
+                setErrorMsg(data.error || "Something went wrong. Please try again.");
             }
         } catch (err) {
             setStatus("error");
+            setErrorMsg("Connection error. Please try again.");
         }
     };
 
@@ -187,7 +194,7 @@ export default function ContactPage() {
                                 ) : "Send Message"}
                             </button>
                             {status === "error" && (
-                                <p className="text-red-500 text-xs font-bold text-center mt-4">Something went wrong. Please try again.</p>
+                                <p className="text-red-500 text-xs font-bold text-center mt-4">{errorMsg}</p>
                             )}
                         </form>
                     </div>
