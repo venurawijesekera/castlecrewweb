@@ -315,12 +315,12 @@ export default function SmartCardsPage() {
                         <p className="text-gray-400 text-sm">Users prefer adding our cards to their mobile wallets.</p>
                     </div>
 
-                    <div className="flex items-center justify-center min-h-[18rem] transition relative overflow-hidden group">
-                        <img src="/assets/img/Apple_Wallet_Icon.svg" alt="Apple Wallet" className="h-40 w-auto mx-auto object-contain transition-transform duration-500 group-hover:scale-110" />
+                    <div className="flex items-center justify-center min-h-[18rem] transition relative overflow-hidden group rounded-2xl">
+                        <img src="/assets/img/Apple_Wallet_Icon.svg" alt="Apple Wallet" className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" />
                     </div>
 
-                    <div className="flex items-center justify-center min-h-[18rem] transition relative overflow-hidden group">
-                        <img src="/assets/img/google-wallet.png" alt="Google Wallet" className="h-40 w-auto mx-auto object-contain transition-transform duration-500 group-hover:scale-110" />
+                    <div className="flex items-center justify-center min-h-[18rem] transition relative overflow-hidden group rounded-2xl">
+                        <img src="/assets/img/google_Wallet_Icon.svg" alt="Google Wallet" className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" />
                     </div>
 
                     <div className="bg-[#121212] p-8 rounded-2xl flex flex-col justify-between min-h-[18rem]">

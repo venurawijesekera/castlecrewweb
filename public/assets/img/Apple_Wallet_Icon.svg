@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 750 563.15">
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 750 563.15">
   <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
   <defs>
     <style>
@@ -8,48 +8,48 @@
       }
 
       .st1 {
-        fill: url(#linear-gradient1);
+        fill-opacity: .32;
       }
 
       .st2 {
-        fill: none;
+        fill-opacity: .31;
       }
 
       .st3 {
-        fill: #d9d6cc;
+        fill: url(#linear-gradient1);
       }
 
       .st4 {
-        clip-path: url(#clippath-1);
+        fill: none;
       }
 
       .st5 {
-        clip-path: url(#clippath-3);
+        fill: #d9d6cc;
       }
 
       .st6 {
+        clip-path: url(#clippath-1);
+      }
+
+      .st7 {
         fill: #f26d5f;
         fill-opacity: .3;
       }
 
-      .st7 {
-        fill: #fcad00;
-      }
-
       .st8 {
-        fill-opacity: .32;
+        clip-path: url(#clippath-3);
       }
 
       .st9 {
-        fill: #f16d5e;
+        fill: #fcad00;
       }
 
       .st10 {
-        clip-path: url(#clippath-2);
+        fill: #f16d5e;
       }
 
       .st11 {
-        fill-opacity: .31;
+        clip-path: url(#clippath-2);
       }
 
       .st12 {
@@ -65,22 +65,22 @@
       }
     </style>
     <clipPath id="clippath">
-      <path class="st2" d="M83.1,31.58c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z"/>
+      <path class="st4" d="M83.1,31.58c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z"/>
     </clipPath>
     <clipPath id="clippath-1">
-      <path class="st2" d="M83.1,94.32c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z"/>
+      <path class="st4" d="M83.1,94.32c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z"/>
     </clipPath>
     <clipPath id="clippath-2">
-      <path class="st2" d="M83.1,157.06c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z"/>
+      <path class="st4" d="M83.1,157.06c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z"/>
     </clipPath>
     <clipPath id="clippath-3">
-      <path class="st2" d="M83.1,219.8c-39.97,0-51.88,23.96-51.88,53.71v7.61l176.41.33c47.13.09,66.43,19.05,86.07,45.58,5,6.76,11.09,15.91,17.03,21.86,17.74,17.76,41.01,26.63,64.27,26.63s46.53-8.87,64.27-26.63c5.94-5.95,12.03-15.1,17.03-21.86,19.64-26.53,38.94-45.49,86.07-45.58l176.41-.33v-7.61c0-29.76-11.9-53.71-51.88-53.71H83.1Z"/>
+      <path class="st4" d="M83.1,219.8c-39.97,0-51.88,23.96-51.88,53.71v7.61l176.41.33c47.13.09,66.43,19.05,86.07,45.58,5,6.76,11.09,15.91,17.03,21.86,17.74,17.76,41.01,26.63,64.27,26.63s46.53-8.87,64.27-26.63c5.94-5.95,12.03-15.1,17.03-21.86,19.64-26.53,38.94-45.49,86.07-45.58l176.41-.33v-7.61c0-29.76-11.9-53.71-51.88-53.71H83.1Z"/>
     </clipPath>
-    <linearGradient id="linear-gradient" x1="7.18" y1="545.39" x2="7.18" y2="551.7" gradientTransform="translate(-11.51 2342.44) scale(3.78 -3.78)" gradientUnits="userSpaceOnUse">
+    <linearGradient id="linear-gradient" x1="63.81" y1="194.27" x2="63.81" y2="187.96" gradientTransform="translate(-225.57 -453.48) scale(3.78)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#cbc9be"/>
       <stop offset="1" stop-color="#c8c5bb" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="linear-gradient1" x1="7.18" y1="545.39" x2="7.18" y2="551.7" gradientTransform="translate(707.27 2342.44) scale(3.78 -3.78)" gradientUnits="userSpaceOnUse">
+    <linearGradient id="linear-gradient1" x1="63.8" y1="194.27" x2="63.8" y2="187.96" gradientTransform="translate(493.21 -453.48) scale(3.78)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#cbc9be"/>
       <stop offset="1" stop-color="#c8c5bb" stop-opacity="0"/>
     </linearGradient>
@@ -88,25 +88,25 @@
   <g id="svg5668" inkscape:version="1.2 (dc2aedaf03, 2022-05-15)" sodipodi:docname="applewallet.svg">
     <sodipodi:namedview id="base" bordercolor="#666666" borderopacity="1.0" fit-margin-bottom="0" fit-margin-left="0" fit-margin-right="0" fit-margin-top="0" inkscape:current-layer="g4145" inkscape:cx="-135.71429" inkscape:cy="572.85714" inkscape:deskcolor="#d1d1d1" inkscape:document-units="mm" inkscape:guide-bbox="true" inkscape:object-paths="true" inkscape:pagecheckerboard="true" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:showpageshadow="2" inkscape:snap-object-midpoints="true" inkscape:snap-smooth-nodes="true" inkscape:window-height="1010" inkscape:window-maximized="1" inkscape:window-width="1620" inkscape:window-x="-6" inkscape:window-y="-6" inkscape:zoom="0.35" pagecolor="#ffffff" showgrid="false" showguides="true" units="px"/>
     <g id="g4145">
-      <path id="path4095" class="st3" d="M77.02,0C26.52,0,0,30.82,0,77.02v409.11C0,532.34,26.52,563.15,77.02,563.15h595.95c50.5,0,77.02-30.82,77.02-77.02V77.02C750,30.82,723.48,0,672.98,0H77.02Z" inkscape:connector-curvature="0"/>
-      <path id="rect3638" class="st9" d="M83.1,31.58c-39.97,0-51.88,23.96-51.88,53.71v195.83l176.41.33c47.13.09,66.43,19.05,86.07,45.58,5,6.76,11.09,15.91,17.03,21.86,17.74,17.76,41.01,26.63,64.27,26.63,23.27,0,46.53-8.87,64.27-26.63,5.94-5.95,12.03-15.1,17.03-21.86,19.64-26.53,38.94-45.49,86.07-45.58l176.41-.33V85.29c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscssssssscsss"/>
-      <path id="path3676" class="st14" d="M83.1,31.58c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
+      <path id="path4095" class="st5" d="M77.02,0C26.52,0,0,30.82,0,77.02v409.11c0,46.21,26.52,77.02,77.02,77.02h595.95c50.5,0,77.02-30.82,77.02-77.02V77.02C750,30.82,723.48,0,672.98,0H77.02Z" inkscape:connector-curvature="0"/>
+      <path id="rect3638" class="st10" d="M83.1,31.58c-39.97,0-51.88,23.96-51.88,53.71v195.83l176.41.33c47.13.09,66.43,19.05,86.07,45.58,5,6.76,11.09,15.91,17.03,21.86,17.74,17.76,41.01,26.63,64.27,26.63s46.53-8.87,64.27-26.63c5.94-5.95,12.03-15.1,17.03-21.86,19.64-26.53,38.94-45.49,86.07-45.58l176.41-.33V85.29c0-29.76-11.9-53.71-51.88-53.71,0,0-583.8,0-583.8,0Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscssssssscsss"/>
+      <path id="path3676" class="st14" d="M83.1,31.58c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71,0,0-583.79,0-583.79,0Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
       <g class="st13">
-        <path id="path3685" class="st8" d="M83.1,94.32c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
+        <path id="path3685" class="st1" d="M83.1,94.32c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
       </g>
-      <path id="path3833" class="st7" d="M83.1,94.32c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
-      <g class="st4">
-        <path id="path3835" class="st11" d="M83.1,157.06c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
+      <path id="path3833" class="st9" d="M83.1,94.32c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
+      <g class="st6">
+        <path id="path3835" class="st2" d="M83.1,157.06c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
       </g>
       <path id="path3837" class="st0" d="M83.1,157.06c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
-      <g class="st10">
-        <path id="path3839" class="st11" d="M83.1,219.8c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
+      <g class="st11">
+        <path id="path3839" class="st2" d="M83.1,219.8c-39.97,0-51.88,23.96-51.88,53.71v62.74c0-29.76,11.9-53.71,51.88-53.71h583.79c39.97,0,51.88,23.96,51.88,53.71v-62.74c0-29.76-11.9-53.71-51.88-53.71H83.1Z" inkscape:connector-curvature="0" sodipodi:nodetypes="sscsscsss"/>
       </g>
-      <g class="st5">
-        <path id="path3848" class="st6" d="M77.02,0C26.52,0,0,30.82,0,77.02v409.11C0,532.34,26.52,563.15,77.02,563.15h595.95c50.5,0,77.02-30.82,77.02-77.02V77.02C750,30.82,723.48,0,672.98,0H77.02ZM83.1,31.58h583.79c39.97,0,51.88,23.96,51.88,53.71v195.83l-176.41.33c-47.13.09-66.43,19.05-86.07,45.58-5,6.76-11.09,15.91-17.03,21.86-17.74,17.76-41.01,26.63-64.27,26.63s-46.53-8.87-64.27-26.63c-5.94-5.95-12.03-15.1-17.03-21.86-19.64-26.53-38.94-45.49-86.07-45.58l-176.41-.33V85.29c0-29.76,11.9-53.71,51.88-53.71Z" inkscape:connector-curvature="0"/>
+      <g class="st8">
+        <path id="path3848" class="st7" d="M77.02,0C26.52,0,0,30.82,0,77.02v409.11c0,46.21,26.52,77.02,77.02,77.02h595.95c50.5,0,77.02-30.82,77.02-77.02V77.02C750,30.82,723.48,0,672.98,0H77.02ZM83.1,31.58h583.79c39.97,0,51.88,23.96,51.88,53.71v195.83l-176.41.33c-47.13.09-66.43,19.05-86.07,45.58-5,6.76-11.09,15.91-17.03,21.86-17.74,17.76-41.01,26.63-64.27,26.63s-46.53-8.87-64.27-26.63c-5.94-5.95-12.03-15.1-17.03-21.86-19.64-26.53-38.94-45.49-86.07-45.58l-176.41-.33V85.29c0-29.76,11.9-53.71,51.88-53.71h.01Z" inkscape:connector-curvature="0"/>
       </g>
       <path id="rect4114" class="st12" d="M0,235.15h31.23v45.97H0v-45.97Z" inkscape:connector-curvature="0"/>
-      <path id="path4129" class="st1" d="M718.77,235.15h31.23v45.97h-31.23v-45.97Z" inkscape:connector-curvature="0"/>
+      <path id="path4129" class="st3" d="M718.77,235.15h31.23v45.97h-31.23v-45.97Z" inkscape:connector-curvature="0"/>
     </g>
   </g>
 </svg>
