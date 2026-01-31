@@ -316,6 +316,9 @@ export default function SmartCardsPage() {
                     </div>
 
                     <div className="flex items-center justify-center min-h-[18rem] transition relative overflow-hidden group rounded-2xl">
+                        <div className="absolute top-4 right-4 bg-white text-[#f00000] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md z-20">
+                            Coming Soon
+                        </div>
                         <img src="/assets/img/Apple_Wallet_Icon.svg" alt="Apple Wallet" className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" />
                     </div>
 
