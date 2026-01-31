@@ -316,9 +316,6 @@ export default function SmartCardsPage() {
                     </div>
 
                     <div className="bg-[#f00000] p-8 rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition relative overflow-hidden group">
-                        <div className="absolute top-4 right-4 bg-white text-[#f00000] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                            Coming Soon
-                        </div>
                         <div className="text-center">
                             <img src="/assets/img/Apple_Wallet_Icon.svg" alt="Apple Wallet" className="h-20 mx-auto mb-4 object-contain" />
                             <span className="font-bold text-2xl">Wallet</span>
@@ -326,11 +323,8 @@ export default function SmartCardsPage() {
                     </div>
 
                     <div className="bg-[#f00000] p-8 rounded-2xl flex items-center justify-center min-h-[18rem] hover:opacity-90 transition relative overflow-hidden group">
-                        <div className="absolute top-4 right-4 bg-white text-[#f00000] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                            Coming Soon
-                        </div>
                         <div className="text-center">
-                            <img src="/assets/img/google-wallet.png" alt="Google Wallet" className="h-20 mx-auto mb-4 object-contain" />
+                            <img src="/assets/img/google-wallet.png" alt="Google Wallet" className="h-24 mx-auto mb-4 object-contain" />
                             <span className="font-bold text-2xl">Google Wallet</span>
                         </div>
                     </div>
