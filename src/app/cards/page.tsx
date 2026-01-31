@@ -315,7 +315,7 @@ export default function SmartCardsPage() {
                         <p className="text-gray-400 text-sm">Users prefer adding our cards to their mobile wallets.</p>
                     </div>
 
-                    <div className="bg-[#121212] flex flex-col items-center justify-center min-h-[18rem] transition relative overflow-hidden group rounded-2xl border border-gray-800">
+                    <div className="bg-[#121212] flex flex-col items-center justify-center min-h-[18rem] transition relative overflow-hidden group rounded-2xl">
                         <div className="absolute top-4 right-4 bg-white text-[#f00000] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md z-20">
                             Coming Soon
                         </div>
