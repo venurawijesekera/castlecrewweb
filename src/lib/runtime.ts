@@ -3,6 +3,7 @@ import { getRequestContext } from "@cloudflare/next-on-pages";
 export interface Env {
     DB: D1Database;
     PRODUCT_IMAGES: R2Bucket;
+    RESEND_API_KEY: string;
 }
 
 export function getDB() {

@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getRequestContext } from "@cloudflare/next-on-pages";
+import { Env } from "@/lib/runtime";
 
 export const runtime = 'edge';
-
-// NOTE: Since we don't have a direct SMTP/Email provider configured yet,
-// we will simulate the behavior and log the request.
-// In a production environment, you would use a service like Resend, SendGrid, or Postmark.
 
 export async function POST(request: NextRequest) {
     try {
@@ -16,26 +14,46 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Required fields missing" }, { status: 400 });
         }
 
-        console.log("Contact Form Submission Received:", {
-            to: "info@castlecrew.cc",
-            cc: "info.castlecrewlk@gmail.com",
-            from: `${firstName} ${lastName} <${email}>`,
-            phone: phone,
-            subject: `Website Inquiry: ${subject}`,
-            body: message
-        });
+        const ctx = getRequestContext();
+        const env = ctx.env as unknown as Env;
 
-        // SIMULATION: In a real Cloudflare Workers/Pages environment, 
-        // you would use fetch() to send a request to an email API.
+        if (!env.RESEND_API_KEY) {
+            console.error("Missing RESEND_API_KEY");
+            return NextResponse.json({ error: "Email service misconfigured" }, { status: 500 });
+        }
 
-        // Example with a generic fetch (hypothetical):
-        /*
-        await fetch('https://api.emailservice.com/send', {
+        // Send via Resend REST API
+        const res = await fetch('https://api.resend.com/emails', {
             method: 'POST',
-            headers: { 'Authorization': 'Bearer YOUR_API_KEY' },
-            body: JSON.stringify({ ... })
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${env.RESEND_API_KEY}`
+            },
+            body: JSON.stringify({
+                from: 'Castle Crew <onboarding@resend.dev>', // Keep as onboarding for now unless domain is verified
+                to: ['info@castlecrew.cc', 'info.castlecrewlk@gmail.com'],
+                reply_to: email,
+                subject: `Website Inquiry: ${subject}`,
+                html: `
+                    <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                        <h2 style="color: #f00000; margin-bottom: 20px;">New Website Inquiry</h2>
+                        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+                        <p><strong>Email:</strong> ${email}</p>
+                        <p><strong>Phone:</strong> ${phone}</p>
+                        <p><strong>Subject:</strong> ${subject}</p>
+                        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                        <p style="white-space: pre-wrap;"><strong>Message:</strong><br/>${message}</p>
+                    </div>
+                `
+            })
         });
-        */
+
+        const resData = await res.json();
+
+        if (!res.ok) {
+            console.error("Resend API Error:", resData);
+            return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
+        }
 
         return NextResponse.json({
             success: true,
