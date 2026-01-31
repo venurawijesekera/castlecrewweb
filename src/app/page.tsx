@@ -23,9 +23,9 @@ export default function Home() {
               Castle Crew specializes in creating custom branded products that help businesses promote their
               identity. From concept to delivery, we craft unique items tailored to your branding needs.
             </p>
-            <Link href="#sculpt-me"
-              className="bg-white text-black px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#f00000] hover:text-white transition">
-              Explore Products
+            <Link href="/services"
+              className="bg-white text-black px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#f00000] hover:text-white transition text-center min-w-[200px]">
+              Explore Services
             </Link>
           </div>
         </div>
@@ -195,9 +195,8 @@ export default function Home() {
       <section className="px-4 md:px-6 mb-32">
         <div className="flex justify-between items-end mb-12 px-2">
           <h2 className="text-4xl md:text-6xl font-black uppercase leading-tight">Explore Our <br /> Products</h2>
-          <Link href="#"
-            className="hidden md:block bg-[#121212] border border-gray-700 text-white px-6 py-3 rounded-full text-xs font-bold uppercase hover:bg-white hover:text-black transition">View
-            All Products</Link>
+          <Link href="/shop"
+            className="hidden md:block bg-[#121212] border border-gray-700 text-white px-6 py-3 rounded-full text-xs font-bold uppercase hover:bg-white hover:text-black transition">Shop Now</Link>
         </div>
 
         <div className="columns-1 md:columns-2 lg:columns-4 gap-4 space-y-4">
