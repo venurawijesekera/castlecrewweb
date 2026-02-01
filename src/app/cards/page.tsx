@@ -180,9 +180,10 @@ export default function SmartCardsPage() {
                             <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">50k</h3>
                             <p className="text-sm text-white/80 font-medium">Professionals networking smarter.</p>
                         </div>
-                        <img src="/assets/img/users.png" alt="Users" className="absolute -bottom-4 -right-4 w-48 h-48 object-contain opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 z-0" />
-                        <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition duration-700"></div>
-                        <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+                        <img src="/assets/img/users.png" alt="Users" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700 z-0 mix-blend-overlay" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-[1]"></div>
+                        <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition duration-700 z-[2]"></div>
+                        <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay z-[3]"></div>
                     </div>
 
                     <div className="bg-[#080808] border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-[#f00000]/30 relative overflow-hidden">
@@ -195,7 +196,8 @@ export default function SmartCardsPage() {
                             <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">0.1s</h3>
                             <p className="text-gray-400 text-sm">Instant NFC transfer speed.</p>
                         </div>
-                        <img src="/assets/img/speed.png" alt="Speed" className="absolute -bottom-4 -right-4 w-48 h-48 object-contain opacity-20 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700 z-0" />
+                        <img src="/assets/img/speed.png" alt="Speed" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 z-0" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-[1]"></div>
                     </div>
 
                     <div className="bg-gradient-to-br from-[#111] to-black border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-green-500/30 relative overflow-hidden">
@@ -207,7 +209,8 @@ export default function SmartCardsPage() {
                             <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">100<span className="text-3xl align-top text-green-500">%</span></h3>
                             <p className="text-gray-400 text-sm">Reduction in paper waste.</p>
                         </div>
-                        <img src="/assets/img/eco.png" alt="Eco" className="absolute -bottom-4 -right-4 w-48 h-48 object-contain opacity-20 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700 z-0" />
+                        <img src="/assets/img/eco.png" alt="Eco" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700 z-0" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-[1]"></div>
                     </div>
                 </div>
             </section>
