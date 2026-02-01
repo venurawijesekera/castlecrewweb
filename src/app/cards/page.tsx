@@ -173,42 +173,45 @@ export default function SmartCardsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
                     <div className="bg-[#080808] border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between relative overflow-hidden group transition-all duration-500 hover:-translate-y-2 hover:border-[#f00000]/30 shadow-2xl">
                         <div className="flex items-center gap-2 relative z-20">
-                            <div className="w-8 h-8 bg-[#f00000]/10 rounded-full flex items-center justify-center text-[#f00000] font-bold backdrop-blur-sm">👤</div>
-                            <span className="font-bold text-[#f00000] tracking-wide">Users</span>
+                            <div className="w-8 h-8 bg-black/40 rounded-full flex items-center justify-center text-[#f00000] font-bold backdrop-blur-md border border-white/10">👤</div>
+                            <span className="font-bold text-white tracking-wide drop-shadow-lg">Users</span>
                         </div>
                         <div className="relative z-20">
-                            <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">50k</h3>
-                            <p className="text-sm text-gray-400 font-medium">Professionals networking smarter.</p>
+                            <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter drop-shadow-2xl">50k</h3>
+                            <p className="text-sm text-gray-300 font-medium drop-shadow-lg">Professionals networking smarter.</p>
                         </div>
-                        <img src="/assets/img/users.png" alt="Users" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700 z-0" />
+                        <img src="/assets/img/users.png" alt="Users" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700 z-0" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
+                        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/80 to-transparent z-10"></div>
                         <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay z-0"></div>
                     </div>
 
                     <div className="bg-[#080808] border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-[#f00000]/30 relative overflow-hidden shadow-2xl">
                         <div className="flex items-center gap-2 relative z-20">
-                            <div className="w-8 h-8 bg-[#f00000]/10 rounded-full flex items-center justify-center text-[#f00000] font-bold">⚡</div>
-                            <span className="text-[#f00000] font-bold tracking-wide">Speed</span>
+                            <div className="w-8 h-8 bg-black/40 rounded-full flex items-center justify-center text-[#f00000] font-bold backdrop-blur-md border border-white/10">⚡</div>
+                            <span className="text-white font-bold tracking-wide drop-shadow-lg">Speed</span>
                         </div>
                         <div className="relative z-20">
-                            <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">0.1s</h3>
-                            <p className="text-gray-400 text-sm">Instant NFC transfer speed.</p>
+                            <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter drop-shadow-2xl">0.1s</h3>
+                            <p className="text-gray-300 text-sm drop-shadow-lg">Instant NFC transfer speed.</p>
                         </div>
-                        <img src="/assets/img/speed.png" alt="Speed" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700 z-0" />
+                        <img src="/assets/img/speed.png" alt="Speed" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700 z-0" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
+                        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/80 to-transparent z-10"></div>
                     </div>
 
                     <div className="bg-[#080808] border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-green-500/30 relative overflow-hidden shadow-2xl">
                         <div className="flex items-center gap-2 relative z-20">
-                            <div className="w-8 h-8 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center text-sm">♻</div>
-                            <span className="font-bold text-green-500 tracking-wide">Eco-Friendly</span>
+                            <div className="w-8 h-8 bg-black/40 rounded-full flex items-center justify-center text-green-500 font-bold backdrop-blur-md border border-white/10">♻</div>
+                            <span className="font-bold text-white tracking-wide drop-shadow-lg">Eco-Friendly</span>
                         </div>
                         <div className="relative z-20">
-                            <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">100<span className="text-3xl align-top text-green-500">%</span></h3>
-                            <p className="text-gray-400 text-sm">Reduction in paper waste.</p>
+                            <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter drop-shadow-2xl">100<span className="text-3xl align-top text-green-500">%</span></h3>
+                            <p className="text-gray-300 text-sm drop-shadow-lg">Reduction in paper waste.</p>
                         </div>
-                        <img src="/assets/img/eco.png" alt="Eco" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700 z-0" />
+                        <img src="/assets/img/eco.png" alt="Eco" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700 z-0" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
+                        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/80 to-transparent z-10"></div>
                     </div>
                 </div>
             </section>
