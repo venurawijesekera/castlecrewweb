@@ -180,6 +180,7 @@ export default function SmartCardsPage() {
                             <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">50k</h3>
                             <p className="text-sm text-white/80 font-medium">Professionals networking smarter.</p>
                         </div>
+                        <img src="/assets/img/users.png" alt="Users" className="absolute -bottom-4 -right-4 w-48 h-48 object-contain opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 z-0" />
                         <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition duration-700"></div>
                         <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
                     </div>
@@ -194,9 +195,10 @@ export default function SmartCardsPage() {
                             <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">0.1s</h3>
                             <p className="text-gray-400 text-sm">Instant NFC transfer speed.</p>
                         </div>
+                        <img src="/assets/img/speed.png" alt="Speed" className="absolute -bottom-4 -right-4 w-48 h-48 object-contain opacity-20 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700 z-0" />
                     </div>
 
-                    <div className="bg-gradient-to-br from-[#111] to-black border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-green-500/30">
+                    <div className="bg-gradient-to-br from-[#111] to-black border border-gray-800 p-8 rounded-xl min-h-[18rem] flex flex-col justify-between group transition-all duration-500 hover:-translate-y-2 hover:border-green-500/30 relative overflow-hidden">
                         <div className="flex items-center gap-2">
                             <div className="w-8 h-8 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center text-sm">♻</div>
                             <span className="font-bold text-green-500 tracking-wide">Eco-Friendly</span>
@@ -205,6 +207,7 @@ export default function SmartCardsPage() {
                             <h3 className="text-6xl md:text-7xl font-black mb-2 text-white tracking-tighter">100<span className="text-3xl align-top text-green-500">%</span></h3>
                             <p className="text-gray-400 text-sm">Reduction in paper waste.</p>
                         </div>
+                        <img src="/assets/img/eco.png" alt="Eco" className="absolute -bottom-4 -right-4 w-48 h-48 object-contain opacity-20 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700 z-0" />
                     </div>
                 </div>
             </section>
