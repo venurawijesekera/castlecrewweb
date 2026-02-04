@@ -97,15 +97,18 @@ export default function Sidebar() {
                                 <i className="bi bi-person-circle"></i> Profile
                             </Link>
 
-                            {(user?.role !== 'admin' && user?.role !== 'super_admin' && user?.enterprise_id) && (
-                                <Link href="/profile?view=products" className={navItemClass("/profile?view=products")}>
-                                    <i className="bi bi-box-seam"></i> Products
-                                </Link>
-                            )}
+                            {/* Products & Leads only for Executive or Enterprise */}
+                            {(user?.plan === 'executive' || user?.enterprise_id) && (
+                                <>
+                                    <Link href="/profile?view=products" className={navItemClass("/profile?view=products")}>
+                                        <i className="bi bi-box-seam"></i> Products
+                                    </Link>
 
-                            <Link href="/product-leads" className={navItemClass("/product-leads")}>
-                                <i className="bi bi-envelope-paper"></i> Product Leads
-                            </Link>
+                                    <Link href="/product-leads" className={navItemClass("/product-leads")}>
+                                        <i className="bi bi-envelope-paper"></i> Product Leads
+                                    </Link>
+                                </>
+                            )}
 
                             <Link href="/leads" className={navItemClass("/leads")}>
                                 <i className="bi bi-person-lines-fill"></i> Connections

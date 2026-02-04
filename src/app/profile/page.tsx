@@ -128,7 +128,8 @@ function ProfileContent() {
         </div>
     );
 
-    const isProductsView = view === "products";
+    const canAccessProducts = user?.plan === 'executive' || user?.enterprise_id;
+    const isProductsView = view === "products" && canAccessProducts;
 
     return (
         <div className="p-8 md:p-16 pb-32 md:pb-16 max-w-6xl mx-auto min-h-full text-slate-900 bg-slate-50/50">
@@ -158,7 +159,7 @@ function ProfileContent() {
                         </div>
                     ) : (
                         <div className="flex flex-col items-end">
-                            <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${user?.plan !== 'starter' || user?.enterprise_id ? 'bg-[#f00000] text-white shadow-lg shadow-red-100' : 'bg-slate-100 text-slate-500'}`}>
+                            <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${(user?.plan !== 'starter' && user?.plan !== 'professional') || user?.enterprise_id ? 'bg-[#f00000] text-white shadow-lg shadow-red-100' : 'bg-slate-100 text-slate-500'}`}>
                                 {user?.enterprise_id ? (user?.role === 'super_admin' ? 'Enterprise Admin+' : 'Enterprise Staff') : (user?.plan + " Member")}
                             </div>
                             <div className="mt-2 text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Joined {user?.created_at ? new Date(user.created_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) : "..."}</div>
@@ -167,7 +168,18 @@ function ProfileContent() {
                 </div>
             </header>
 
-            {isProductsView ? (
+            {view === "products" && !canAccessProducts ? (
+                <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[3rem] border border-slate-100 shadow-sm text-center px-6">
+                    <div className="w-20 h-20 bg-red-50 text-[#f00000] rounded-3xl flex items-center justify-center mb-8 rotate-3 shadow-lg shadow-red-100">
+                        <i className="bi bi-shield-lock-fill text-3xl"></i>
+                    </div>
+                    <h2 className="text-3xl font-black uppercase italic tracking-tighter mb-4">Feature Restricted</h2>
+                    <p className="text-slate-500 max-w-sm mb-8 font-medium">Product cards are exclusive to <b>Executive</b> and <b>Enterprise</b> partners. Upgrade to launch your catalog.</p>
+                    <button className="bg-slate-900 text-white font-black uppercase py-4 px-10 rounded-2xl hover:bg-[#f00000] transition-all text-xs tracking-widest italic shadow-xl hover:shadow-red-200">
+                        View Upgrade Options
+                    </button>
+                </div>
+            ) : isProductsView ? (
                 /* PRODUCTS VIEW */
                 <div className="space-y-10">
                     <div className="flex justify-between items-center">
