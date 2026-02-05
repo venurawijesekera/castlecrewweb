@@ -119,6 +119,35 @@ function ProfileContent() {
         }
     };
 
+    const handleShare = () => {
+        if (user?.slug) {
+            const url = `https://castlecrew.cc/${user.slug}`;
+            navigator.clipboard.writeText(url);
+            alert("Link copied to clipboard!");
+        }
+    };
+
+    const handleAddToWallet = async () => {
+        try {
+            const token = localStorage.getItem("castle_token");
+            const res = await fetch('/api/create-wallet-pass', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            const data: any = await res.json();
+
+            if (res.ok && data.saveUrl) {
+                window.open(data.saveUrl, '_blank');
+            } else {
+                alert('Failed: ' + (data.error || 'Unknown error'));
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Error connecting to wallet service');
+        }
+    };
+
     if (loading) return (
         <div className="flex items-center justify-center min-h-screen text-slate-400">
             <div className="animate-pulse flex flex-col items-center gap-4">
@@ -214,7 +243,12 @@ function ProfileContent() {
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Template: <span className="text-slate-900">{card.template_id || 'Signature'}</span></span>
                                 </div>
                                 <div className="mt-auto pt-4 flex gap-3">
-                                    <button className="flex-1 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest py-3 px-4 rounded-xl hover:bg-[#f00000] shadow-sm transition-all italic">Edit Project</button>
+                                    <Link
+                                        href={`/editor?slug=${card.slug}`}
+                                        className="flex-1 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest py-3 px-4 rounded-xl hover:bg-[#f00000] shadow-sm transition-all italic flex items-center justify-center"
+                                    >
+                                        Edit Card
+                                    </Link>
                                     <button onClick={() => handleDelete(card.slug)} className="w-12 h-full bg-slate-50 text-slate-300 rounded-xl hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center">
                                         <i className="bi bi-trash3-fill"></i>
                                     </button>
@@ -285,12 +319,21 @@ function ProfileContent() {
                                 </div>
                             </div>
 
-                            <div className="mt-12 flex gap-4">
-                                <button className="flex-1 bg-slate-900 text-white px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#f00000] transition-all shadow-lg hover:shadow-red-200 italic">
-                                    Enhance Card
-                                </button>
-                                <button className="w-14 h-14 bg-slate-50 text-slate-400 rounded-2xl hover:bg-slate-100 transition-all flex items-center justify-center">
-                                    <i className="bi bi-qr-code text-xl"></i>
+                            <div className="mt-12 flex flex-col gap-3">
+                                <div className="flex gap-3">
+                                    <Link href="/editor" className="flex-1 bg-slate-900 text-white px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#f00000] transition-all shadow-lg hover:shadow-red-200 italic flex items-center justify-center">
+                                        Edit Card
+                                    </Link>
+                                    <button onClick={handleShare} className="w-14 h-14 bg-slate-50 text-slate-400 rounded-2xl hover:bg-slate-100 transition-all flex items-center justify-center group/btn">
+                                        <i className="bi bi-share-fill group-hover/btn:text-[#f00000] transition-colors"></i>
+                                    </button>
+                                </div>
+                                <button
+                                    onClick={handleAddToWallet}
+                                    className="w-full bg-white border border-slate-100 text-slate-900 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-[#f00000] hover:text-[#f00000] transition-all shadow-sm flex items-center justify-center gap-3 italic"
+                                >
+                                    <i className="bi bi-wallet2 text-lg"></i>
+                                    Google Wallet
                                 </button>
                             </div>
                         </div>
